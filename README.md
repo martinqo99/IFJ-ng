@@ -1,4 +1,16 @@
 IFJ-ng
 ======
 
-IFJ-ng
+- projekt do předmětu Formální jazyky a překladače
+- tým 097, variant a/1/I
+
+Členové týmu:
+ - Koláček František <xkolac12@stud.fit.vutbr.cz>
+ - Stodůlka Daniel <@stud.fit.vutbr.cz>
+ - Hermann Lukáš <@stud.fit.vutbr.cz>
+ - Tran Manh Hoang <@stud.fit.vutbr.cz>
+ 
+Varianta:
+ - a) Knugh-Moris-Prattův algoritmus
+ - 1) Algoritmus Quick sort
+ - I) Binární vyhledávací strom
