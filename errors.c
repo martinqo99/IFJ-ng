@@ -20,8 +20,7 @@
 E_CODE gErrorCode;
 
 char* E_MESSAGES[] = {
-    [ERROR_OK] = "Preklad probehl bez chyb"
-    
+    [ERROR_OK] = "Preklad probehl uspesne"    
 };
 
 void programAbort(E_CODE errorCode){
