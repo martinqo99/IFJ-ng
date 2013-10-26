@@ -7,7 +7,7 @@ IFJ-ng
 Členové týmu:
  - Koláček František <xkolac12@stud.fit.vutbr.cz>
  - Stodůlka Daniel <@stud.fit.vutbr.cz>
- - Hermann Lukáš <@stud.fit.vutbr.cz>
+ - Hermann Lukáš <xherma25@stud.fit.vutbr.cz>
  - Tran Manh Hoang <@stud.fit.vutbr.cz>
  
 Varianta:
