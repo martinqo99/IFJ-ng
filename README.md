@@ -8,7 +8,7 @@ IFJ-ng
  - Koláček František <xkolac12@stud.fit.vutbr.cz>
  - Stodůlka Daniel <@stud.fit.vutbr.cz>
  - Hermann Lukáš <xherma25@stud.fit.vutbr.cz>
- - Tran Manh Hoang <@stud.fit.vutbr.cz>
+ - Tran Manh Hoang <xtranh00@stud.fit.vutbr.cz>
  
 Varianta:
  - a) Knugh-Moris-Prattův algoritmus
