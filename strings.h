@@ -41,4 +41,6 @@ void strFree(STRING*);
 unsigned int strSize(STRING*);
 unsigned int strUsed(STRING*);
 
+unsigned int strCompare(STRING, char*);
+
 #endif

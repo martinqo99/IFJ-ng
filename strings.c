@@ -110,3 +110,8 @@ unsigned int strSize(STRING* str){
 unsigned int strUsed(STRING* str){
 	return str->used;	
 }
+
+unsigned int strCompare(STRING str, char* str2)
+{
+	return strcmp(str.data, str2);
+}
