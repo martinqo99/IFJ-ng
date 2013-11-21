@@ -113,5 +113,5 @@ unsigned int strUsed(STRING* str){
 
 unsigned int strCompare(STRING str, char* str2)
 {
-	return strcmp(str.data, str2);
+	return !strcmp(str.data, str2);
 }

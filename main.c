@@ -20,6 +20,7 @@
 
 #include "errors.h"
 #include "strings.h"
+#include "scanner.h"
 
 int main(int argc, char* argv[]){	
 	
@@ -45,6 +46,24 @@ int main(int argc, char* argv[]){
 
 	strFree(&tmp1);
 	strFree(&tmp2);
+	
+	// ------ FILE OPEN ------
+	
+	glob_FileHandler = fopen(argv[1],"r");
+	
+	// -------- LEX  --------
+	
+	init_Token();
+	
+	/*int i=0;
+	int pom;
+	while((pom = get_Token()) != TTYPE_EOF)
+	{
+		i++;
+		printf("Token: %d\tTyp: %d\tData:\t%s\n",i,pom,glob_Token.data.data);
+	}
+	*/
+	
 	
 	return ecode;
 }
