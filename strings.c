@@ -103,15 +103,14 @@ void strFree(STRING* str){
 	return;
 }
 
+int strCompare(STRING str1, char* str2){
+	return !strcmp(str1.data, str2);
+}
+
 unsigned int strSize(STRING* str){
 	return str->size;
 }
 
 unsigned int strUsed(STRING* str){
 	return str->used;	
-}
-
-unsigned int strCompare(STRING str, char* str2)
-{
-	return !strcmp(str.data, str2);
 }

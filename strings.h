@@ -38,9 +38,11 @@ void strAppend(STRING*, char);
 void strClear(STRING*);
 void strFree(STRING*);
 
+int strCompare(STRING, char*);
+
 unsigned int strSize(STRING*);
 unsigned int strUsed(STRING*);
 
-unsigned int strCompare(STRING, char*);
+
 
 #endif
