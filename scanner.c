@@ -364,3 +364,25 @@ enum_RetVal get_Token()
 	}
 	return TTYPE_ERROR;
 }
+
+enum_RetVal get_Next_Token()
+{
+	// backup token data and file position
+	struct_Token backup_token = glob_Token;
+	STRING data;
+	//strCopyString(&gToken.data, &data);
+
+	unsigned int pos = ftell(glob_FileHandler);
+	
+	// call get_Token();
+	enum_RetVal retval = get_Token();
+	
+	// set back file position and token data	
+	fseek (glob_FileHandler, pos, SEEK_SET);
+	
+	strFree(&glob_Token.data);
+	backup_token.data = data;
+	glob_Token = backup_token;
+
+	return retval;
+}
