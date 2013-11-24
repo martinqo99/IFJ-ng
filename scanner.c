@@ -370,7 +370,7 @@ enum_RetVal get_Next_Token()
 	// backup token data and file position
 	struct_Token backup_token = glob_Token;
 	STRING data;
-	//strCopyString(&gToken.data, &data);
+	strCopy(&glob_Token.data, &data);
 
 	unsigned int pos = ftell(glob_FileHandler);
 	
