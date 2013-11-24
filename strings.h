@@ -35,6 +35,7 @@ void strInitRaw(STRING*, char*);
 void strInitString(STRING*, STRING*);
 
 void strAppend(STRING*, char);
+void strCopy(STRING*, STRING*);
 void strClear(STRING*);
 void strFree(STRING*);
 

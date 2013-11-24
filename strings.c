@@ -81,6 +81,10 @@ void strAppend(STRING* str, char c){
 	str->data[str->used] = '\0';
 }
 
+void strCopy(STRING* strSrc, STRING* strDst){
+	strInitString(strDst, strSrc);	
+}
+
 void strClear(STRING* str){
 	if(!str)
 		return;
