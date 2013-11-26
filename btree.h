@@ -8,21 +8,20 @@
 #include "errors.h"
 
 
-typedef struct
+typedef struct 
 {
-	struct struct_BTree_Node *left;
-	struct struct_BTree_Node *right;
+	struct struct_BTree_Node left;
+	struct struct_BTree_Node right;
 	
 	void *data;
 	STRING *key;
-	//int height;
-} struct_BTree_Node;
+} *struct_BTree_Node;
 
 
 typedef struct
 {
-	struct_BTree_Node *root;
-	struct_BTree_Node *last;
+	struct_BTree_Node root;
+	struct_BTree_Node last;
 } struct_BTree;
 
 // API
@@ -33,10 +32,7 @@ struct_BTree_Node 	BT_Search(struct_BTree*, STRING*);
 
 // library functions
 struct_BTree_Node 	recursive_Node_Search(struct_BTree_Node, STRING*);
-void 				recursive_Node_Delete(struct_BTree_Node*);
+void 				recursive_Node_Delete(struct_BTree_Node);
 
-
-//void BT_Delete_Nodes(struct_BTree*);
-//insert, search, 
 
 #endif

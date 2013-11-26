@@ -11,7 +11,7 @@ void BT_Free(struct_BTree* tree)
 	BT_Init(tree);
 }
 
-void recursive_Node_Delete(struct_BTree_Node* node)
+void recursive_Node_Delete(struct_BTree_Node node)
 {
 	if(node->left != NULL)
 		recursive_Node_Delete(node->left);
@@ -48,7 +48,6 @@ ERROR BT_Insert(struct_BTree* tree, STRING* key, void* data)
         tree->root->data = data;
         tree->root->left = NULL;
 		tree->root->right = NULL;
-        //tree->root->height = 0;
         tree->last = tree->root;
         return ERROR_OK;
 	}
@@ -67,7 +66,6 @@ ERROR BT_Insert(struct_BTree* tree, STRING* key, void* data)
 				temp_tree->left->data = data;
 				temp_tree->left->left = NULL;
 				temp_tree->left->right = NULL;
-				//temp_tree->left->height = (temp_tree->height) + 1;
 				tree->last = temp_tree->left;
 				return ERROR_OK;
             }
@@ -82,7 +80,6 @@ ERROR BT_Insert(struct_BTree* tree, STRING* key, void* data)
 				temp_tree->right->data = data;
 				temp_tree->right->left = NULL;
 				temp_tree->right->right = NULL;
-				//temp_tree->right->height = (temp_tree->height) + 1;
 				tree->last = temp_tree->right;
 				return ERROR_OK;
             }
