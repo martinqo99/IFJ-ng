@@ -1,69 +1,57 @@
-/**
- * Predmet:  IFJ / IAL
- * Projekt:  Implementace interpretu jazyka PHP13
- * Varianta: a/1/I
- * Soubor:   main.c
- *
- * Popis:
- *
- *
- * Datum:    20.11.2013
- *
- * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
- *           Stodulka Daniel
- *           Hermann Lukas
- *           Tran Manh Hoang
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "errors.h"
-#include "strings.h"
+#include "mmu.h"
 #include "scanner.h"
 
-int main(int argc, char* argv[]){	
-	
+int main(int argc, char* argv[])
+{
+
 	if(argc != 2){
-		fprintf(stderr, "\n");
+		fprintf(stderr, "Invalid arguments\n");
 		return E_COMPILATOR;
 	}
 	
+	mmuTreeInit();
 	
-	ERROR ecode = E_OK;
-
-	STRING tmp1;
-	STRING tmp2;
-	
- 	strInitRaw(&tmp1, "This is only for test purpose");
- 	strInitRaw(&tmp2, "This is only for");
-	
-	printf("%s\n", tmp1.data);
-	printf("%s\n", tmp2.data);
-	
-	strInitString(&tmp1, &tmp2);
-	printf("%s\n", tmp1.data);
-
-	strFree(&tmp1);
-	strFree(&tmp2);
-	
-	// ------ FILE OPEN ------
-	
-	glob_FileHandler = fopen(argv[1],"r");
-	
-	// -------- LEX  --------
-	
-	init_Token();
-	
-	/*int i=0;
-	int pom;
-	while((pom = get_Token()) != TTYPE_EOF)
-	{
-		i++;
-		printf("Token: %d\tTyp: %d\tData:\t%s\n",i,pom,glob_Token.data.data);
+	if(!(glob_FileHandler = mmuFopen(argv[1], "r"))){
+		fprintf(stderr, "Cannot open input file\n");
+		return E_COMPILATOR;
 	}
-	*/
+	
+	// ------ LEX ------
 	
 	
-	return ecode;
+	
+	/*
+	int* value = malloc(sizeof(int));
+	printf("address: %d\n", value);
+	int* value1 = malloc(sizeof(int));
+	printf("address: %d\n", value1);
+	int* value2 = malloc(sizeof(int));
+	printf("address: %d\n", value2);
+	int* value3 = mmuMalloc(sizeof(int));
+ 	int* value4 = malloc(sizeof(int));
+	printf("address: %d\n", value4);
+	int* value5 = mmuMalloc(sizeof(int));
+	int* value6 = mmuMalloc(sizeof(int));
+
+	value6 = mmuRealloc(value6, sizeof(long int));
+	
+	free(value4);
+	free(value2);
+	free(value1);
+	free(value4);
+	mmuFree(value5);
+	mmuFree(value6);
+*/
+	
+	mmuFclose(glob_FileHandler);
+
+	ERROR err = E_OK;
+
+	mmuGlobalFree();
+	
+	return err;
 }

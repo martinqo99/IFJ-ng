@@ -2,13 +2,22 @@
 
 void BT_Init(struct_BTree* tree)
 {
+	tree = malloc(sizeof(struct struct_BTree));
+// 	tree->root = malloc(sizeof(void*));
 	tree->root = NULL;
+// 	tree->last = malloc(sizeof(void*));
+	tree->last = NULL;
 }
 
 void BT_Free(struct_BTree* tree)
 {
+	if(tree->root == NULL)
+	{
+		free(tree);
+		return;
+	}
 	recursive_Node_Delete(tree->root);
-	BT_Init(tree);
+	free(tree);
 }
 
 void recursive_Node_Delete(struct_BTree_Node node)
@@ -17,79 +26,76 @@ void recursive_Node_Delete(struct_BTree_Node node)
 		recursive_Node_Delete(node->left);
 	if(node->right != NULL)
 		recursive_Node_Delete(node->right);
-	mmuFree(node);
+	mmuFree(node->data);
+	free(node);
 }
 
 
-struct_BTree_Node BT_Search(struct_BTree* tree, STRING* key)
+struct_BTree_Node BT_Search(struct_BTree* tree, intptr_t key)
 {
 	return recursive_Node_Search(tree->root, key);
 }
 
-struct_BTree_Node recursive_Node_Search(struct_BTree_Node node, STRING* key)
+struct_BTree_Node recursive_Node_Search(struct_BTree_Node node, intptr_t key)
 {
 	if(node == NULL)
-		return NULL;
-	else if(strCompare(node->key, key))
+        return NULL;
+	else if(node->key == key)
 		return node;
-	else if(strCompare(node->key, key) < 0)
+	else if (node->key < key)
 		return recursive_Node_Search(node->left, key);
 	else
 		return recursive_Node_Search(node->right, key);
 }
 
 
-ERROR BT_Insert(struct_BTree* tree, STRING* key, void* data)
+struct_BTree_Node BT_Insert(struct_BTree* tree, intptr_t key)
 {
 	if (tree->root == NULL)
 	{
-	    tree->root = mmuMalloc(sizeof(struct struct_BTree_Node));
-        tree->root->key = key;
-        tree->root->data = data;
-        tree->root->left = NULL;
+	    tree->root = malloc(sizeof(struct struct_BTree_Node));
+		tree->root->key = key;
+		tree->root->left = NULL;
 		tree->root->right = NULL;
-        tree->last = tree->root;
-        return ERROR_OK;
+		tree->last = tree->root;
+		return tree->root;
 	}
-	
-	
-    struct_BTree_Node temp_tree = tree->root;
 
-	while(temp_tree != NULL)
+    struct_BTree_Node temp_node = tree->root;
+
+	while(temp_node != NULL)
 	{
-        if (strCompare(key, temp_tree->key) < 0)
+        if ( key < temp_node->key)
 		{
-            if(temp_tree->left == NULL)
+            if(temp_node->left == NULL)
 			{
-				temp_tree->left = mmuMalloc(sizeof(struct struct_BTree_Node));
-				temp_tree->left->key = key;
-				temp_tree->left->data = data;
-				temp_tree->left->left = NULL;
-				temp_tree->left->right = NULL;
-				tree->last = temp_tree->left;
-				return ERROR_OK;
+				temp_node->left = malloc(sizeof(struct struct_BTree_Node));
+				temp_node->left->key = key;
+				temp_node->left->left = NULL;
+				temp_node->left->right = NULL;
+				tree->last = temp_node->left;
+				return temp_node;
             }
-            else temp_tree=temp_tree->left;
+            else temp_node=temp_node->left;
         }
-        else if (strCompare(key, temp_tree->key) > 0)
+        else if ( key > temp_node->key)
 		{
-            if (temp_tree->right == NULL)
+            if (temp_node->right == NULL)
 			{
-				temp_tree->right = mmuMalloc(sizeof(struct struct_BTree_Node));
-				temp_tree->right->key = key;
-				temp_tree->right->data = data;
-				temp_tree->right->left = NULL;
-				temp_tree->right->right = NULL;
-				tree->last = temp_tree->right;
-				return ERROR_OK;
+				temp_node->right = malloc(sizeof(struct struct_BTree_Node));
+				temp_node->right->key = key;
+				temp_node->right->left = NULL;
+				temp_node->right->right = NULL;
+				tree->last = temp_node->right;
+				return temp_node;
             }
-            else temp_tree = temp_tree->right;
+            else temp_node = temp_node->right;
         }
         else
-		{ 
-			tree->last = temp_tree;
-			return ERROR_INS_EXIST; 
+		{
+			tree->last = temp_node;
+			return temp_node;
 		}
     }
-    return ERROR_OK;
+    return temp_node;
 }

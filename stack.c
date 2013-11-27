@@ -8,14 +8,14 @@ void Sinit(TStack* s){
 
 void SPush(TStack* s, void* EL){
         s->Top  = EL;
-        s->Top++1;
+        (s->Top)++;
 }
 
 void* SPop(TStack* s){
     void* tmp;
-    if(s->Top > 0){
+    if(s->Top > *s->SPole){
       tmp = s->Top;
-      s->Top--;
+      (s->Top)--;
     }
     return tmp;
 }
@@ -24,6 +24,7 @@ int SEmpty(TStack* s){
 
     s->Top = NULL;
 
+    free(s->SPole);
+    s->SPole = NULL;
     return 1;
-
 }
