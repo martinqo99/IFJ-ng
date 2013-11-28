@@ -7,7 +7,7 @@
  * Popis:
  *
  *
- * Datum:    20.11.2013
+ * Datum:    28.11.2013
  *
  * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
  *           Stodulka Daniel
@@ -17,36 +17,85 @@
 
 #include "list.h"
 
-void listInit(LISTPTR list){
+void listInit(LIST_PTR list){
     list->begin = NULL;
     list->end = NULL;
     list->curr = NULL;
 }
 
-void listInsertBegin(LISTPTR list, PTR value){
-    
+void listInsertBegin(LIST_PTR list, PTR value){
+	LIST_NODE_PTR tmp = malloc(sizeof(LIST_NODE));
+	
+	tmp->value = value;
+	tmp->next = list->begin;
+	
+	if(!list->begin)
+		list->end = tmp;
+	
+	list->begin = tmp;
 }
     
-void listInsertEnd(LISTPTR list, PTR value){
-    
+void listInsertEnd(LIST_PTR list, PTR value){
+    LIST_NODE_PTR tmp = malloc(sizeof(LIST_NODE));
+	
+	tmp->value = value;
+	tmp->next = NULL;
+	
+	if(!list->begin){
+		list->begin = tmp;
+		list->end = tmp;
+	}
+	else
+		list->end->next = tmp;
+		
+	list->end = tmp;   
 }
 
-void listInsertPost(LISTPTR list, PTR value){
-    
+void listInsertPost(LIST_PTR list, PTR value){
+    LIST_NODE_PTR tmp = malloc(sizeof(LIST_NODE));
+	
+	tmp->value = value;
+	
+	if(list->curr){
+		tmp->next = list->curr->next;
+		list->curr->next = tmp;
+		
+		if(!tmp->next)
+			list->end = tmp;		
+	}
+	else if(!list->begin){
+		tmp->next = NULL;
+		
+		list->begin = tmp;
+		list->end = tmp;		
+	}
+	else{
+		tmp->next = list->begin;
+		list->begin = tmp;		
+	}		
 }
 
-void listBegin(LISTPTR list){
-    
+void listBegin(LIST_PTR list){
+    list->curr = list->begin;
 }
     
-void listSucc(LISTPTR list){
-    
-}
-
-void listEnd(LISTPTR list){
-    
+void listSucc(LIST_PTR list){
+    if(list->curr)
+		list->curr = list->curr->next;
 }
 
-void listFree(LISTPTR list){
-    
+void listEnd(LIST_PTR list){
+    list->curr = list->end;
+}
+
+void listFree(LIST_PTR list){
+    LIST_NODE_PTR tmp;
+	
+	while((tmp = list->begin)){
+		list->begin = tmp->next;
+		
+		free(tmp);
+	}
+	
+	listInit(list);
 }

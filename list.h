@@ -7,7 +7,7 @@
  * Popis:
  *
  *
- * Datum:    20.11.2013
+ * Datum:    28.11.2013
  *
  * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
  *           Stodulka Daniel
@@ -25,27 +25,27 @@ typedef void* PTR;
 
 #include "mmu.h"
 
-typedef struct LISTNODE{
+typedef struct LIST_NODE{
     PTR value;
-    struct LISTNODE* next;    
-} LISTNODE, *LISTNODEPTR;
+    struct LIST_NODE* next;    
+} LIST_NODE, *LIST_NODE_PTR;
 
 typedef struct LIST{
-    LISTNODEPTR begin;
-    LISTNODEPTR end;
-    LISTNODEPTR curr;
-} LIST, *LISTPTR;
+    LIST_NODE_PTR begin;
+    LIST_NODE_PTR end;
+    LIST_NODE_PTR curr;
+} LIST, *LIST_PTR;
 
 
-void listInit(LISTPTR list);
-void listInsertBegin(LISTPTR list, PTR value);
-void listInsertEnd(LISTPTR list, PTR value);
-void listInsertPost(LISTPTR list, PTR value);
+void listInit(LIST_PTR list);
+void listInsertBegin(LIST_PTR list, PTR value);
+void listInsertEnd(LIST_PTR list, PTR value);
+void listInsertPost(LIST_PTR list, PTR value);
 
-void listBegin(LISTPTR list);
-void listSucc(LISTPTR list);
-void listEnd(LISTPTR list);
+void listBegin(LIST_PTR list);
+void listSucc(LIST_PTR list);
+void listEnd(LIST_PTR list);
 
-void listFree(LISTPTR list);
+void listFree(LIST_PTR list);
 
 #endif
