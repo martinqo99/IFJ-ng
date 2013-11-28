@@ -29,7 +29,7 @@ void stackPush(STACK_PTR stack, PTR value){
 	if(!stack)
 		return;	
 	
-	STACK_NODE_PTR tmp = malloc(sizeof(STACK_NODE));
+	STACK_NODE_PTR tmp = gcMalloc(sizeof(STACK_NODE));
 	
 	tmp->value = value;
 	tmp->next = stack->begin;
@@ -79,7 +79,7 @@ void stackFree(STACK_PTR stack){
 	while((tmp = stack->begin)){
 		stack->begin = tmp->next;
 		
-		free(tmp);
+		gcFree(tmp);
 	}	
 	
 	stackInit(stack);
