@@ -24,7 +24,7 @@ void listInit(LIST_PTR list){
 }
 
 void listInsertBegin(LIST_PTR list, PTR value){
-	LIST_NODE_PTR tmp = malloc(sizeof(LIST_NODE));
+	LIST_NODE_PTR tmp = gcMalloc(sizeof(LIST_NODE));
 	
 	tmp->value = value;
 	tmp->next = list->begin;
@@ -36,7 +36,7 @@ void listInsertBegin(LIST_PTR list, PTR value){
 }
     
 void listInsertEnd(LIST_PTR list, PTR value){
-    LIST_NODE_PTR tmp = malloc(sizeof(LIST_NODE));
+    LIST_NODE_PTR tmp = gcMalloc(sizeof(LIST_NODE));
 	
 	tmp->value = value;
 	tmp->next = NULL;
@@ -52,7 +52,7 @@ void listInsertEnd(LIST_PTR list, PTR value){
 }
 
 void listInsertPost(LIST_PTR list, PTR value){
-    LIST_NODE_PTR tmp = malloc(sizeof(LIST_NODE));
+    LIST_NODE_PTR tmp = gcMalloc(sizeof(LIST_NODE));
 	
 	tmp->value = value;
 	
@@ -94,7 +94,7 @@ void listFree(LIST_PTR list){
 	while((tmp = list->begin)){
 		list->begin = tmp->next;
 		
-		free(tmp);
+		gcFree(tmp);
 	}
 	
 	listInit(list);
