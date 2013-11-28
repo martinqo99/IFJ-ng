@@ -22,6 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gc.h"
+
 #define SIZE_STEP 8
 
 typedef struct string{
