@@ -68,11 +68,11 @@ void strAppend(STRING* str, char c){
 		return;
 
 	if((str->data == NULL) || (str->size == (str->used + 1) && str->data == NULL)){
-		str->data = (char*)malloc(sizeof(char) * SIZE_STEP);
+		str->data = (char*)gcMalloc(sizeof(char) * SIZE_STEP);
 		str->size = SIZE_STEP;		
 	}
 	else if(str->size == (str->used + 1)){
-		str->data = (char*)realloc(str->data, sizeof(char) * (str->size + SIZE_STEP));
+		str->data = (char*)gcRealloc(str->data, sizeof(char) * (str->size + SIZE_STEP));
 		str->size = str->size + SIZE_STEP;
 	}
 
@@ -98,7 +98,7 @@ void strFree(STRING* str){
 		return;
 	
 	if(str->data != NULL && str->used != 0)
-		free(str->data);
+		gcFree(str->data);
 	
 	str->data = NULL;
 	str->size = 0;
