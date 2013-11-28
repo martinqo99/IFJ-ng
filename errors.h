@@ -22,7 +22,7 @@
 
 typedef enum error{
 	E_OK					= 0,
-	
+	E_INTERPRET			= 1,
 	E_COMPILATOR			= 99	
 } ERROR;
 

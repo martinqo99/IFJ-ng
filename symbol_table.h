@@ -38,7 +38,8 @@ typedef union VALUE{
 
 typedef enum TYPE{
     TYPE_BOOL,
-    TYPE_DIGIT,
+    TYPE_DIGIT_INT,
+	TYPE_DIGIT_DOUBLE,
     TYPE_STRING,
     TYPE_CALLABLE,
     TYPE_OTHER
@@ -46,6 +47,7 @@ typedef enum TYPE{
 
 typedef enum INSTRUCTION_TYPE{
     INSTRUCTION_RETURN,
+	INSTRUCTION_MOV, // op1 = odkud, op2 = null, dest = kam
     //Tuxi dopln si instrukce, ktere potrebujes
 } INSTRUCTION_TYPE;
 
@@ -60,11 +62,18 @@ typedef struct SYMBOL{
     ITEMPTR items;    
 } SYMBOL;
 
+/*
+  typedef struct tsymbol{
+  tString key;
+  tSymbolData *data; //pole, pro vice instanci stejne promenne
+  tDataType type;
+} tSymbol;
+*/
 typedef struct INSTRUCTION{
     INSTRUCTION_TYPE type;
-    PTR destionation;
     PTR operand1;
     PTR operand2;
+	PTR destionation;
 } INSTRUCTION;
 
 typedef struct FUNCTION{
@@ -85,46 +94,57 @@ typedef struct SYMBOL_TABLE{
     FUNCTIONPTR curr;    
 } SYMBOL_TABLE;
 
+/*
+enum enum_instruction
+{// R = registr,  kst -pole konstant, load nil -  RK - registr nebo konstanta
+	
+	I_MOVE = 0,    		A B     R(A) := R(B)  (konstantu move nepresouva)         
+	I_LOADK = 1, 		A Bx    R(A) := Kst(Bx)    indexujeme konstanty od 0     
+	I_LOADNIL = 2,	A B     R(A) := ... := R(B) := nil       local a;
+	
+// konstanta je posunuta o MAX_STACK_SIZE  oproti registrum 
+	I_ADD = 3,        	A B C   R(A) := RK(B) + RK(C)                           
+	I_SUB = 4,         	A B C   R(A) := RK(B) - RK(C)                           
+	I_MUL = 5,         	A B C   R(A) := RK(B) * RK(C)                           
+	I_DIV = 6,        	A B C   R(A) := RK(B) / RK(C)                           
+	I_MOD = 7,       	A B C   R(A) := RK(B) % RK(C)                           
+	I_POW = 8,       	A B C   R(A) := RK(B) ^ RK(C)                           
+	I_UNM = 9,       	A B     R(A) := -RK(B)                                   
+	I_NOT = 10,      	A B     R(A) := not RK(B)                                
+	I_CONCAT = 7,     	A B C   R(A) := RK(B) .. RK(C)                            
+ 	I_AND = 13,        A B C   R(A) := RK(B) and RK(C)                           
+ 	I_OR = 14,         	A B C   R(A) := RK(B) or RK(C)                            
+	I_LE = 8,         	A B C   R(A) := RK(B) <  RK(C)                             
+	I_GR = 9,         	A B C   R(A) := RK(B) >  RK(C)                             
+	I_EL = 10,        	A B C   R(A) := RK(B) <= RK(C)                             
+	I_EG = 11,        	A B C   R(A) := RK(B) >= RK(C)                             
+	I_EQ = 12,         	A B C   R(A) := RK(B) == RK(C)                             
+	I_NEQ = 13,        	A B C   R(A) := RK(B) ~= RK(C)                             
+	I_JMP = 14,         B     pc=B                                    
+	I_JT = 15,         	A B     if(RK(A) == true)   pc=B                
+	I_JF = 16,         	A B     if(RK(A) == false)  pc=B  
+	
+	I_CALL = 17,      	A B C   R(A) <= funkce C (parametry R(A) * B)
+				      neboli R(A) = call(R(A) = prvni parametr, B = pocet parametru, C = id funkce),
+				      obdobne write - neni konstanta nic
+				      
+	I_RETURN = 18,     	A       return RK(A) 
+ 	I_READ = 26,       	A B     R(A) = read(RK(B))
+ 	I_WRITE = 27,   	A B     write(R(A) * R(B)) - neni konstanta nic
 
-// ---------- PREPSAT!!!! --------
-typedef enum {
-    I_RETURN,
-//stack
-    I_POP,
-    I_PUSH,
-    I_SEMPTY,
-//presun
-    I_MOV,
-//aritmetika
-    I_ADD, //= LEX_ADDITION,
-    I_SUB, //= LEX_SUBSTRACTION,
-    I_MUL, //= LEX_MULTIPLICATION,
-    I_DIV, //= LEX_DIVISION,
-    I_POW, //= LEX_POWER,
-//logika
-    I_EQUAL, //= LEX_EQUAL,		// ==
-    I_NEQUAL, //= LEX_UNEQUAL,	// !=
-    I_LESS, //= LEX_LESSER, //<
-    I_ELESS, //= LEX_LESSER_EQUAL,		// <=
-    I_MORE, //= LEX_GREATER,		// >
-    I_EMORE, //= LEX_GREATER_EQUAL,		// >=
-//skoky - snad nebudou potreba vsechny
-    I_LABEL,		// navesti
-    I_FJUMP,		//false jump
-    I_JUMP,		//nepodmineny jump
+	I_INPUT = 19,	// embedd function input - syntax = input() - returns stdin input
+			// R(A) := stdin = input()
+			
+	I_PRINT = 20, 		R(A) := print(R(B) - prvni parametr, C - pocet parametru)
+	I_LEN = 21,   		R(A) := typeof(RK(B))
+	I_TYPEOF = 22,		R(A) := len(RK(B))
+	I_FIND = 23,		R(A) := find(RK(B),RK(C))
+    I_SORT = 24,		R(A) := sort(RK(B))
+    I_NUMERIC = 25,	R(A) := numeric(RK(B))
+			
+	I_STOP = 26 //- konec
+};
 
-    I_CALL,
-//vestavene fce
-    I_INPUT,
-    I_NUMERIC,
-    I_PRINT,
-    I_TYPEOF,
-    I_LEN,
-    I_FIND,
-    I_SORT,
-    I_STRING, // dest od do, string je na stacku
-    NOINSTR
-}tItype;
-// ---------- PREPSAT!!!! --------
+*/
 
 #endif
