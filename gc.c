@@ -1,7 +1,89 @@
-#include "mmu.h"
+/**
+ * Predmet:  IFJ / IAL
+ * Projekt:  Implementace interpretu jazyka PHP13
+ * Varianta: a/1/I
+ * Soubor:   gc.c
+ *
+ * Popis:
+ *
+ *
+ * Datum:    28.11.2013
+ *
+ * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
+ *           Stodulka Daniel
+ *           Hermann Lukas
+ *           Tran Manh Hoang
+ */
 
-btMMU mmuTree;
+#include "gc.h"
 
+GC garbageCollector;
+
+void gcInit(){	
+    signal(SIGINT, gcAbort);
+    signal(SIGABRT, gcAbort);		
+}
+
+PTR gcMalloc(int size){
+	PTR block = malloc(size);
+	
+	if(!block)
+		gcAbort();
+	
+	return block;
+}
+
+PTR gcRealloc(PTR block, int size){
+	PTR newBlock = realloc(block, size);
+	
+	if(!newBlock)
+		gcAbort();	
+	
+	return newBlock;
+}
+
+PTR gcCalloc(int count, int size){
+	PTR block = calloc(count, size);
+	
+	if(!block)
+		gcAbort();
+	
+	return block;
+}
+
+PTR gcFopen(const char* fileName, const char* mode){
+	PTR block = fopen(fileName, mode);
+	
+	if(!block)
+		gcAbort();
+	
+	return block;	
+}
+
+void gcFree(PTR block){
+	if(!block)
+		return;
+	
+	free(block);	
+}
+
+void gcFclose(PTR block){
+	if(!block)
+		return;
+	
+	fclose(block);	
+}
+
+void gcDispose(){
+	
+	
+}
+
+void gcAbort(){
+	
+}
+
+/*
 void recursive_mmuGlobalFree(struct_BTree_Node node);
 
 void mmuTreeInit()
@@ -181,4 +263,4 @@ void recursive_mmuGlobalFree(struct_BTree_Node node)
 	
 	mmuFree(node);
 }
-
+*/

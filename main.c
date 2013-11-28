@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "errors.h"
-#include "mmu.h"
+#include "gc.h"
 #include "scanner.h"
 
 int main(int argc, char* argv[])
@@ -13,9 +13,9 @@ int main(int argc, char* argv[])
 		return E_COMPILATOR;
 	}
 	
-	mmuTreeInit();
+	gcInit();
 	
-	if(!(glob_FileHandler = mmuFopen(argv[1], "r"))){
+	if(!(glob_FileHandler = gcFopen(argv[1], "r"))){
 		fprintf(stderr, "Cannot open input file\n");
 		return E_COMPILATOR;
 	}
@@ -47,11 +47,11 @@ int main(int argc, char* argv[])
 	mmuFree(value6);
 */
 	
-	mmuFclose(glob_FileHandler);
+	gcFclose(glob_FileHandler);
 
 	ERROR err = E_OK;
 
-	mmuGlobalFree();
+	gcDispose();
 	
 	return err;
 }

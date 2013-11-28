@@ -25,6 +25,7 @@ typedef void* PTR;
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "gc.h"
 
 typedef struct LIST_NODE{
     PTR value;

@@ -25,6 +25,7 @@ typedef void* PTR;
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "gc.h"
 
 typedef struct STACK_NODE{
 	PTR value;
