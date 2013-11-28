@@ -23,7 +23,8 @@ typedef void* PTR;
 #ifndef LIST_H_INCLUDED
 #define LIST_H_INCLUDED
 
-#include "mmu.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 typedef struct LIST_NODE{
     PTR value;
@@ -36,16 +37,13 @@ typedef struct LIST{
     LIST_NODE_PTR curr;
 } LIST, *LIST_PTR;
 
-
 void listInit(LIST_PTR list);
 void listInsertBegin(LIST_PTR list, PTR value);
 void listInsertEnd(LIST_PTR list, PTR value);
 void listInsertPost(LIST_PTR list, PTR value);
-
 void listBegin(LIST_PTR list);
 void listSucc(LIST_PTR list);
 void listEnd(LIST_PTR list);
-
 void listFree(LIST_PTR list);
 
 #endif
