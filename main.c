@@ -1,3 +1,20 @@
+/**
+ * Predmet:  IFJ / IAL
+ * Projekt:  Implementace interpretu jazyka PHP13
+ * Varianta: a/1/I
+ * Soubor:   main.c
+ *
+ * Popis:
+ *
+ *
+ * Datum:    28.11.2013
+ *
+ * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
+ *           Stodulka Daniel
+ *           Hermann Lukas
+ *           Tran Manh Hoang
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 

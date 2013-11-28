@@ -2,7 +2,7 @@
 
 void BT_Init(struct_BTree* tree)
 {
-	tree = malloc(sizeof(struct struct_BTree));
+	tree = gcMalloc(sizeof(struct struct_BTree));
 // 	tree->root = malloc(sizeof(void*));
 	tree->root = NULL;
 // 	tree->last = malloc(sizeof(void*));
@@ -13,11 +13,11 @@ void BT_Free(struct_BTree* tree)
 {
 	if(tree->root == NULL)
 	{
-		free(tree);
+		gcFree(tree);
 		return;
 	}
 	recursive_Node_Delete(tree->root);
-	free(tree);
+	gcFree(tree);
 }
 
 void recursive_Node_Delete(struct_BTree_Node node)
@@ -26,30 +26,30 @@ void recursive_Node_Delete(struct_BTree_Node node)
 		recursive_Node_Delete(node->left);
 	if(node->right != NULL)
 		recursive_Node_Delete(node->right);
-	mmuFree(node->data);
-	free(node);
+	gcFree(node->data);
+	gcFree(node);
 }
 
 
-struct_BTree_Node BT_Search(struct_BTree* tree, intptr_t key)
+struct_BTree_Node BT_Search(struct_BTree* tree, STRING_PTR key)
 {
 	return recursive_Node_Search(tree->root, key);
 }
 
-struct_BTree_Node recursive_Node_Search(struct_BTree_Node node, intptr_t key)
+struct_BTree_Node recursive_Node_Search(struct_BTree_Node node, STRING_PTR key)
 {
 	if(node == NULL)
         return NULL;
-	else if(node->key == key)
+	else if(strCompareStrings(*node->key,*key))
 		return node;
-	else if (node->key < key)
+	else if (strSize(node->key) < strSize(key))
 		return recursive_Node_Search(node->left, key);
 	else
 		return recursive_Node_Search(node->right, key);
 }
 
 
-struct_BTree_Node BT_Insert(struct_BTree* tree, intptr_t key)
+struct_BTree_Node BT_Insert(struct_BTree* tree, STRING_PTR key)
 {
 	if (tree->root == NULL)
 	{

@@ -30,21 +30,22 @@ typedef struct string{
 	char* data;
 	unsigned int size;
 	unsigned int used;
-} STRING, *STRINGPTR;
+} STRING, *STRING_PTR;
 
-void strInit(STRING*);
-void strInitRaw(STRING*, char*);
-void strInitString(STRING*, STRING*);
+void strInit(STRING_PTR);
+void strInitRaw(STRING_PTR, char*);
+void strInitString(STRING_PTR, STRING_PTR);
 
-void strAppend(STRING*, char);
-void strCopy(STRING*, STRING*);
-void strClear(STRING*);
-void strFree(STRING*);
+void strAppend(STRING_PTR, char);
+void strCopy(STRING_PTR, STRING_PTR);
+void strClear(STRING_PTR);
+void strFree(STRING_PTR);
 
 int strCompare(STRING, char*);
+int strCompareStrings(STRING, STRING);
 
-unsigned int strSize(STRING*);
-unsigned int strUsed(STRING*);
+unsigned int strSize(STRING_PTR);
+unsigned int strUsed(STRING_PTR);
 
 
 

@@ -111,6 +111,10 @@ int strCompare(STRING str1, char* str2){
 	return !strcmp(str1.data, str2);
 }
 
+int strCompareStrings(STRING str1, STRING str2){
+	return !strcmp(str1.data, str2.data);	
+}
+
 unsigned int strSize(STRING* str){
 	return str->size;
 }
