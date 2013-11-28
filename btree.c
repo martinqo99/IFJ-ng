@@ -53,7 +53,7 @@ struct_BTree_Node BT_Insert(struct_BTree* tree, STRING_PTR key)
 {
 	if (tree->root == NULL)
 	{
-	    tree->root = malloc(sizeof(struct struct_BTree_Node));
+	    tree->root = gcMalloc(sizeof(struct struct_BTree_Node));
 		tree->root->key = key;
 		tree->root->left = NULL;
 		tree->root->right = NULL;
@@ -69,7 +69,7 @@ struct_BTree_Node BT_Insert(struct_BTree* tree, STRING_PTR key)
 		{
             if(temp_node->left == NULL)
 			{
-				temp_node->left = malloc(sizeof(struct struct_BTree_Node));
+				temp_node->left = gcMalloc(sizeof(struct struct_BTree_Node));
 				temp_node->left->key = key;
 				temp_node->left->left = NULL;
 				temp_node->left->right = NULL;
@@ -82,7 +82,7 @@ struct_BTree_Node BT_Insert(struct_BTree* tree, STRING_PTR key)
 		{
             if (temp_node->right == NULL)
 			{
-				temp_node->right = malloc(sizeof(struct struct_BTree_Node));
+				temp_node->right = gcMalloc(sizeof(struct struct_BTree_Node));
 				temp_node->right->key = key;
 				temp_node->right->left = NULL;
 				temp_node->right->right = NULL;
