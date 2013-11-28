@@ -37,6 +37,7 @@ typedef union VALUE{
 } VALUE;
 
 typedef enum TYPE{
+	TYPE_NULL,
     TYPE_BOOL,
     TYPE_DIGIT_INT,
 	TYPE_DIGIT_DOUBLE,
@@ -47,7 +48,10 @@ typedef enum TYPE{
 
 typedef enum INSTRUCTION_TYPE{
     INSTRUCTION_RETURN,
-	INSTRUCTION_MOV, // op1 = odkud, op2 = null, dest = kam
+	INSTRUCTION_MOV,         	//	A B		R(A) := R(B)  		(konstantu move nepresouva)
+    INSTRUCTION_LOADK,   	// 	A Bx    R(A) := Kst(Bx)    indexujeme konstanty od 0     
+	INSTRUCTION_LOAD_NULL	//	A B     R(A) := ... := R(B) := nil       local a;
+    
     //Tuxi dopln si instrukce, ktere potrebujes
 } INSTRUCTION_TYPE;
 
