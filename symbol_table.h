@@ -86,4 +86,45 @@ typedef struct SYMBOL_TABLE{
 } SYMBOL_TABLE;
 
 
+// ---------- PREPSAT!!!! --------
+typedef enum {
+    I_RETURN,
+//stack
+    I_POP,
+    I_PUSH,
+    I_SEMPTY,
+//presun
+    I_MOV,
+//aritmetika
+    I_ADD, //= LEX_ADDITION,
+    I_SUB, //= LEX_SUBSTRACTION,
+    I_MUL, //= LEX_MULTIPLICATION,
+    I_DIV, //= LEX_DIVISION,
+    I_POW, //= LEX_POWER,
+//logika
+    I_EQUAL, //= LEX_EQUAL,		// ==
+    I_NEQUAL, //= LEX_UNEQUAL,	// !=
+    I_LESS, //= LEX_LESSER, //<
+    I_ELESS, //= LEX_LESSER_EQUAL,		// <=
+    I_MORE, //= LEX_GREATER,		// >
+    I_EMORE, //= LEX_GREATER_EQUAL,		// >=
+//skoky - snad nebudou potreba vsechny
+    I_LABEL,		// navesti
+    I_FJUMP,		//false jump
+    I_JUMP,		//nepodmineny jump
+
+    I_CALL,
+//vestavene fce
+    I_INPUT,
+    I_NUMERIC,
+    I_PRINT,
+    I_TYPEOF,
+    I_LEN,
+    I_FIND,
+    I_SORT,
+    I_STRING, // dest od do, string je na stacku
+    NOINSTR
+}tItype;
+// ---------- PREPSAT!!!! --------
+
 #endif
