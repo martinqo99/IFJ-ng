@@ -17,36 +17,36 @@
 
 #include "list.h"
 
-void listInit(tListPTR list){
+void listInit(LISTPTR list){
     list->begin = NULL;
     list->end = NULL;
     list->curr = NULL;
 }
 
-void listInsertBegin(tListPTR list, PTR value){
+void listInsertBegin(LISTPTR list, PTR value){
     
 }
     
-void listInsertEnd(tListPTR list, PTR value){
-    
-}
-
-void listInsertPost(tListPTR list, PTR value){
+void listInsertEnd(LISTPTR list, PTR value){
     
 }
 
-void listBegin(tListPTR list){
-    
-}
-    
-void listSucc(tListPTR list){
+void listInsertPost(LISTPTR list, PTR value){
     
 }
 
-void listEnd(tListPTR list){
+void listBegin(LISTPTR list){
+    
+}
+    
+void listSucc(LISTPTR list){
     
 }
 
-void listFree(tListPTR list){
+void listEnd(LISTPTR list){
+    
+}
+
+void listFree(LISTPTR list){
     
 }

@@ -25,27 +25,27 @@ typedef void* PTR;
 
 #include "mmu.h"
 
-typedef struct tListNode{
+typedef struct LISTNODE{
     PTR value;
-    struct tListNode* next;    
-} tListNode, *tListNodePTR;
+    struct LISTNODE* next;    
+} LISTNODE, *LISTNODEPTR;
 
-typedef struct tList{
-    tListNodePTR begin;
-    tListNodePTR end;
-    tListNodePTR curr;
-} tList, *tListPTR;
+typedef struct LIST{
+    LISTNODEPTR begin;
+    LISTNODEPTR end;
+    LISTNODEPTR curr;
+} LIST, *LISTPTR;
 
 
-void listInit(tListPTR list);
-void listInsertBegin(tListPTR list, PTR value);
-void listInsertEnd(tListPTR list, PTR value);
-void listInsertPost(tListPTR list, PTR value);
+void listInit(LISTPTR list);
+void listInsertBegin(LISTPTR list, PTR value);
+void listInsertEnd(LISTPTR list, PTR value);
+void listInsertPost(LISTPTR list, PTR value);
 
-void listBegin(tListPTR list);
-void listSucc(tListPTR list);
-void listEnd(tListPTR list);
+void listBegin(LISTPTR list);
+void listSucc(LISTPTR list);
+void listEnd(LISTPTR list);
 
-void listFree(tListPTR list);
+void listFree(LISTPTR list);
 
 #endif
