@@ -36,6 +36,7 @@ enum_RetVal get_Token();
 enum_RetVal get_Next_Token();
 */
 
+//Hlavni funkce parseru
 ERROR parser(SYMBOL_TABLE_PTR st){
 	ERROR err;	
 	
@@ -49,12 +50,13 @@ ERROR parser(SYMBOL_TABLE_PTR st){
 	return parserParse(st);	
 }
 
+//Vyhleda definice funkci
 ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 	printf("Finding function definitions:\n");
 	enum_RetVal retval;
 	
 	init_Token();
-	
+
 	while((retval = get_Token()) != TTYPE_EOF){
 		//printf("Token: %s\n", glob_Token.data.data);
 		if(retval == TTYPE_KEYWORD && strCompare(glob_Token.data, "function")){
@@ -76,6 +78,7 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 	return E_OK;
 }
 
+//Funkce pro druhe parsovani
 ERROR parserParse(SYMBOL_TABLE_PTR st){
 	ERROR err = E_OK;
 
@@ -102,9 +105,11 @@ ERROR parserParse(SYMBOL_TABLE_PTR st){
 		return parserParse(st);
 	}
 }
+
+//Parsovani definice funkce
 //function id (<params>){ <stat_list> }
 ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
-	printf("Parsing function\n");
+	printf("Parsing definition function\n");
 	ERROR err = E_OK;
 	
 	if(get_Token() != TTYPE_FUNCTION)
@@ -115,7 +120,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	if(!st->curr)
 		return E_COMPILATOR;
 	
-	printf("Current function %s\n", st->curr->id.data);
+	printf("Change current function to %s\n", st->curr->id.data);
 	
 	if(get_Token() != TTYPE_L_BRACKET)
 		return E_SYNTAX;
@@ -131,17 +136,16 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 		return E_SYNTAX;
 	
 	err = parserParseFunctionCode(st);
-		
-	if(get_Token() != TTYPE_R_BRACE)
-		return E_SYNTAX;	
+
 
 	return err;
 }
 
+//Parsovani parametru definice funkce (0-1)
 // <params> - id <params_n>
 // <params> - eps
 ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
-	printf("Parsing function param\n");
+	printf("Parsing function definition param\n");
 	
 	enum_RetVal retval = get_Token();
 	
@@ -162,10 +166,11 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 		return E_SYNTAX;
 }
 
+//Parsovani parametru definice funkce (2+)
 // <params_n> - , id <params_n>
 // <params_n> - eps
 ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
-	printf("Parsing function params\n");
+	printf("Parsing function definition params\n");
 	
 	enum_RetVal retval = get_Token();
 	
@@ -196,14 +201,41 @@ ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 	else
 		return E_SYNTAX;	
 }
-
+//Parsovani tela definice funkce
+// <stat_list> - eps
+// <stat_list> - <command> <stat_list>
 ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
 	printf("Parsing function code\n");
-	return E_OK;
+	
+	enum_RetVal retval = get_Token();
+	
+	if(retval == TTYPE_R_BRACE)
+		return E_OK;
+	//else if(retval == TTYPE_ELSE) // why?
+	//	return E_SYNTAX;
+	else{
+		ERROR err = parserParseCode(st, retval);
+		
+		if(err == E_OK)
+			return parserParseFunctionCode(st);
+		else
+			return err;
+	}
 }
-
+//Parsovani prikazu
 ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
+	printf("Parsing code [%d]: %s\n", retval, glob_Token.data.data);
 	ERROR err = E_OK;
+	
+	
+	switch(retval){
+		case TTYPE_FUNCTION:
+			break;
+		case TTYPE_RESERVED:
+			break;
+		default:
+			return E_SYNTAX;
+	}
 	
 	return err;
 }

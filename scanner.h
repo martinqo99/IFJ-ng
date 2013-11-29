@@ -34,7 +34,7 @@ typedef enum enum_RetVal
 	
 	TTYPE_EQUAL, TTYPE_NOT_EQUAL,					//	==	!==
 	TTYPE_LESSER, TTYPE_GREATER,						//	<	>
-	TTYPE_LESSER_EQUAL, TTYPE_GREATER_EQUAL,			//	<=	>=
+	TTYPE_LESSER_EQUAL, TTYPE_GREATER_EQUAL,			// 10.	<=	>=
 
 	TTYPE_ADDITION, TTYPE_SUBTRACTION,				//	+	-
 	TTYPE_MULTIPLICATION, TTYPE_DIVISION,			//	*	/
@@ -42,7 +42,7 @@ typedef enum enum_RetVal
 	TTYPE_ASSIGN,  TTYPE_COMMA,	TTYPE_DOT,			//	=	,	.
 	TTYPE_SEMICOLON,									//	;
 	TTYPE_STRING, 										//	"blabla"
-	TTYPE_FUNCTION,									//	blabla
+	TTYPE_FUNCTION,									//	20. blabla
 
 	TTYPE_VARIABLE,									// $blabla
 	TTYPE_NUMBER,										// 15
