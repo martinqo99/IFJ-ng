@@ -23,4 +23,3 @@
 		return 0;
 	}
 	$foo = MyMain("Toto je nejaky text v programu jazyka IFJ13");
-?>

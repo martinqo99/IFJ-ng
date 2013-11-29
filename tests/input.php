@@ -19,4 +19,3 @@
 		}
 		$x = put_string("Vysledek je: ", $vysl, "\n");
 	}
-?>

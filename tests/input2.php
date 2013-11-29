@@ -31,4 +31,3 @@
 		$message = "Vysledek je: " . $vysl . "\n";
 	}
 	$zzz = put_string($message);
-?>
