@@ -67,5 +67,7 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 			return E_SYNTAX;
 	}
 	
+	free_Token();
+	
 	return E_OK;
 }

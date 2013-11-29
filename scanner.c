@@ -46,6 +46,10 @@ void clear_Token(){
     strInit(&(glob_Token.data));
 }
 
+void free_Token(){
+	strFree(&(glob_Token.data));
+}
+
 enum_RetVal get_Token()
 {
 	clear_Token();	//clear Token

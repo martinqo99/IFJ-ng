@@ -1,26 +1,34 @@
 #include "btree.h"
 
-void BT_Init(struct_BTree* tree)
-{
+void BT_Init(struct_BTree* tree){
+	if(!tree)
+		return;
+	
 	tree->root = NULL;
 	tree->last = NULL;
 }
 
-void BT_Free(struct_BTree* tree)
-{
-	if(tree->root == NULL)
-	{
+void BT_Free(struct_BTree* tree){
+	if(!tree)
 		return;
-	}
+
+	if(!tree->root)
+		return;
+	
 	recursive_Node_Delete(tree->root);
+	
+	BT_Init(tree);
 }
 
-void recursive_Node_Delete(struct_BTree_Node node)
-{
+void recursive_Node_Delete(struct_BTree_Node node){
+	if(!node)
+		return;
+	
 	if(node->left != NULL)
 		recursive_Node_Delete(node->left);
 	if(node->right != NULL)
 		recursive_Node_Delete(node->right);
+	
 	gcFree(node->data);
 	gcFree(node);
 }

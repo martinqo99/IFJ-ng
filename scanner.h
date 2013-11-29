@@ -100,6 +100,7 @@ extern struct_Token glob_Token;
 
 void init_Token();
 void clear_Token();
+void free_Token();
 
 enum_RetVal get_Token();
 enum_RetVal get_Next_Token();

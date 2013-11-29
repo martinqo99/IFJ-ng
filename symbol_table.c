@@ -44,8 +44,10 @@ ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
 	strCopy(&id, &function->id);
 	
 	ERROR err;
+	STRING_PTR t = malloc(sizeof(STRING));
+	strInitRaw(t, "text");
 	
-	BT_Insert(&st->functions, &function->id);
+	BT_Insert(&st->functions, t);
 	
 	if(err != E_OK){
 		
