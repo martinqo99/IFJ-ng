@@ -15,7 +15,7 @@
 
 // --- API ---
 ERROR interpret(SYMBOL_TABLE*);
-ERROR recursive_interpret(FUNCTIONPTR, TStack*);
+ERROR recursive_interpret(FUNCTIONPTR, STACK_PTR);
 
 /*bool isConstant(tSymbol *);
 ERROR copySymbolData(tSymbolData *,tSymbolData *);

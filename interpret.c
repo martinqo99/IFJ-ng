@@ -4,7 +4,7 @@
 {\
 	if((data_dst)->items->type == TYPE_STRING) \
 	{\
-		mmuFree(&(data_dst)->items->value.valString); \
+		gcFree(&(data_dst)->items->value.valString); \
 	}\
 	if((data_src)->items->type == TYPE_DIGIT_INT)\
 	{\
@@ -32,45 +32,35 @@
 	}\
 }
 
-/*
-	(data_dst).data.string = *((s_string*)mem_alloc(sizeof(struct s_string),id_interpret));\
-	(data_dst).data.string.input = mem_alloc((data_src).data.string.size,id_interpret);\
-	memcpy((data_dst).data.string.input, (data_src).data.string.input, (data_src).data.string.length);\
-	(data_dst).data.string.length = (data_src).data.string.length;\
-	(data_dst).type = TYPE_STRING;\
-*/
-
 ERROR interpret(SYMBOL_TABLE* table)
 {
-  TStack* stack;
-  ERROR err;
-  Sinit(stack);
+	STACK_PTR stack;
+	ERROR err;
+	stack = gcMalloc(sizeof(struct STACK));
+	stackInit(stack);
   
-  /// ----- POZNAMKA ----- 
-  err = recursive_interpret(&(table->start),stack);
+	/// ----- POZNAMKA ----- 
+	err = recursive_interpret(&(table->start),stack);
   
-  // ------ STACK FREE? ------
-//   stackDispose(stack);
-//   stackDestroy(stack);
-  return err;
+	stackFree(stack);
+	gcFree(stack);
+	return err;
 }
 
-ERROR recursive_interpret(FUNCTIONPTR function, TStack* stack)
+ERROR recursive_interpret(FUNCTIONPTR function, STACK_PTR stack)
 {
-	
-	LISTNODE *help = function->instructions.begin;
-	
+	LIST_NODE_PTR help = function->instructions.begin;
 	ERROR err = E_OK;
 	
 	// ----- Priprava promenych ------
 	INSTRUCTION* instruction = NULL;
 	
 	ITEMPTR null_item;
-	null_item = mmuMalloc(sizeof(struct ITEM));
+	null_item = gcMalloc(sizeof(struct ITEM));
 	null_item->type = TYPE_NULL;
 	
 	SYMBOL* null_symbol;
-	null_symbol = mmuMalloc(sizeof(struct SYMBOL));
+	null_symbol = gcMalloc(sizeof(struct SYMBOL));
 	null_symbol->type = TYPE_NULL;
 	null_symbol->items = null_item;
 	
@@ -78,8 +68,8 @@ ERROR recursive_interpret(FUNCTIONPTR function, TStack* stack)
     SYMBOL* op2 = NULL;
     SYMBOL* dest = NULL;
 	
-    FUNCTIONPTR tmp_function = NULL;
-		
+//     FUNCTIONPTR tmp_function = NULL;
+	
 	while(help != NULL && err == E_OK)
 	{
 		instruction = (INSTRUCTION*) help->value;
@@ -153,4 +143,5 @@ ERROR recursive_interpret(FUNCTIONPTR function, TStack* stack)
 			
 		}
 	}
+	return err;
 }
