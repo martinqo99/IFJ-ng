@@ -2,12 +2,12 @@
  * Predmet:  IFJ / IAL
  * Projekt:  Implementace interpretu jazyka PHP13
  * Varianta: a/1/I
- * Soubor:   errors.c
+ * Soubor:   parser.h
  *
  * Popis:
  *
  *
- * Datum:    12.9.2013
+ * Datum:    28.11.2013
  *
  * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
  *           Stodulka Daniel
@@ -15,19 +15,10 @@
  *           Tran Manh Hoang
  */
 
-#ifndef ERRORS_H_INCLUDED
-#define ERRORS_H_INCLUDED
+#include "errors.h"
+#include "gc.h"
+#include "symbol_table.h"
+#include "scanner.h"
 
-#include <stdlib.h>
-
-typedef enum error{
-	E_OK					= 0,
-	E_SYNTAX				= 1,
-	E_INTERPRET				= 1,
-
-	E_COMPILATOR			= 99	
-} ERROR;
-
-void ChuckSaidNo(ERROR ecode);
-
-#endif
+ERROR parser(SYMBOL_TABLE_PTR st);
+ERROR parserFindFunctions(SYMBOL_TABLE_PTR st);

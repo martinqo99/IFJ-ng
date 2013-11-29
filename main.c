@@ -22,6 +22,7 @@
 #include "gc.h"
 #include "scanner.h"
 #include "symbol_table.h"
+#include "parser.h"
 
 void programAbort();
 
@@ -35,13 +36,11 @@ int main(int argc, char* argv[]){
 	if(!(glob_FileHandler = gcFopen(argv[1], "r")))
 		programAbort(E_COMPILATOR, "Cannot open input file\n");
 	
-	ERROR err = E_OK;
-	
-	init_Token();
-	
 	SYMBOL_TABLE st;
 	
 	stInit(&st);
+	
+	ERROR err = parser(&st);
 	
 	
 	

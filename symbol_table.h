@@ -89,17 +89,18 @@ typedef struct FUNCTION{
     LIST staticValues;
     
     int calledCount;
-    bool defined;
-} FUNCTION, *FUNCTIONPTR;
+} FUNCTION, *FUNCTION_PTR;
 
 typedef struct SYMBOL_TABLE{
     struct_BTree functions;
     
     FUNCTION start;
-    FUNCTIONPTR curr;    
+    FUNCTION_PTR curr;    
 } SYMBOL_TABLE, *SYMBOL_TABLE_PTR;
 
 void stInit(SYMBOL_TABLE_PTR st);
+ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id);
+
 void stFree(SYMBOL_TABLE_PTR st);
 
 /*

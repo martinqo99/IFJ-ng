@@ -28,9 +28,31 @@ void stInit(SYMBOL_TABLE_PTR st){
 	listInit(&st->start.instructions);
 	
 	st->start.calledCount = 0;
-	st->start.defined = true;
 	
 	st->curr = &(st->start);
+}
+
+ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
+	FUNCTION_PTR function = gcMalloc(sizeof(FUNCTION));
+	
+	BT_Init(&function->symbols);
+	listInit(&function->staticValues);
+	listInit(&function->instructions);
+	
+	function->calledCount = 0;
+	
+	strCopy(&id, &function->id);
+	
+	ERROR err;
+	
+	err = BT_Insert(&st->functions, &function->id);
+	
+	if(err != E_OK){
+		
+		
+	}
+	
+	return err;	
 }
 
 void stFree(SYMBOL_TABLE_PTR st){
@@ -44,7 +66,6 @@ void stFree(SYMBOL_TABLE_PTR st){
 	listFree(&st->start.instructions);
 	
 	st->start.calledCount = 0;
-	st->start.defined = true;
 	
 	st->curr = NULL;
 }
