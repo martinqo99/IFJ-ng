@@ -231,17 +231,79 @@ ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
 //Parsovani prikazu
 ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 	printf("Parsing code [%d]: %s\n", retval, glob_Token.data.data);
-	ERROR err = E_OK;
 	
+	ERROR err = E_OK;	
+
 	
 	switch(retval){
-		case TTYPE_FUNCTION:
+		case TTYPE_VARIABLE:
+			if(!stSearchSymbol(st->curr, glob_Token.data))
+				stInsertSymbol(st->curr, glob_Token.data);
+			
+			//Stejny nazev parametru a funkce - ale nemozne v PHP
+			//if(!stSearchFunction(st, glob_Token.data))
+			//	return E_SEMANTIC;
+				
+			retval = get_Token();
+			
+			if(retval != TTYPE_ASSIGN)
+				return E_SYNTAX;
+			//Prazdny prikaz
+			//else if(retval == TTYPE_SEMICOLON)
+			//	return E_OK;
+			else{
+				err = parserControlAssign(st, stGetLastSymbol(st->curr));
+				
+				if(err != E_OK)
+					return err;
+			}
+			
 			break;
-		case TTYPE_RESERVED:
+		case TTYPE_KEYWORD:
+			if(strCompare(glob_Token.data, "if")){
+				retval = get_Token();
+			}
+			//while(<expression>){ <stat_list> }
+			else if(strCompare(glob_Token.data, "while")){
+				retval = get_Token();
+			}
+			//return expression;
+			else if(strCompare(glob_Token.data, "return")){
+				retval = get_Token();
+			}
+			else
+				return E_SYNTAX;
 			break;
 		default:
+			printf("[debug] SYNTAX ERROR: %s\n", glob_Token.data.data);
 			return E_SYNTAX;
 	}
 	
 	return err;
+}
+
+// <assign> - expression
+// <assign> - id(<params>)
+// <assign> - boolval(<term>)
+// <assign> - doubleval(<term>)
+// <assign> - intval(<term>)
+// <assign> - strval(<term>)
+// <assign> - get_string()
+// <assign> - put_string(<term>)
+// <assign> - strlen(<term>)
+// <assign> - get_substring(<term>,<num>,<num>)
+// <assign> - find_string(string, string)
+// <assign> - sort_string(string)
+ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
+	ERROR err = E_OK;
+	enum_RetVal retval = get_Token();
+	
+	switch(retval){
+		
+		default:
+			break;
+	}
+	
+	
+	return err;	
 }

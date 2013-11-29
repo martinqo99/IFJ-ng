@@ -28,3 +28,4 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st);
 ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st);
 ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st);
 ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval);
+ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol);
