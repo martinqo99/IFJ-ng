@@ -39,8 +39,6 @@ void init_Token(){
     rewind(glob_FileHandler);
 
     strInit(&(glob_Token.data));
-	
-	glob_Token.first_call = 1;
 }
 
 void clear_Token(){
@@ -187,14 +185,13 @@ enum_RetVal get_Token()
                 else if(cur_char == 'p' && strCompare(glob_Token.data , "<?")){
 					add_Token_Data(cur_char); 
 					break;}
-				else if(cur_char == 'p' && strCompare(glob_Token.data , "<?ph")){
-					if(glob_Token.first_call == 0)
-						return TTYPE_ERROR;
-					glob_Token.first_call = 0;
-					clear_Token();
-					cur_state = STATE_START;}
+				else if(cur_char == 'p' && strCompare(glob_Token.data , "<?ph")){		
+					add_Token_Data(cur_char); 
+					break;}
                 else if(cur_char == 'h' && strCompare(glob_Token.data , "<?p"))
 					add_Token_Data(cur_char); 
+				else if((cur_char == '\n' || cur_char == ' ' || cur_char == '\t') && strCompare(glob_Token.data , "<?php"))
+					return TTYPE_PHP_START; 
                 else{
                     ungetc(cur_char, glob_FileHandler);
                     return TTYPE_ERROR;}

@@ -48,6 +48,7 @@ typedef enum enum_RetVal
 	TTYPE_NUMBER,										// 15
 	TTYPE_DEC_NUMBER,									// 15.45
 	TTYPE_EXP_NUMBER,									// 15.45e-4
+	TTYPE_PHP_START,									// <?php
 	
 	TTYPE_KEYWORD,
 	TTYPE_RESERVED,
@@ -91,7 +92,6 @@ typedef struct struct_Token
 	unsigned int column;
 
 	STRING data;
-	int first_call;
 } struct_Token;
 
 extern struct_Token glob_Token;
