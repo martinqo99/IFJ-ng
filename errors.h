@@ -24,6 +24,7 @@ typedef enum error{
 	E_OK					= 0,
 	E_SYNTAX				= 1,
 	E_INTERPRET				= 2,
+	E_SEMANTIC				= 3,
 
 	E_COMPILATOR			= 99	
 } ERROR;
