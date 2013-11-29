@@ -44,9 +44,13 @@ ERROR parser(SYMBOL_TABLE_PTR st){
 	if(err != E_OK)
 		return err;
 	
+	init_Token();
+	
+	return parserParse(st);	
 }
 
 ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
+	printf("Finding function definitions:\n");
 	enum_RetVal retval;
 	
 	init_Token();
@@ -57,7 +61,7 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 			retval = get_Token();
 			
 			if(retval == TTYPE_FUNCTION){
-				printf("Funkce: %s\n", glob_Token.data.data);
+				printf("- %s\n", glob_Token.data.data);
 				stInsertFunction(st, glob_Token.data);
 			}
 			else
@@ -70,4 +74,83 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 	free_Token();
 	
 	return E_OK;
+}
+
+ERROR parserParse(SYMBOL_TABLE_PTR st){
+	ERROR err = E_OK;
+
+	st->curr = &st->start;
+	
+	enum_RetVal retval = get_Token();
+	
+	if(retval == TTYPE_EOF)
+		return err;
+	else if(retval == TTYPE_KEYWORD && strCompare(glob_Token.data, "function")){
+		err = parserParseFunction(st);
+		
+		if(err != E_OK)
+			return err;
+		
+		return parserParse(st);
+	}
+	else{
+		err = parserParseCode(st, retval);
+		
+		if(err != E_OK)
+			return err;
+		
+		return parserParse(st);
+	}
+}
+//function id (<params>){ <stat_list> }
+ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
+	printf("Parsing function:\n");
+	ERROR err = E_OK;
+	
+	if(get_Token() != TTYPE_FUNCTION)
+		return E_SYNTAX;
+	
+	st->curr = stSearchFunction(st, glob_Token.data);
+	
+	if(!st->curr)
+		return E_COMPILATOR;
+	
+	printf("Current function %s\n", st->curr->id.data);
+	
+	if(get_Token() != TTYPE_L_BRACKET)
+		return E_SYNTAX;
+	
+	err = parserParseFunctionParams(st);
+	
+	if(err != E_OK)
+		return err;
+		
+	INSTRUCTION_PTR i = NULL;
+	//INSTRUKCE
+	
+	listInsertEnd(&st->curr->instructions, i);
+		
+	if(get_Token() != TTYPE_L_BRACE)
+		return E_SYNTAX;
+	
+	err = parserParseFunctionCode(st);
+		
+	if(get_Token() != TTYPE_R_BRACE)
+		return E_SYNTAX;	
+
+	return err;
+}
+
+ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
+	return E_OK;
+}
+
+ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
+	return E_OK;
+}
+
+ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
+	ERROR err = E_OK;
+	
+	return err;
 }

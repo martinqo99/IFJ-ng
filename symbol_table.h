@@ -79,7 +79,7 @@ typedef struct INSTRUCTION{
     PTR operand1;
     PTR operand2;
 	PTR destionation;
-} INSTRUCTION;
+} INSTRUCTION, *INSTRUCTION_PTR;
 
 typedef struct FUNCTION{
     STRING id;
@@ -100,6 +100,7 @@ typedef struct SYMBOL_TABLE{
 
 void stInit(SYMBOL_TABLE_PTR st);
 ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id);
+FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id);
 
 void stFree(SYMBOL_TABLE_PTR st);
 

@@ -53,6 +53,18 @@ ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
 	return err;	
 }
 
+FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id){
+	struct_BTree_Node node = BT_Search(&st->functions, &id);
+	
+	if(!node)
+		return NULL;
+	
+	if(!node->data)
+		return NULL;
+	
+	return (FUNCTION_PTR)node->data;	
+}
+
 void stFree(SYMBOL_TABLE_PTR st){
 	if(!st)
 		return;
