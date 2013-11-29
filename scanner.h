@@ -48,8 +48,6 @@ typedef enum enum_RetVal
 	TTYPE_NUMBER,										// 15
 	TTYPE_DEC_NUMBER,									// 15.45
 	TTYPE_EXP_NUMBER,									// 15.45e-4
-	TTYPE_PHP_START,									// <?php
-	TTYPE_PHP_END,										//	?>
 	
 	TTYPE_KEYWORD,
 	TTYPE_RESERVED,
@@ -83,8 +81,7 @@ typedef enum enum_State
 	STATE_LINE_COMMENT,
 	STATE_BLOCK_COMMENT,
 	
-	STATE_PHP_START,
-	STATE_PHP_END
+	STATE_PHP_START
 	
 } enum_State;
 
@@ -94,6 +91,7 @@ typedef struct struct_Token
 	unsigned int column;
 
 	STRING data;
+	int first_call;
 } struct_Token;
 
 extern struct_Token glob_Token;

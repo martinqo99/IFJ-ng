@@ -39,6 +39,8 @@ void init_Token(){
     rewind(glob_FileHandler);
 
     strInit(&(glob_Token.data));
+	
+	glob_Token.first_call = 1;
 }
 
 void clear_Token(){
@@ -85,7 +87,6 @@ enum_RetVal get_Token()
                 else if(cur_char == '/'){ add_Token_Data(cur_char); cur_state = STATE_SLASH; break;}
                 else if(cur_char == ';'){ add_Token_Data(cur_char); return TTYPE_SEMICOLON;}
                 else if(cur_char == ','){ add_Token_Data(cur_char); return TTYPE_COMMA;}
-                else if(cur_char == '?'){ add_Token_Data(cur_char); cur_state = STATE_PHP_END; break;}
                 else if(cur_char == '$'){ add_Token_Data(cur_char); cur_state = STATE_VARIABLE; break;}
                 else if(cur_char == '='){ add_Token_Data(cur_char); cur_state = STATE_ASSIGN; break;}
                 else if(cur_char == '!'){ add_Token_Data(cur_char); cur_state = STATE_NOT_EQUAL; break;}
@@ -186,21 +187,17 @@ enum_RetVal get_Token()
                 else if(cur_char == 'p' && strCompare(glob_Token.data , "<?")){
 					add_Token_Data(cur_char); 
 					break;}
-				else if(cur_char == 'p' && strCompare(glob_Token.data , "<?ph")){		
-					add_Token_Data(cur_char); 
-					return TTYPE_PHP_START; }
+				else if(cur_char == 'p' && strCompare(glob_Token.data , "<?ph")){
+					if(glob_Token.first_call == 0)
+						return TTYPE_ERROR;
+					glob_Token.first_call = 0;
+					clear_Token();
+					cur_state = STATE_START;}
                 else if(cur_char == 'h' && strCompare(glob_Token.data , "<?p"))
 					add_Token_Data(cur_char); 
                 else{
                     ungetc(cur_char, glob_FileHandler);
                     return TTYPE_ERROR;}
-                break;
-			case STATE_PHP_END:
-				if(cur_char == '>'){
-					add_Token_Data(cur_char);
-                    return TTYPE_PHP_END; }
-                else
-                    return TTYPE_ERROR;
                 break;
 			case STATE_VARIABLE:
 				if(cur_char == EOF)
