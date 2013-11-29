@@ -19,6 +19,7 @@
 #include "gc.h"
 #include "symbol_table.h"
 #include "scanner.h"
+#include "exp.h"
 
 ERROR parser(SYMBOL_TABLE_PTR st);
 ERROR parserFindFunctions(SYMBOL_TABLE_PTR st);

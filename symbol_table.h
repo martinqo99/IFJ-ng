@@ -55,6 +55,7 @@ typedef enum INSTRUCTION_TYPE{
     INSTRUCTION_NOP,
 	
 	INSTRUCTION_POP,
+	INSTRUCTION_PUSH,
     //Tuxi dopln si instrukce, ktere potrebujes
 } INSTRUCTION_TYPE;
 

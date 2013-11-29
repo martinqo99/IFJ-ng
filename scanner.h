@@ -28,23 +28,24 @@ extern FILE* glob_FileHandler;
 
 typedef enum enum_RetVal
 {
-	TTYPE_L_BRACKET, TTYPE_R_BRACKET,				// (	)
 	TTYPE_L_SBRACKET, TTYPE_R_SBRACKET,				//	[	]
 	TTYPE_L_BRACE, TTYPE_R_BRACE,						//	{	}
+	TTYPE_ASSIGN,  TTYPE_COMMA,	TTYPE_DOT,			//	=	,	.
 	
-	TTYPE_EQUAL, TTYPE_NOT_EQUAL,					//	==	!==
-	TTYPE_LESSER, TTYPE_GREATER,						//	<	>
-	TTYPE_LESSER_EQUAL, TTYPE_GREATER_EQUAL,			// 10.	<=	>=
-
+	//NESAHAT - VAZBA NA PRECEDENCNI TABULKU!
+	TTYPE_VARIABLE,									// $blabla	
+	TTYPE_L_BRACKET, TTYPE_R_BRACKET,				// (	)
 	TTYPE_ADDITION, TTYPE_SUBTRACTION,				//	+	-
 	TTYPE_MULTIPLICATION, TTYPE_DIVISION,			//	*	/
-
-	TTYPE_ASSIGN,  TTYPE_COMMA,	TTYPE_DOT,			//	=	,	.
-	TTYPE_SEMICOLON,									//	;
+	TTYPE_POWER,
+	TTYPE_EQUAL, TTYPE_NOT_EQUAL,					//	==	!==
+	TTYPE_LESSER, TTYPE_LESSER_EQUAL,				// < <=
+	TTYPE_GREATER,	TTYPE_GREATER_EQUAL,			// > >=
+	TTYPE_SEMICOLON,								//	;	
+	
 	TTYPE_STRING, 										//	"blabla"
-	TTYPE_FUNCTION,									//	20. blabla
-
-	TTYPE_VARIABLE,									// $blabla
+	TTYPE_FUNCTION,										//	blabla
+	
 	TTYPE_NUMBER,										// 15
 	TTYPE_DEC_NUMBER,									// 15.45
 	TTYPE_EXP_NUMBER,									// 15.45e-4
@@ -57,6 +58,7 @@ typedef enum enum_RetVal
 	TTYPE_NULL,
 	
 	TTYPE_EOF,
+	TTYPE_EXPRESSION,
 	TTYPE_ERROR = 66
 	
 } enum_RetVal;

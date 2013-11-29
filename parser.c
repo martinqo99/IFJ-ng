@@ -233,7 +233,8 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 	printf("Parsing code [%d]: %s\n", retval, glob_Token.data.data);
 	
 	ERROR err = E_OK;	
-
+	//INSTRUCTION_PTR operator1, operator2, i;
+	SYMBOL_PTR symbol;
 	
 	switch(retval){
 		case TTYPE_VARIABLE:
@@ -270,6 +271,18 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			//return expression;
 			else if(strCompare(glob_Token.data, "return")){
 				retval = get_Token();
+				
+				//EDIT
+				err = parserExpression(st, retval, symbol);
+				
+				if(err != E_OK)
+					return err;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_RETURN, NULL, NULL, NULL));
+				
+				if(get_Token() != TTYPE_SEMICOLON)
+					return E_SYNTAX;
 			}
 			else
 				return E_SYNTAX;
@@ -296,14 +309,55 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 // <assign> - sort_string(string)
 ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	ERROR err = E_OK;
+	
 	enum_RetVal retval = get_Token();
 	
 	switch(retval){
-		
+		case TTYPE_RESERVED:
+			if(strCompare(glob_Token.data, "boolval")){
+				
+			}
+			else if(strCompare(glob_Token.data, "doubleval")){
+				
+			}
+			else if(strCompare(glob_Token.data, "intval")){
+				
+			}
+			else if(strCompare(glob_Token.data, "strval")){
+				
+			}			
+			else if(strCompare(glob_Token.data, "get_string")){
+				
+			}
+			else if(strCompare(glob_Token.data, "put_string")){
+				
+			}
+			else if(strCompare(glob_Token.data, "strlen")){
+				
+			}
+			else if(strCompare(glob_Token.data, "get_substring")){
+				
+			}
+			else if(strCompare(glob_Token.data, "find_string")){
+				
+			}
+			else if(strCompare(glob_Token.data, "sort_string")){
+				
+			}
+			else
+				return E_SYNTAX;
+			break;
+		// variable + 5
+		case TTYPE_VARIABLE:
+			break;
+		// funkce(x)
+		case TTYPE_FUNCTION:
+			break;
+		case TTYPE_STRING:
+			break;
 		default:
 			break;
-	}
-	
+	}	
 	
 	return err;	
 }
