@@ -104,7 +104,7 @@ ERROR parserParse(SYMBOL_TABLE_PTR st){
 }
 //function id (<params>){ <stat_list> }
 ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
-	printf("Parsing function:\n");
+	printf("Parsing function\n");
 	ERROR err = E_OK;
 	
 	if(get_Token() != TTYPE_FUNCTION)
@@ -120,7 +120,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	if(get_Token() != TTYPE_L_BRACKET)
 		return E_SYNTAX;
 	
-	err = parserParseFunctionParams(st);
+	err = parserParseFunctionParam(st);
 	
 	if(err != E_OK)
 		return err;
@@ -141,11 +141,69 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	return err;
 }
 
+// <params> - id <params_n>
+// <params> - eps
+ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
+	printf("Parsing function param\n");
+	
+	enum_RetVal retval = get_Token();
+	
+	if(retval == TTYPE_R_BRACKET)
+		return E_OK;
+	else if(retval == TTYPE_VARIABLE){
+		//Stejny nazev parametru a funkce - ale nemozne v PHP
+		//if(stSearchFunction(st, glob_Token.data))
+		//	return E_SEMANTIC;
+		
+		stInsertSymbol(st->curr, glob_Token.data);
+			
+		INSTRUCTION_PTR i;
+		//INSTRUKCE
+		
+		return parserParseFunctionParams(st);
+	}
+	else
+		return E_SYNTAX;
+}
+
+// <params_n> - , id <params_n>
+// <params_n> - eps
 ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
-	return E_OK;
+	printf("Parsing function params\n");
+	
+	enum_RetVal retval = get_Token();
+	
+	if(retval == TTYPE_R_BRACKET)
+		return E_OK;
+	else if(retval == TTYPE_COMMA){
+		
+		retval = get_Token();
+		
+		if(retval == TTYPE_VARIABLE){
+			//Stejny nazev parametru a funkce - ale nemozne v PHP
+			//if(stSearchFunction(st, glob_Token.data))
+			//	return E_SEMANTIC;
+			
+			//Stejny nazev dvou parametru
+			if(stSearchSymbol(st->curr, glob_Token.data))
+ 				return E_SEMANTIC;
+			
+			stInsertSymbol(st->curr, glob_Token.data);
+			
+			INSTRUCTION_PTR i;
+			//INSTRUKCE
+			
+			return parserParseFunctionParams(st);
+		}
+		else
+			return E_SYNTAX;
+	}
+	else
+		return E_SYNTAX;	
 }
 
 ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
+	printf("Parsing function code\n");
 	return E_OK;
 }
 

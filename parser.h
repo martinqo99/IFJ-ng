@@ -24,6 +24,7 @@ ERROR parser(SYMBOL_TABLE_PTR st);
 ERROR parserFindFunctions(SYMBOL_TABLE_PTR st);
 ERROR parserParse(SYMBOL_TABLE_PTR st);
 ERROR parserParseFunction(SYMBOL_TABLE_PTR st);
+ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st);
 ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st);
 ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st);
 ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval);

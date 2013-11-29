@@ -53,6 +53,23 @@ ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
 	return err;	
 }
 
+ERROR stInsertSymbol(FUNCTION_PTR function, STRING id){
+	SYMBOL_PTR symbol = gcMalloc(sizeof(SYMBOL));
+	
+	strCopy(&id, &symbol->id);
+	symbol->type = TYPE_OTHER;
+	symbol->items = NULL;
+	
+	ERROR err = BT_Insert(&function->symbols, &symbol->id, symbol);
+	
+	if(err != E_OK){
+		
+		
+	}
+	
+	return err;
+}
+
 FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id){
 	struct_BTree_Node node = BT_Search(&st->functions, &id);
 	
@@ -63,6 +80,18 @@ FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id){
 		return NULL;
 	
 	return (FUNCTION_PTR)node->data;	
+}
+
+SYMBOL_PTR stSearchSymbol(FUNCTION_PTR function, STRING id){
+	struct_BTree_Node node = BT_Search(&function->symbols, &id);
+	
+	if(!node)
+		return NULL;
+	
+	if(!node->data)
+		return NULL;
+	
+	return (SYMBOL_PTR)node->data;	
 }
 
 void stFree(SYMBOL_TABLE_PTR st){

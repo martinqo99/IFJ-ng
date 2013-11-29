@@ -65,7 +65,7 @@ typedef struct SYMBOL{
     STRING id;
     TYPE type;    
     ITEMPTR items;    
-} SYMBOL;
+} SYMBOL, *SYMBOL_PTR;
 
 /*
   typedef struct tsymbol{
@@ -100,7 +100,10 @@ typedef struct SYMBOL_TABLE{
 
 void stInit(SYMBOL_TABLE_PTR st);
 ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id);
+ERROR stInsertSymbol(FUNCTION_PTR function, STRING id);
+
 FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id);
+SYMBOL_PTR stSearchSymbol(FUNCTION_PTR function, STRING id);
 
 void stFree(SYMBOL_TABLE_PTR st);
 
