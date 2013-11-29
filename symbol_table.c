@@ -16,3 +16,35 @@
  */
 
 #include "symbol_table.h"
+
+void stInit(SYMBOL_TABLE_PTR st){
+	if(!st)
+		return;
+	
+	BT_Init(&st->start.symbols);
+	BT_Init(&st->functions);
+	
+	listInit(&st->start.staticValues);
+	listInit(&st->start.instructions);
+	
+	st->start.calledCount = 0;
+	st->start.defined = true;
+	
+	st->curr = &(st->start);
+}
+
+void stFree(SYMBOL_TABLE_PTR st){
+	if(!st)
+		return;
+	
+	//BT_Free(&st->start.symbols);
+	//BT_Free(&st->functions);
+	
+	listFree(&st->start.staticValues);
+	listFree(&st->start.instructions);
+	
+	st->start.calledCount = 0;
+	st->start.defined = true;
+	
+	st->curr = NULL;
+}

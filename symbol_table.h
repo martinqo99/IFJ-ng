@@ -97,7 +97,10 @@ typedef struct SYMBOL_TABLE{
     
     FUNCTION start;
     FUNCTIONPTR curr;    
-} SYMBOL_TABLE;
+} SYMBOL_TABLE, *SYMBOL_TABLE_PTR;
+
+void stInit(SYMBOL_TABLE_PTR st);
+void stFree(SYMBOL_TABLE_PTR st);
 
 /*
 enum enum_instruction
