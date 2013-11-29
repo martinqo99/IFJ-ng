@@ -2,10 +2,7 @@
 
 void BT_Init(struct_BTree* tree)
 {
-	tree = gcMalloc(sizeof(struct struct_BTree));
-// 	tree->root = malloc(sizeof(void*));
 	tree->root = NULL;
-// 	tree->last = malloc(sizeof(void*));
 	tree->last = NULL;
 }
 
@@ -13,11 +10,9 @@ void BT_Free(struct_BTree* tree)
 {
 	if(tree->root == NULL)
 	{
-		gcFree(tree);
 		return;
 	}
 	recursive_Node_Delete(tree->root);
-	gcFree(tree);
 }
 
 void recursive_Node_Delete(struct_BTree_Node node)

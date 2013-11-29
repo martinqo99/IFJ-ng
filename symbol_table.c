@@ -45,7 +45,7 @@ ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
 	
 	ERROR err;
 	
-	err = BT_Insert(&st->functions, &function->id);
+	BT_Insert(&st->functions, &function->id);
 	
 	if(err != E_OK){
 		
@@ -59,8 +59,8 @@ void stFree(SYMBOL_TABLE_PTR st){
 	if(!st)
 		return;
 	
-	//BT_Free(&st->start.symbols);
-	//BT_Free(&st->functions);
+	BT_Free(&st->start.symbols);
+	BT_Free(&st->functions);
 	
 	listFree(&st->start.staticValues);
 	listFree(&st->start.instructions);
