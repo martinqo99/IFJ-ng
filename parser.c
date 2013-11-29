@@ -125,11 +125,8 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	if(err != E_OK)
 		return err;
 		
-	INSTRUCTION_PTR i = NULL;
-	//INSTRUKCE
-	
-	listInsertEnd(&st->curr->instructions, i);
-		
+	listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_NOP, NULL, NULL, NULL));
+
 	if(get_Token() != TTYPE_L_BRACE)
 		return E_SYNTAX;
 	
@@ -157,8 +154,7 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 		
 		stInsertSymbol(st->curr, glob_Token.data);
 			
-		INSTRUCTION_PTR i;
-		//INSTRUKCE
+		listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, NULL, NULL, NULL));
 		
 		return parserParseFunctionParams(st);
 	}
@@ -190,8 +186,7 @@ ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 			
 			stInsertSymbol(st->curr, glob_Token.data);
 			
-			INSTRUCTION_PTR i;
-			//INSTRUKCE
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, NULL, NULL, NULL));
 			
 			return parserParseFunctionParams(st);
 		}

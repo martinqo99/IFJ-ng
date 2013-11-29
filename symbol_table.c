@@ -94,6 +94,16 @@ SYMBOL_PTR stSearchSymbol(FUNCTION_PTR function, STRING id){
 	return (SYMBOL_PTR)node->data;	
 }
 
+SYMBOL_PTR stGetLastSymbol(FUNCTION_PTR function){
+	if(!function)
+		return NULL;
+		
+	if(!function->staticValues.end)
+		return NULL;
+	
+	return function->staticValues.end->value;
+}
+
 void stFree(SYMBOL_TABLE_PTR st){
 	if(!st)
 		return;
@@ -107,4 +117,17 @@ void stFree(SYMBOL_TABLE_PTR st){
 	st->start.calledCount = 0;
 	
 	st->curr = NULL;
+}
+
+// Helpers
+
+INSTRUCTION_PTR makeInstruction(INSTRUCTION_TYPE type, PTR operand1, PTR operand2, PTR destionation){
+	INSTRUCTION_PTR i = gcMalloc(sizeof(INSTRUCTION));
+	
+	i->type = type;
+	i->operand1 = operand1;
+	i->operand2 = operand2;
+	i->destionation = destionation;
+	
+	return i;
 }

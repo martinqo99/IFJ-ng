@@ -51,8 +51,10 @@ typedef enum INSTRUCTION_TYPE{
     INSTRUCTION_RETURN,
 	INSTRUCTION_MOV,         	//	A B		R(A) := R(B)  		(konstantu move nepresouva)
     INSTRUCTION_LOADK,   	// 	A Bx    R(A) := Kst(Bx)    indexujeme konstanty od 0     
-	INSTRUCTION_LOAD_NULL	//	A B     R(A) := ... := R(B) := nil       local a;
-    
+	INSTRUCTION_LOAD_NULL,	//	A B     R(A) := ... := R(B) := nil       local a;
+    INSTRUCTION_NOP,
+	
+	INSTRUCTION_POP,
     //Tuxi dopln si instrukce, ktere potrebujes
 } INSTRUCTION_TYPE;
 
@@ -104,8 +106,13 @@ ERROR stInsertSymbol(FUNCTION_PTR function, STRING id);
 
 FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id);
 SYMBOL_PTR stSearchSymbol(FUNCTION_PTR function, STRING id);
+SYMBOL_PTR stGetLastSymbol(FUNCTION_PTR function);
 
 void stFree(SYMBOL_TABLE_PTR st);
+
+//Helpers
+INSTRUCTION_PTR makeInstruction(INSTRUCTION_TYPE type, PTR operand1, PTR operand2, PTR destionation);
+
 
 /*
 enum enum_instruction
