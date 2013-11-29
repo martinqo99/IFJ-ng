@@ -41,7 +41,7 @@ typedef struct struct_BTree{
 // API
 void 				BT_Init(struct_BTree*);
 void 				BT_Free(struct_BTree*);
-struct_BTree_Node	BT_Insert(struct_BTree*, STRING_PTR key);
+ERROR				BT_Insert(struct_BTree*, STRING_PTR key, void* data);
 struct_BTree_Node 	BT_Search(struct_BTree*, STRING_PTR key);
 
 // library functions

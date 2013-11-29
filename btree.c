@@ -52,7 +52,7 @@ struct_BTree_Node recursive_Node_Search(struct_BTree_Node node, STRING_PTR key)
 }
 
 
-struct_BTree_Node BT_Insert(struct_BTree* tree, STRING_PTR key)
+ERROR BT_Insert(struct_BTree* tree, STRING_PTR key, void* data)
 {
 	if (tree->root == NULL)
 	{
@@ -60,8 +60,9 @@ struct_BTree_Node BT_Insert(struct_BTree* tree, STRING_PTR key)
 		tree->root->key = key;
 		tree->root->left = NULL;
 		tree->root->right = NULL;
+		tree->root->data = data;
 		tree->last = tree->root;
-		return tree->root;
+		return E_OK;
 	}
 
     struct_BTree_Node temp_node = tree->root;
@@ -76,8 +77,9 @@ struct_BTree_Node BT_Insert(struct_BTree* tree, STRING_PTR key)
 				temp_node->left->key = key;
 				temp_node->left->left = NULL;
 				temp_node->left->right = NULL;
+				temp_node->left->data = data;
 				tree->last = temp_node->left;
-				return temp_node;
+				return E_OK;
             }
             else temp_node=temp_node->left;
         }
@@ -89,16 +91,17 @@ struct_BTree_Node BT_Insert(struct_BTree* tree, STRING_PTR key)
 				temp_node->right->key = key;
 				temp_node->right->left = NULL;
 				temp_node->right->right = NULL;
+				temp_node->right->data = data;
 				tree->last = temp_node->right;
-				return temp_node;
+				return E_OK;
             }
             else temp_node = temp_node->right;
         }
         else
 		{
 			tree->last = temp_node;
-			return temp_node;
+			return E_OK;
 		}
     }
-    return temp_node;
+    return E_OK;
 }

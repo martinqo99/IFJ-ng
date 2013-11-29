@@ -44,10 +44,18 @@ ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
 	strCopy(&id, &function->id);
 	
 	ERROR err;
+	
 	STRING_PTR t = malloc(sizeof(STRING));
 	strInitRaw(t, "text");
+	STRING_PTR d = malloc(sizeof(STRING));
+	strInitRaw(d, "data");
 	
-	BT_Insert(&st->functions, t);
+	err = BT_Insert(&st->functions, t, d);
+	struct_BTree_Node tmp;
+	tmp = BT_Search(&st->functions,t);
+	STRING_PTR test;
+	test = tmp->data;
+	printf("DATA: %s",test->data);
 	
 	if(err != E_OK){
 		
