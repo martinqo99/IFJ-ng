@@ -40,12 +40,18 @@ enum_RetVal get_Next_Token();
 ERROR parser(SYMBOL_TABLE_PTR st){
 	ERROR err;	
 	
+	if(get_Token() != TTYPE_PHP_START)
+		return E_SYNTAX;
+	
 	err = parserFindFunctions(st);
 	
 	if(err != E_OK)
 		return err;
 	
 	init_Token();
+	
+	if(get_Token() != TTYPE_PHP_START)
+		return E_SYNTAX;
 	
 	return parserParse(st);	
 }
