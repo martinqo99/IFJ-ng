@@ -36,11 +36,8 @@ const char expressionPrecedentTable[EXPRESSION_TABLE_SIZE][EXPRESSION_TABLE_SIZE
   [TTYPE_SEMICOLON]			={[TTYPE_VARIABLE]='<','<', 0 ,'<','<','<','<','<','<','<','<','<','<','<',[TTYPE_SEMICOLON]='$'},
 };
 
-ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR symbol){
-	ERROR err = E_OK;
-	
-	return err;
-	
+ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symbol){
+
 	enum_RetVal term1, term2;
 	char weight;
 	
@@ -81,9 +78,13 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR symbo
 			case '$':
 				if(stackCount(&stack) == 0)
 					return E_SYNTAX;
-				//else if()
+				
+				expression = (EXPRESSION_PTR)stackPop(&stack);
+				
+				if(expression->retval != TTYPE_EXPRESSION)
+					return E_SYNTAX;
 					
-					symbol = expression->symbol;
+				*symbol = expression->symbol;					
 				break;
 			case '<':
 			case '=':

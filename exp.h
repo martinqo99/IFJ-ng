@@ -31,7 +31,7 @@ typedef struct EXPRESSION{
 	SYMBOL_PTR symbol;
 } EXPRESSION, *EXPRESSION_PTR;
 
-ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR symbol);
+ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symbol);
 
 //helpers
 EXPRESSION_PTR makeExpression(enum_RetVal retval, SYMBOL_PTR symbol);
