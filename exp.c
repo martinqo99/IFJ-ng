@@ -37,7 +37,7 @@ const char expressionPrecedentTable[EXPRESSION_TABLE_SIZE][EXPRESSION_TABLE_SIZE
 };
 
 ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symbol){
-
+	ERROR err = E_OK;
 	enum_RetVal term1, term2;
 	char weight;
 	
@@ -88,10 +88,65 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				break;
 			case '<':
 			case '=':
+				err = pushExpression(st, &stack, NULL, term2);
+				if(err != E_OK)
+					return err;
+				
+				retval = get_Token();
 				break;
 			case '>':
+				if(stackCount(&stack) == 0)
+					return E_SYNTAX;
+				
+				expression = (EXPRESSION_PTR)stackPop(&stack);				
+				
+				//E->(E)
+				if(expression->retval == TTYPE_R_BRACKET){
+					if(stackCount(&stack) == 0)
+						return E_SYNTAX;					
+					
+					expression = (EXPRESSION_PTR)stackPop(&stack);
+				
+					if(expression->retval != TTYPE_EXPRESSION)
+						return E_SYNTAX;	
+					
+					//magic
+						
+					if(stackCount(&stack) == 0)
+						return E_SYNTAX;
+					
+					expression = (EXPRESSION_PTR)stackPop(&stack);
+				
+					if(expression->retval != TTYPE_L_BRACKET)
+						return E_SYNTAX;
+				}
+				//E-> E op E
+				else if(expression->retval == TTYPE_EXPRESSION){
+					if(stackCount(&stack) == 0)
+						return E_SYNTAX;
+					
+					expression = (EXPRESSION_PTR)stackPop(&stack);
+				
+					if(expression->retval != TTYPE_EXPRESSION)
+						return E_SYNTAX;
+					
+					//magic
+
+					if(stackCount(&stack) == 0)
+						return E_SYNTAX;
+					
+					expression = (EXPRESSION_PTR)stackPop(&stack);
+				
+					if(expression->retval != TTYPE_EXPRESSION)
+						return E_SYNTAX;
+					
+				}
+				else
+					return E_SYNTAX;
+				
 				break;
 			default:
+				printf("ERROR EXPRESSION\n");
 				return E_SYNTAX;
 		}
 		
@@ -124,4 +179,7 @@ enum_RetVal getTerm(STACK_PTR stack){
 	else
 		return ((EXPRESSION_PTR)(node->value))->retval;
 }
+
+ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, enum_RetVal term){
 	
+}

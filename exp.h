@@ -36,5 +36,6 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 //helpers
 EXPRESSION_PTR makeExpression(enum_RetVal retval, SYMBOL_PTR symbol);
 enum_RetVal getTerm(STACK_PTR stack);
+ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, enum_RetVal term);
 
 #endif

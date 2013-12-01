@@ -273,7 +273,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				retval = get_Token();
 				
 				//EDIT
-				err = parserExpression(st, retval, symbol);
+				err = parserExpression(st, retval, &symbol);
 				
 				if(err != E_OK)
 					return err;
