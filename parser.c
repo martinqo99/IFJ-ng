@@ -220,6 +220,7 @@ ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
 	//else if(retval == TTYPE_ELSE) // why?
 	//	return E_SYNTAX;
 	else{
+		printf("Parsing function body\n");
 		ERROR err = parserParseCode(st, retval);
 		
 		if(err == E_OK)
@@ -238,21 +239,23 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 	
 	switch(retval){
 		case TTYPE_VARIABLE:
+			printf("Found variable\n");
 			if(!stSearchSymbol(st->curr, glob_Token.data))
 				stInsertSymbol(st->curr, glob_Token.data);
-			
+
 			//Stejny nazev parametru a funkce - ale nemozne v PHP
 			//if(!stSearchFunction(st, glob_Token.data))
 			//	return E_SEMANTIC;
 				
 			retval = getToken();
 			
-			if(retval != TTYPE_ASSIGN)
-				return E_SYNTAX;
 			//Prazdny prikaz
-			//else if(retval == TTYPE_SEMICOLON)
-			//	return E_OK;
+			if(retval == TTYPE_SEMICOLON)
+				return E_OK;
+			else if(retval != TTYPE_ASSIGN)
+				return E_SYNTAX;
 			else{
+				printf("Found assign and last symbol was: %s\n", stGetLastSymbol(st->curr)->id.data);
 				err = parserControlAssign(st, stGetLastSymbol(st->curr));
 				
 				if(err != E_OK)
@@ -261,6 +264,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			
 			break;
 		case TTYPE_KEYWORD:
+			printf("Found variable\n");
 			if(strCompare(glob_Token.data, "if")){
 				retval = getToken();
 			}
@@ -308,6 +312,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 // <assign> - find_string(string, string)
 // <assign> - sort_string(string)
 ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
+	printf("Control assign\n");
 	ERROR err = E_OK;
 	
 	enum_RetVal retval = getToken();
