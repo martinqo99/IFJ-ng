@@ -32,15 +32,15 @@ extern struct_Token glob_Token;
 void init_Token();
 void clear_Token();
 
-enum_RetVal get_Token();
-enum_RetVal get_Next_Token();
+enum_RetVal getToken();
+enum_RetVal getNextToken();
 */
 
 //Hlavni funkce parseru
 ERROR parser(SYMBOL_TABLE_PTR st){
 	ERROR err;	
 	
-	if(get_Token() != TTYPE_PHP_START)
+	if(getToken() != TTYPE_PHP_START)
 		return E_SYNTAX;
 	
 	err = parserFindFunctions(st);
@@ -50,7 +50,7 @@ ERROR parser(SYMBOL_TABLE_PTR st){
 	
 	init_Token();
 	
-	if(get_Token() != TTYPE_PHP_START)
+	if(getToken() != TTYPE_PHP_START)
 		return E_SYNTAX;
 	
 	return parserParse(st);	
@@ -63,10 +63,10 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 	
 	init_Token();
 
-	while((retval = get_Token()) != TTYPE_EOF){
+	while((retval = getToken()) != TTYPE_EOF){
 		//printf("Token: %s\n", glob_Token.data.data);
 		if(retval == TTYPE_KEYWORD && strCompare(glob_Token.data, "function")){
-			retval = get_Token();
+			retval = getToken();
 			
 			if(retval == TTYPE_FUNCTION){
 				printf("- %s\n", glob_Token.data.data);
@@ -90,7 +90,7 @@ ERROR parserParse(SYMBOL_TABLE_PTR st){
 
 	st->curr = &st->start;
 	
-	enum_RetVal retval = get_Token();
+	enum_RetVal retval = getToken();
 	
 	if(retval == TTYPE_EOF)
 		return err;
@@ -118,7 +118,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	printf("Parsing definition function\n");
 	ERROR err = E_OK;
 	
-	if(get_Token() != TTYPE_FUNCTION)
+	if(getToken() != TTYPE_FUNCTION)
 		return E_SYNTAX;
 	
 	st->curr = stSearchFunction(st, glob_Token.data);
@@ -128,7 +128,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	
 	printf("Change current function to %s\n", st->curr->id.data);
 	
-	if(get_Token() != TTYPE_L_BRACKET)
+	if(getToken() != TTYPE_L_BRACKET)
 		return E_SYNTAX;
 	
 	err = parserParseFunctionParam(st);
@@ -138,7 +138,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 		
 	listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_NOP, NULL, NULL, NULL));
 
-	if(get_Token() != TTYPE_L_BRACE)
+	if(getToken() != TTYPE_L_BRACE)
 		return E_SYNTAX;
 	
 	err = parserParseFunctionCode(st);
@@ -153,7 +153,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 	printf("Parsing function definition param\n");
 	
-	enum_RetVal retval = get_Token();
+	enum_RetVal retval = getToken();
 	
 	if(retval == TTYPE_R_BRACKET)
 		return E_OK;
@@ -178,13 +178,13 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 	printf("Parsing function definition params\n");
 	
-	enum_RetVal retval = get_Token();
+	enum_RetVal retval = getToken();
 	
 	if(retval == TTYPE_R_BRACKET)
 		return E_OK;
 	else if(retval == TTYPE_COMMA){
 		
-		retval = get_Token();
+		retval = getToken();
 		
 		if(retval == TTYPE_VARIABLE){
 			//Stejny nazev parametru a funkce - ale nemozne v PHP
@@ -213,7 +213,7 @@ ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
 	printf("Parsing function code\n");
 	
-	enum_RetVal retval = get_Token();
+	enum_RetVal retval = getToken();
 	
 	if(retval == TTYPE_R_BRACE)
 		return E_OK;
@@ -245,7 +245,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			//if(!stSearchFunction(st, glob_Token.data))
 			//	return E_SEMANTIC;
 				
-			retval = get_Token();
+			retval = getToken();
 			
 			if(retval != TTYPE_ASSIGN)
 				return E_SYNTAX;
@@ -262,15 +262,15 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			break;
 		case TTYPE_KEYWORD:
 			if(strCompare(glob_Token.data, "if")){
-				retval = get_Token();
+				retval = getToken();
 			}
 			//while(<expression>){ <stat_list> }
 			else if(strCompare(glob_Token.data, "while")){
-				retval = get_Token();
+				retval = getToken();
 			}
 			//return expression;
 			else if(strCompare(glob_Token.data, "return")){
-				retval = get_Token();
+				retval = getToken();
 				
 				//EDIT
 				err = parserExpression(st, retval, &symbol);
@@ -281,7 +281,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_RETURN, NULL, NULL, NULL));
 				
-				if(get_Token() != TTYPE_SEMICOLON)
+				if(getToken() != TTYPE_SEMICOLON)
 					return E_SYNTAX;
 			}
 			else
@@ -310,7 +310,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	ERROR err = E_OK;
 	
-	enum_RetVal retval = get_Token();
+	enum_RetVal retval = getToken();
 	
 	switch(retval){
 		case TTYPE_RESERVED:
