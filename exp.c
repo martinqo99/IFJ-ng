@@ -92,7 +92,7 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				if(err != E_OK)
 					return err;
 				
-				retval = get_Token();
+				retval = getToken();
 				break;
 			case '>':
 				if(stackCount(&stack) == 0)
