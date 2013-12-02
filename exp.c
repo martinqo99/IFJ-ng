@@ -214,8 +214,7 @@ ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, en
 		retval == TTYPE_FALSE || 
 		retval == TTYPE_STRING ||
 		retval == TTYPE_NUMBER ||
-		retval == TTYPE_DEC_NUMBER ||
-		retval == TTYPE_EXP_NUMBER
+		retval == TTYPE_DEC_NUMBER
 	){
 		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);
 		retval = TTYPE_EXPRESSION;

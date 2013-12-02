@@ -319,6 +319,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	
 	switch(retval){
 		case TTYPE_RESERVED:
+			printf(" - assign reserved\n");
 			if(strCompare(glob_Token.data, "boolval")){
 				
 			}
@@ -354,13 +355,17 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			break;
 		// variable + 5
 		case TTYPE_VARIABLE:
+			printf(" - assign variable\n");
 			break;
 		// funkce(x)
 		case TTYPE_FUNCTION:
+			printf(" - assign function\n");
 			break;
 		case TTYPE_STRING:
+			printf(" - assign string\n");
 			break;
 		default:
+			printf(" - assign default: %s\n", glob_Token.data.data);
 			break;
 	}	
 	
