@@ -48,6 +48,8 @@ typedef enum error{
 */
 } ERROR;
 
+
+void ChuckSaid(ERROR ecode, const char* msg);
 void ChuckSaidNo(ERROR ecode);
 
 #endif

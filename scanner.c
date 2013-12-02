@@ -368,7 +368,7 @@ enum_RetVal getToken(){
 	enum_RetVal retval = get_Token();
 	
 	if(retval == TTYPE_ERROR)
-		ChuckSaidNo(E_LEXICAL);
+		ChuckSaid(E_LEXICAL, "Neplatny lexem");
 		
 	return retval;
 }
@@ -399,7 +399,7 @@ enum_RetVal getNextToken(){
 	enum_RetVal retval = get_Next_Token();
 	
 	if(retval == TTYPE_ERROR)
-		ChuckSaidNo(E_LEXICAL);
+		ChuckSaid(E_LEXICAL, "Neplatny lexem");
 		
 	return retval;
 }
