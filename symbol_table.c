@@ -125,10 +125,10 @@ SYMBOL_PTR stGetLastSymbol(FUNCTION_PTR function){
 	if(!function)
 		return NULL;
 		
-	if(!function->staticValues.end)
+	if(!function->symbols.last)
 		return NULL;
-	
-	return function->staticValues.end->value;
+
+	return function->symbols.last->data;
 }
 
 void stFree(SYMBOL_TABLE_PTR st){
