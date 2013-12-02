@@ -363,6 +363,16 @@ enum_RetVal get_Token()
 	return TTYPE_ERROR;
 }
 
+//error wrapper
+enum_RetVal getToken(){
+	enum_RetVal retval = get_Token();
+	
+	if(retval == TTYPE_ERROR)
+		ChuckSaidNo(E_LEXICAL);
+		
+	return retval;
+}
+
 enum_RetVal get_Next_Token()
 {
 	// backup token data and file position
@@ -382,5 +392,14 @@ enum_RetVal get_Next_Token()
 	backup_token.data = data;
 	glob_Token = backup_token;
 
+	return retval;
+}
+
+enum_RetVal getNextToken(){
+	enum_RetVal retval = get_Next_Token();
+	
+	if(retval == TTYPE_ERROR)
+		ChuckSaidNo(E_LEXICAL);
+		
 	return retval;
 }

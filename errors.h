@@ -19,6 +19,7 @@
 #define ERRORS_H_INCLUDED
 
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef enum error{
 	E_OK							= 0,

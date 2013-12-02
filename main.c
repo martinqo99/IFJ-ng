@@ -29,12 +29,12 @@ void programAbort();
 int main(int argc, char* argv[]){
 
 	if(argc != 2)
-		programAbort(E_COMPILATOR, "Invalid arguments");
+		ChuckSaid(E_COMPILATOR, "Invalid arguments");
 
 	gcInit();
 	
 	if(!(glob_FileHandler = gcFopen(argv[1], "r")))
-		programAbort(E_COMPILATOR, "Cannot open input file\n");
+		ChuckSaid(E_COMPILATOR, "Cannot open input file\n");
 	
 	SYMBOL_TABLE st;
 	
@@ -52,9 +52,4 @@ int main(int argc, char* argv[]){
 	gcDispose();
 	
 	return err;
-}
-
-void programAbort(ERROR err, const char* msg){
-	fprintf(stderr, "%s\n", msg);
-	exit(err);
 }

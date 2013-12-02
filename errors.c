@@ -17,7 +17,12 @@
 
 #include "errors.h"
 
+void ChuckSaid(ERROR ecode, const char* msg){
+	fprintf(stderr, "%s\n");
+	exit(ecode);
+}
+
 void ChuckSaidNo(ERROR ecode){
-	
+	fprintf(stderr, "Chuck rekl ne\n");
 	exit(ecode);
 }
