@@ -82,6 +82,33 @@ FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id){
 	return (FUNCTION_PTR)node->data;	
 }
 
+SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal retval){
+	SYMBOL_PTR symbol = gcMalloc(sizeof(SYMBOL));
+	
+	symbol->items = gcMalloc(sizeof(ITEM));
+	
+	switch(retval){
+		case TTYPE_NULL:
+			symbol->items->type = TYPE_NULL;
+			break;
+		case TTYPE_TRUE:
+			symbol->items->type = TYPE_BOOL;
+			symbol->items->value.valBool = true;
+			break;
+		case TTYPE_FALSE:
+			symbol->items->type = TYPE_BOOL;
+			symbol->items->value.valBool = false;
+			break;
+		case TTYPE_STRING:
+		case TTYPE_NUMBER:
+		case TTYPE_VARIABLE:
+		default:
+			return NULL;
+	}
+	
+	return symbol;
+}
+
 SYMBOL_PTR stSearchSymbol(FUNCTION_PTR function, STRING id){
 	struct_BTree_Node node = BT_Search(&function->symbols, &id);
 	

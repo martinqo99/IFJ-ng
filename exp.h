@@ -26,6 +26,24 @@
 
 #define EXPRESSION_TABLE_SIZE TTYPE_SEMICOLON+1
 
+#define isop(r) \
+( \
+	r == TTYPE_ADDITION || \
+	r == TTYPE_SUBTRACTION || \
+	r == TTYPE_MULTIPLICATION || \
+	r == TTYPE_DIVISION || \
+	r == TTYPE_POWER || \
+	r == TTYPE_LESSER || \
+	r == TTYPE_GREATER || \
+	r == TTYPE_LESSER_EQUAL || \
+	r == TTYPE_GREATER_EQUAL || \
+	r == TTYPE_EQUAL || \
+	r == TTYPE_NOT_EQUAL \
+)
+
+#define type(r) r
+
+
 typedef struct EXPRESSION{
 	enum_RetVal retval;
 	SYMBOL_PTR symbol;
@@ -36,6 +54,6 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 //helpers
 EXPRESSION_PTR makeExpression(enum_RetVal retval, SYMBOL_PTR symbol);
 enum_RetVal getTerm(STACK_PTR stack);
-ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, enum_RetVal term);
+ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, enum_RetVal retval);
 
 #endif

@@ -41,6 +41,14 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 	enum_RetVal term1, term2;
 	char weight;
 	
+	INSTRUCTION_PTR i = NULL;
+	INSTRUCTION_TYPE iType = INSTRUCTION_NOP;
+	
+	SYMBOL_PTR destination, source1, source2;
+	destination = NULL;
+	source1 = NULL;
+	source2 = NULL;	
+	
 	EXPRESSION_PTR expression;
 	STACK stack;
 	
@@ -93,6 +101,7 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 					return err;
 				
 				retval = getToken();
+				printf("EXP get token: %s\n", glob_Token.data.data);
 				break;
 			case '>':
 				if(stackCount(&stack) == 0)
@@ -103,14 +112,17 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				//E->(E)
 				if(expression->retval == TTYPE_R_BRACKET){
 					if(stackCount(&stack) == 0)
-						return E_SYNTAX;					
+						return E_SYNTAX;	
+					
+					iType = INSTRUCTION_NOP;
 					
 					expression = (EXPRESSION_PTR)stackPop(&stack);
 				
 					if(expression->retval != TTYPE_EXPRESSION)
-						return E_SYNTAX;	
+						return E_SYNTAX;						
 					
 					//magic
+					destination = expression->symbol;
 						
 					if(stackCount(&stack) == 0)
 						return E_SYNTAX;
@@ -125,12 +137,14 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 					if(stackCount(&stack) == 0)
 						return E_SYNTAX;
 					
+					source2 = expression->symbol;
+					
 					expression = (EXPRESSION_PTR)stackPop(&stack);
-				
-					if(expression->retval != TTYPE_EXPRESSION)
+					
+					if(!isop(expression->retval))
 						return E_SYNTAX;
 					
-					//magic
+					iType = type(expression->retval);
 
 					if(stackCount(&stack) == 0)
 						return E_SYNTAX;
@@ -140,9 +154,16 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 					if(expression->retval != TTYPE_EXPRESSION)
 						return E_SYNTAX;
 					
+					source1 = expression->symbol;					
 				}
 				else
 					return E_SYNTAX;
+				
+				
+				err = pushExpression(st, &stack, destination, TTYPE_EXPRESSION);
+				
+				if(err != E_OK)
+					return err;
 				
 				break;
 			default:
@@ -180,6 +201,27 @@ enum_RetVal getTerm(STACK_PTR stack){
 		return ((EXPRESSION_PTR)(node->value))->retval;
 }
 
-ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, enum_RetVal term){
+ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, enum_RetVal retval){
+	if(retval == TTYPE_VARIABLE){
+		if(!(symbol = stSearchSymbol(st->curr, glob_Token.data)))
+			return E_SEMANTIC_TYPE_MISMATCH;
+			
+		retval = TTYPE_EXPRESSION;
+	}
+	else if(
+		retval == TTYPE_NULL ||
+		retval == TTYPE_TRUE ||
+		retval == TTYPE_FALSE || 
+		retval == TTYPE_STRING ||
+		retval == TTYPE_NUMBER ||
+		retval == TTYPE_DEC_NUMBER ||
+		retval == TTYPE_EXP_NUMBER
+	){
+		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);
+		retval = TTYPE_EXPRESSION;
+	}
 	
+	stackPush(stack, makeExpression(retval, symbol));
+	
+	return E_OK;
 }

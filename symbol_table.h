@@ -28,6 +28,7 @@ typedef void* PTR;
 #include "strings.h"
 #include "list.h"
 #include "btree.h"
+#include "scanner.h"
 
 
 typedef union VALUE{
@@ -105,7 +106,9 @@ void stInit(SYMBOL_TABLE_PTR st);
 ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id);
 ERROR stInsertSymbol(FUNCTION_PTR function, STRING id);
 
+
 FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id);
+SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal retval);
 SYMBOL_PTR stSearchSymbol(FUNCTION_PTR function, STRING id);
 SYMBOL_PTR stGetLastSymbol(FUNCTION_PTR function);
 
