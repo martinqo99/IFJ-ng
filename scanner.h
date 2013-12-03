@@ -108,4 +108,6 @@ enum_RetVal getToken();
 enum_RetVal get_Next_Token();
 
 
+const char* debugRetval(enum_RetVal retval);
+
 #endif

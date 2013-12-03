@@ -410,3 +410,82 @@ enum_RetVal getNextToken(){
 		
 	return retval;
 }
+
+const char* debugRetval(enum_RetVal retval){
+	switch(retval){
+		case TTYPE_L_SBRACKET:
+			return "[";
+		case TTYPE_R_SBRACKET:
+			return "]";
+		case TTYPE_L_BRACE:
+			return "{";
+		case TTYPE_R_BRACE:
+			return "}";
+		case TTYPE_ASSIGN:
+			return "=";
+		case TTYPE_COMMA:
+			return ",";
+		case TTYPE_DOT:
+			return ".";
+		case TTYPE_VARIABLE:
+			return "$var";
+		case TTYPE_L_BRACKET:
+			return "(";
+		case TTYPE_R_BRACKET:
+			return ")";
+		case TTYPE_ADDITION:
+			return "+";
+		case TTYPE_SUBTRACTION:
+			return "-";
+		case TTYPE_MULTIPLICATION:
+			return "*";
+		case TTYPE_DIVISION:
+			return "/";
+		case TTYPE_POWER:
+			return "POWER?";
+		case TTYPE_EQUAL:
+			return "==";
+		case TTYPE_NOT_EQUAL:
+			return "!=";
+		case TTYPE_LESSER:
+			return "<";
+		case TTYPE_LESSER_EQUAL:
+			return "<=";
+		case TTYPE_GREATER:
+			return ">";
+		case TTYPE_GREATER_EQUAL:
+			return ">=";
+		case TTYPE_SEMICOLON:
+			return ";";
+		case TTYPE_STRING:
+			return "string";
+		case TTYPE_FUNCTION:
+			return "function()";
+		case TTYPE_NUMBER:
+			return "number";
+		case TTYPE_DEC_NUMBER:
+			return "dec_number";
+		case TTYPE_PHP_START:
+			return "<?php";
+		
+		case TTYPE_KEYWORD:
+			return "keyword";
+		case TTYPE_RESERVED:
+			return "reserved";
+		case TTYPE_TRUE:
+			return "true";
+		case TTYPE_FALSE:
+			return "false";
+		case TTYPE_NULL:
+			return "null";
+		case TTYPE_EOF:
+			return "eof";
+		case TTYPE_EXPRESSION:
+			return "expression";
+		case TTYPE_ERROR:
+			return "error";
+		default:
+			return "undefined";
+	}
+
+}

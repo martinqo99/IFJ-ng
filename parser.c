@@ -316,12 +316,19 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	ERROR err = E_OK;
 	
 	enum_RetVal retval = getToken();
+	INSTRUCTION_PTR i = NULL;
 	
 	switch(retval){
 		case TTYPE_RESERVED:
-			printf(" - assign reserved\n");
+			printf(" - assign reserved (NOT IMPLEMENTED YET)\n");
 			if(strCompare(glob_Token.data, "boolval")){
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
 				
+				//magic
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
 			}
 			else if(strCompare(glob_Token.data, "doubleval")){
 				
@@ -356,10 +363,23 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 		// variable + 5
 		case TTYPE_VARIABLE:
 			printf(" - assign variable\n");
+			
+			SYMBOL_PTR tmp = NULL;
+			err = parserExpression(st, retval, &symbol);
+			
+			if(err != E_OK)
+				return err;
+			
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
+			
 			break;
 		// funkce(x)
 		case TTYPE_FUNCTION:
 			printf(" - assign function\n");
+			
+			if(!stSearchFunction(st, glob_Token.data))
+				return E_SEMANTIC_UNDECLARED;
+			
 			break;
 		case TTYPE_STRING:
 			printf(" - assign string\n");

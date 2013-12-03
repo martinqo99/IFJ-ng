@@ -35,6 +35,7 @@ void stackPush(STACK_PTR stack, PTR value){
 	tmp->next = stack->begin;
 	
 	stack->begin = tmp;
+	stack->count++;
 }
 
 PTR stackPop(STACK_PTR stack){
@@ -47,6 +48,7 @@ PTR stackPop(STACK_PTR stack){
 	STACK_NODE_PTR tmp = stack->begin;
 	PTR value = tmp->value;
 	stack->begin = tmp->next;
+	stack->count--;
 
 	free(tmp);	
 	
