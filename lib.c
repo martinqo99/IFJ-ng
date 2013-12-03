@@ -116,24 +116,119 @@ ITEM doubleval(ITEM item)
 	}
 	else if(item.type == TYPE_STRING)
 	{
-		int size = strlen(item.value.valString.data);
+		
 		int i;
-		double num;
-		new.value.valDouble = 0.0;
+		int start = 0;
+		int size = strlen(item.value.valString.data);
 		
 		for(i = 0; i < size; i++ )
 		{
-			if(isspace(item.value.valString.data[i]))
+			if(isdigit(item.value.valString.data[i]))
 			{
+				start = i;
+				break;
 			}
-			else if(isdigit(item.value.valString.data[i]))
-			{
-				num = item.value.valString.data[i] - '0';
-				new.value.valDouble = new.value.valDouble*10+num;
-			}
-			else
-				return new;
 		}
+		
+		
+		STRING number;
+		strInit(&number);
+		
+		int err;
+// 		printf("%d, %d\n",start,size);
+		number = get_substring(item.value.valString, start, size, &err);
+		
+		/*
+		if(err !=0)
+		{}//ERROR
+		
+		int state = 0;
+		size = strlen(number.data);
+		int maybe_plus_minus=0;
+		for(i=0;i<size;i++)
+		{
+			char cur_char = number.data[i];
+			switch (state)
+			{
+				case 0:
+					if(isdigit(cur_char))
+					{
+					}
+					else if(cur_char == '.')
+					{
+						state = 1;
+					}
+					else if((cur_char == 'e' || cur_char == 'E'))
+					{
+						state = 2;
+						maybe_plus_minus = 1;
+					}
+					else
+					{
+						err = i;
+						break;
+					}
+				break;
+				case 1:
+					if(isdigit(cur_char))
+					{
+					}
+					else if((cur_char == 'e' || cur_char == 'E'))
+					{
+						state = 2;
+						maybe_plus_minus = 1;
+					}
+					else
+					{
+						err = i;
+						break;
+					}
+				break;
+				case 2:
+					if((cur_char == '+' || cur_char == '-') && maybe_plus_minus)
+					{
+						maybe_plus_minus = 0;
+					}
+					else if(isdigit(cur_char))
+					{
+						maybe_plus_minus = 0;
+					}
+					else
+					{
+						err = i;
+						break;
+					}
+				break;
+				default:
+					err = 0;
+					break;
+				break;
+			}
+		}
+		*/
+		
+		
+// 		if(err != 0)
+// 		{
+// 			number = get_substring(item.value.valString, start-1, start+end, &err);
+// 			if(err !=0)
+// 			{}//ERROR
+// 		}
+		
+// 		printf("cisclo: %s\n",number.data);
+		
+		
+		double cislo;
+		sscanf(number.data, "%lf", &cislo);
+// 		printf("cisclo: %f\n",cislo);
+		
+		
+		char pole[50];
+		sprintf(pole,"%f",cislo);
+		
+// 		printf("text: %s\n",pole);
+		
+		strInitRaw(&new.value.valString, pole);
 	}
 	else
 	{
@@ -199,7 +294,7 @@ STRING get_string()
 	return new;
 }
 
-//funkcni - OK
+//funkcni - OK // parametr.data
 int put_string(int count, ...)
 {
     va_list list;

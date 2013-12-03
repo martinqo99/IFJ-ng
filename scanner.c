@@ -352,13 +352,16 @@ enum_RetVal get_Token()
 					ungetc(cur_char, glob_FileHandler);
 					if((last_char == 'e' || last_char == 'E') || (last_char == '+' || last_char == '-'))
 						return TTYPE_ERROR;
-					char* tmp1;
-					double tmp2 = strtod(glob_Token.data.data, &tmp1);//(double)glob_Token.data.data;
-					STRING tmp3;
-					char* pole=NULL;
-					sprintf(pole,"%f",tmp2);
-					strInitRaw(&tmp3, pole);
-					strCopy(&glob_Token.data,&tmp3);
+					
+					double num;
+					sscanf(glob_Token.data.data, "%lf", &num);
+					
+					STRING tmp;
+					char pole[50];
+					sprintf(pole,"%f",num);
+					strInitRaw(&tmp, pole);
+					
+					strCopy(&glob_Token.data,&tmp);
 					return TTYPE_DEC_NUMBER;
 				}
                 break;
