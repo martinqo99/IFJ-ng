@@ -356,7 +356,7 @@ enum_RetVal get_Token()
 					double tmp2 = strtod(glob_Token.data.data, &tmp1);//(double)glob_Token.data.data;
 					STRING tmp3;
 					char* pole=NULL;
-					sprintf(pole,"%f",tmp1);
+					sprintf(pole,"%f",tmp2);
 					strInitRaw(&tmp3, pole);
 					strCopy(&glob_Token.data,&tmp3);
 					return TTYPE_DEC_NUMBER;
