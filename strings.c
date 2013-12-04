@@ -130,3 +130,17 @@ unsigned int strSize(STRING* str){
 unsigned int strUsed(STRING* str){
 	return str->used;	
 }
+
+void strConcatenate(STRING_PTR first,STRING_PTR second){
+    int tmp_used;
+    tmp_used = first->used + second->used;
+
+    gcRealloc(first->data,tmp_used);
+    int j = 0;
+    for(int i = first->used;i<tmp_used;i++){
+            first->data[i] = second->data[j];
+            j++;
+    }
+
+    first->used = tmp_used;
+}

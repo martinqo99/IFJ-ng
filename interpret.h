@@ -7,6 +7,7 @@
 
 //#include "syntactic.h"
 #include "symbol_table.h"
+#include "strings.h"
 //#include "library.h"
 
 //#include "quicksort.h"
@@ -15,7 +16,7 @@
 
 // --- API ---
 ERROR interpret(SYMBOL_TABLE*);
-ERROR recursive_interpret(FUNCTIONPTR, STACK_PTR);
+ERROR recursive_interpret(FUNCTION_PTR, STACK_PTR);
 
 /*bool isConstant(tSymbol *);
 ERROR copySymbolData(tSymbolData *,tSymbolData *);

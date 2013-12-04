@@ -99,3 +99,25 @@ void listFree(LIST_PTR list){
 	
 	listInit(list);
 }
+
+LIST_NODE_PTR listAt(LIST_PTR list, int num)
+{
+	LIST_NODE_PTR new;
+	new = list->begin;
+	int i;
+	for(i=0;i<num;i++)
+	{
+		if(new->next != NULL)
+		{
+			new = new->next;
+			return new;
+		}
+		else
+		{
+			new = NULL;
+			return new;
+		}
+	}
+	return new;
+}
+

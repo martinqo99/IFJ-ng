@@ -46,5 +46,6 @@ void listBegin(LIST_PTR list);
 void listSucc(LIST_PTR list);
 void listEnd(LIST_PTR list);
 void listFree(LIST_PTR list);
+LIST_NODE_PTR listAt(LIST_PTR list, int num);
 
 #endif

@@ -47,6 +47,6 @@ int strCompareStrings(STRING, STRING);
 unsigned int strSize(STRING_PTR);
 unsigned int strUsed(STRING_PTR);
 
-
+void strConcatenate(STRING_PTR first,STRING_PTR second);
 
 #endif
