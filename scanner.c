@@ -290,7 +290,7 @@ enum_RetVal get_Token()
 							return TTYPE_KEYWORD;
 					}
 					
-					for(int i=0;i<5;i++)
+					for(int i=0;i<10;i++)
 					{
 						if(strCompare(glob_Token.data, list_Reserved[i]))
 							return TTYPE_RESERVED;
