@@ -100,7 +100,10 @@ void strClear(STRING* str){
 void strFree(STRING* str){
 	if(!str)
 		return;
-
+		
+	if(str->data != NULL)
+		return;
+		
 	if(str->data != NULL && str->used != 0)
 	//if(str->data && str->used != 0)
 		gcFree(str->data);
