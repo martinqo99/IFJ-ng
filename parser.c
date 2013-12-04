@@ -263,6 +263,9 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			}
 			
 			break;
+		case TTYPE_FUNCTION:
+			printf("Found function: %s\n", glob_Token.data.data);
+			break;
 		case TTYPE_KEYWORD:
 			printf("Found keyword: %s\n", glob_Token.data.data);
 			if(strCompare(glob_Token.data, "if")){
@@ -381,6 +384,21 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			if(!stSearchFunction(st, glob_Token.data))
 				return E_SEMANTIC_UNDECLARED;
 			
+			if(getToken() != TTYPE_L_BRACKET)
+				return E_SYNTAX;
+			
+			err = parserParseCallParam(st);
+			
+			if(err != E_OK)
+				return err;
+				
+			if(getToken() != TTYPE_SEMICOLON)
+				return E_SYNTAX;
+			
+			
+			makeInstruction(INSTRUCTION_CALL, NULL, NULL, NULL);
+			
+			printf(" - assign function completed\n");
 			break;
 		case TTYPE_STRING:
 			printf(" - assign string\n");
@@ -391,4 +409,74 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	}	
 	
 	return err;	
+}
+
+ERROR parserParseCallParam(SYMBOL_TABLE_PTR st){	
+	enum_RetVal retval = getToken();
+	SYMBOL_PTR symbol = NULL;
+	
+	//Bez parametru
+	if(retval == TTYPE_R_BRACKET)
+		return E_OK;
+	
+	listEnd(&st->curr->instructions);
+	
+	if(retval == TTYPE_VARIABLE){
+		if(!stSearchFunction(st, glob_Token.data))
+			return E_SEMANTIC_UNDECLARED;
+		
+		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);
+	}
+	else if(
+		retval == TTYPE_NUMBER ||
+		retval == TTYPE_DEC_NUMBER ||
+		retval == TTYPE_TRUE ||
+		retval == TTYPE_FALSE || 
+		retval == TTYPE_NULL ||
+		retval == TTYPE_STRING
+	)
+		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);		
+	else
+		return E_SYNTAX;
+
+	listInsertPost(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
+	
+	return parserParseCallParams(st);
+}
+
+ERROR parserParseCallParams(SYMBOL_TABLE_PTR st){
+	enum_RetVal retval = getToken();
+	SYMBOL_PTR symbol = NULL;
+	
+	listEnd(&st->curr->instructions);
+	
+	//Bez dalsich parametru
+	if(retval == TTYPE_R_BRACKET)
+		return E_OK;
+	//Parametry oddelene carkou
+	else if(retval != TTYPE_COMMA)
+		return E_SYNTAX;
+	else{
+		if(retval == TTYPE_VARIABLE){
+			if(!stSearchFunction(st, glob_Token.data))
+				return E_SEMANTIC_UNDECLARED;
+		
+			symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);			
+		}
+		else if(
+			retval == TTYPE_NUMBER ||
+			retval == TTYPE_DEC_NUMBER ||		
+			retval == TTYPE_TRUE ||
+			retval == TTYPE_FALSE || 
+			retval == TTYPE_NULL ||
+			retval == TTYPE_STRING
+		)
+			symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);	
+		else
+			return E_SYNTAX;		
+		
+		listInsertPost(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
+		
+		return parserParseCallParams(st);
+	}
 }
