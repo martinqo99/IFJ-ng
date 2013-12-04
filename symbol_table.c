@@ -86,6 +86,7 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 	SYMBOL_PTR symbol = gcMalloc(sizeof(SYMBOL));
 	
 	symbol->items = gcMalloc(sizeof(ITEM));
+	strCopy(&id, &symbol->id); //mozno ne?
 	
 	switch(retval){
 		case TTYPE_NULL:
@@ -102,9 +103,25 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 		case TTYPE_STRING:
 		case TTYPE_NUMBER:
 		case TTYPE_VARIABLE:
+		case TTYPE_CONSTANT:
+			break;
 		default:
 			return NULL;
 	}
+	
+	listInsertEnd(&function->staticValues, symbol);
+	
+	return symbol;
+}
+
+SYMBOL_PTR stInsertStaticValueEmpty(FUNCTION_PTR function){
+	SYMBOL_PTR symbol = gcMalloc(sizeof(SYMBOL));
+	
+	symbol->id.data = NULL;
+	symbol->type = TTYPE_CONSTANT;
+	symbol->items = NULL;
+	
+	listInsertEnd(&function->staticValues, symbol);
 	
 	return symbol;
 }

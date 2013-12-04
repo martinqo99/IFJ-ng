@@ -66,7 +66,7 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 		
 		if(
 			term2 == TTYPE_VARIABLE ||
-			term2 == TTYPE_FUNCTION ||
+			//term2 == TTYPE_FUNCTION ||
 			term2 == TTYPE_NUMBER ||
 			term2 == TTYPE_DEC_NUMBER ||
 			term2 == TTYPE_TRUE ||
@@ -89,18 +89,19 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 			weight = expressionPrecedentTable[term1][term2];
 		}			
 		
-		printf("[exp] Weight: '%c'\n", weight);
+		printf("[exp] Weight: '%c', stack size %d\n", weight, stackCount(&stack));
 		
 		switch(weight){
-			case '$':
+			case '$':				
 				if(stackCount(&stack) == 0)
 					return E_SYNTAX;
-				
 				expression = (EXPRESSION_PTR)stackPop(&stack);
 				
-				if(expression->retval != TTYPE_EXPRESSION)
+				if(expression->retval != TTYPE_EXPRESSION){
+					printf("[exp] Expect expression, get: %s\n", debugRetval(expression->retval));
 					return E_SYNTAX;
-					
+				}
+
 				*symbol = expression->symbol;					
 				break;
 			case '<':
@@ -172,8 +173,15 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				else
 					return E_SYNTAX;
 				
+				if(iType == INSTRUCTION_NOP){
+						printf("[exp] Creating black constant\n");
+						destination = stInsertStaticValueEmpty(st->curr);
+						i = makeInstruction(iType, destination, source1, source2); // itype
+						listInsertEnd(&st->curr->instructions, i);					
+				}
 				
 				err = pushExpression(st, &stack, destination, TTYPE_EXPRESSION);
+				printf("[exp] Push expression to stack in E op E (stack size: %d)\n", stackCount(&stack));
 				
 				if(err != E_OK)
 					return err;
@@ -185,9 +193,9 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 		}
 		
 	}while( !(term1 == TTYPE_SEMICOLON && term2 == TTYPE_SEMICOLON) );
-	
+
 	stackFree(&stack);
-	
+
 	return E_OK;
 }
 

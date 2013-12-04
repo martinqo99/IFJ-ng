@@ -239,7 +239,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 	
 	switch(retval){
 		case TTYPE_VARIABLE:
-			printf("Found variable\n");
+			printf("Found variable: %s\n", glob_Token.data.data);
 			if(!stSearchSymbol(st->curr, glob_Token.data))
 				stInsertSymbol(st->curr, glob_Token.data);
 
@@ -264,7 +264,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			
 			break;
 		case TTYPE_KEYWORD:
-			printf("Found variable\n");
+			printf("Found keyword: %s\n", glob_Token.data.data);
 			if(strCompare(glob_Token.data, "if")){
 				retval = getToken();
 			}
@@ -285,8 +285,8 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_RETURN, NULL, NULL, NULL));
 				
-				if(getToken() != TTYPE_SEMICOLON)
-					return E_SYNTAX;
+				//if(getToken() != TTYPE_SEMICOLON)
+				//	return E_SYNTAX;
 			}
 			else
 				return E_SYNTAX;
@@ -366,12 +366,13 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			
 			SYMBOL_PTR tmp = NULL;
 			err = parserExpression(st, retval, &symbol);
-			
+
 			if(err != E_OK)
 				return err;
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
 			
+			printf(" - assign variable completed\n");
 			break;
 		// funkce(x)
 		case TTYPE_FUNCTION:

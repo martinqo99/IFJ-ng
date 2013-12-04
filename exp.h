@@ -41,7 +41,7 @@
 	r == TTYPE_NOT_EQUAL \
 )
 
-#define type(r) r
+#define type(r) r + (INSTRUCTION_ADDITION - TTYPE_ADDITION)
 
 
 typedef struct EXPRESSION{

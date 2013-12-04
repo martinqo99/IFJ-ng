@@ -47,18 +47,38 @@ typedef enum TYPE{
 	TYPE_DIGIT_DOUBLE,
     TYPE_STRING,
     TYPE_CALLABLE,
+	TTYPE_CONSTANT,
     TYPE_OTHER
 } TYPE;
 
 typedef enum INSTRUCTION_TYPE{
     INSTRUCTION_RETURN,
+	
+	INSTRUCTION_POP,
+	INSTRUCTION_PUSH,
+	
+	
 	INSTRUCTION_MOV,         	//	A B		R(A) := R(B)  		(konstantu move nepresouva)
     INSTRUCTION_LOADK,   	// 	A Bx    R(A) := Kst(Bx)    indexujeme konstanty od 0     
 	INSTRUCTION_LOAD_NULL,	//	A B     R(A) := ... := R(B) := nil       local a;
     INSTRUCTION_NOP,
 	
-	INSTRUCTION_POP,
-	INSTRUCTION_PUSH,
+	INSTRUCTION_ADDITION, //TTYPE_ADDITION
+    INSTRUCTION_SUBSTRACTION,
+	INSTRUCTION_MULTIPLICATION,
+	INSTRUCTION_DIVISION,
+	INSTRUCTION_POWER,
+	
+	INSTRUCTION_EQUAL,
+	INSTRUCTION_NOT_EQUAL,
+	INSTRUCTION_LESS,
+	INSTRUCTION_LESS_EQUAL,
+	INSTRUCTION_GREATER,
+	INSTRUCTION_GREATER_EQUAL,
+	
+
+	
+
     //Tuxi dopln si instrukce, ktere potrebujes
 } INSTRUCTION_TYPE;
 
@@ -108,9 +128,9 @@ void stInit(SYMBOL_TABLE_PTR st);
 ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id);
 ERROR stInsertSymbol(FUNCTION_PTR function, STRING id);
 
-
 FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id);
 SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal retval);
+SYMBOL_PTR stInsertStaticValueEmpty(FUNCTION_PTR function);
 SYMBOL_PTR stSearchSymbol(FUNCTION_PTR function, STRING id);
 SYMBOL_PTR stGetLastSymbol(FUNCTION_PTR function);
 
