@@ -12,7 +12,7 @@
  * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
  *           Stodulka Daniel
  *           Hermann Lukas
- *           Tran Manh Hoang
+ *           Tran Manh Hoang 
  */
 
 #include "strings.h"
@@ -30,9 +30,12 @@ void strInitRaw(STRING* str, char* raw){
 	if(!str)
 		return;
 	
+	if(!raw)
+		return;
+	
 	strClear(str);
 		
-	if(raw != NULL || *raw != '\0'){
+	if(raw || *raw != '\0'){
 		char* ptr = raw;
 		
 		do{
@@ -67,7 +70,7 @@ void strAppend(STRING* str, char c){
 	if(!str)
 		return;
 
-	if((str->data == NULL) || (str->size == (str->used + 1) && str->data == NULL)){
+	if(!str->data || str->size == (str->used + 1)){
 		str->data = (char*)gcMalloc(sizeof(char) * SIZE_STEP);
 		str->size = SIZE_STEP;		
 	}
@@ -96,8 +99,8 @@ void strClear(STRING* str){
 void strFree(STRING* str){
 	if(!str)
 		return;
-	
-	if(str->data != NULL && str->used != 0)
+
+	if(str->data && str->used != 0)
 		gcFree(str->data);
 	
 	str->data = NULL;
