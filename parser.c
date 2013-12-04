@@ -320,45 +320,171 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	
 	enum_RetVal retval = getToken();
 	INSTRUCTION_PTR i = NULL;
+	FUNCTION_PTR f = NULL;
 	
 	switch(retval){
 		case TTYPE_RESERVED:
 			printf(" - assign reserved (NOT IMPLEMENTED YET)\n");
+			
 			if(strCompare(glob_Token.data, "boolval")){
+				printf(" - assign lib boolval\n");
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				//magic
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
 				
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, symbol, NULL, NULL));
 			}
 			else if(strCompare(glob_Token.data, "doubleval")){
+				printf(" - assign lib boolval\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "intval")){
+				printf(" - assign lib intval\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_INTVAL, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "strval")){
+				printf(" - assign lib strval\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_STRVAL, symbol, NULL, NULL));				
 			}			
 			else if(strCompare(glob_Token.data, "get_string")){
+				printf(" - assign lib get_string\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_STRING, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "put_string")){
+				printf(" - assign lib put_string\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_PUT_STRING, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "strlen")){
+				printf(" - assign lib strlen\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_STRLEN, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "get_substring")){
+				printf(" - assign lib get_substring\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_SUBSTRING, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "find_string")){
+				printf(" - assign lib find_string\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_FIND_STRING, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "sort_string")){
+				printf(" - assign lib sort_string\n");
 				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				err = parserParseCallParam(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				if(getToken() != TTYPE_SEMICOLON) //weak
+					return E_SYNTAX;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_SORT_STRING, symbol, NULL, NULL));				
 			}
 			else
 				return E_SYNTAX;
@@ -381,7 +507,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 		case TTYPE_FUNCTION:
 			printf(" - assign function\n");
 			
-			if(!stSearchFunction(st, glob_Token.data))
+			if(!(f = stSearchFunction(st, glob_Token.data)))
 				return E_SEMANTIC_UNDECLARED;
 			
 			if(getToken() != TTYPE_L_BRACKET)
@@ -393,10 +519,10 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				return err;
 				
 			if(getToken() != TTYPE_SEMICOLON)
-				return E_SYNTAX;
+				return E_SYNTAX;			
 			
-			
-			makeInstruction(INSTRUCTION_CALL, NULL, NULL, NULL);
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_CALL, f, NULL, NULL));
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, symbol, NULL, NULL));
 			
 			printf(" - assign function completed\n");
 			break;
