@@ -55,14 +55,14 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 	stackInit(&stack);
 	stackPush(&stack, makeExpression(TTYPE_SEMICOLON, NULL));
 	
-	printf("[exp] Parse expression, begin: %s\n", glob_Token.data.data);
+	fprintf(stderr,"[exp] Parse expression, begin: %s\n", glob_Token.data.data);
 	
 	do{
 		
 		term1 = getTerm(&stack);
-		printf("[exp] Get term1 from stack [%s]\n", debugRetval(term1));
+		fprintf(stderr,"[exp] Get term1 from stack [%s]\n", debugRetval(term1));
 		term2 = retval;
-		printf("[exp] Get term2 from retval [%s]\n", debugRetval(term2));
+		fprintf(stderr,"[exp] Get term2 from retval [%s]\n", debugRetval(term2));
 		
 		if(
 			term2 == TTYPE_VARIABLE ||
@@ -84,12 +84,12 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 		}
 		
 		if(weight == '0'){
-			printf("[exp] Reset term2 to semicolon\n");
+			fprintf(stderr,"[exp] Reset term2 to semicolon\n");
 			term2 = TTYPE_SEMICOLON;
 			weight = expressionPrecedentTable[term1][term2];
 		}			
 		
-		printf("[exp] Weight: '%c', stack size %d\n", weight, stackCount(&stack));
+		fprintf(stderr,"[exp] Weight: '%c', stack size %d\n", weight, stackCount(&stack));
 		
 		switch(weight){
 			case '$':				
@@ -98,7 +98,7 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				expression = (EXPRESSION_PTR)stackPop(&stack);
 				
 				if(expression->retval != TTYPE_EXPRESSION){
-					printf("[exp] Expect expression, get: %s\n", debugRetval(expression->retval));
+					fprintf(stderr,"[exp] Expect expression, get: %s\n", debugRetval(expression->retval));
 					return E_SYNTAX;
 				}
 
@@ -106,24 +106,24 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				break;
 			case '<':
 			case '=':
-				printf("[exp] Push term2 [%s] to stack\n", debugRetval(term2));
+				fprintf(stderr,"[exp] Push term2 [%s] to stack\n", debugRetval(term2));
 				err = pushExpression(st, &stack, NULL, term2);
 				if(err != E_OK)
 					return err;
 				
 				retval = getToken();
-				printf("[exp] Get token: %s\n", glob_Token.data.data);
+				fprintf(stderr,"[exp] Get token: %s\n", glob_Token.data.data);
 				break;
 			case '>':
 				if(stackCount(&stack) == 0)
 					return E_SYNTAX;
 				
 				expression = (EXPRESSION_PTR)stackPop(&stack);	
-				printf("[exp] Pop expression [%s] from stack\n", debugRetval(expression->retval));
+				fprintf(stderr,"[exp] Pop expression [%s] from stack\n", debugRetval(expression->retval));
 				
 				//E->(E)
 				if(expression->retval == TTYPE_R_BRACKET){
-					printf("[exp] Type: E->(E)\n");
+					fprintf(stderr,"[exp] Type: E->(E)\n");
 					if(stackCount(&stack) == 0)
 						return E_SYNTAX;	
 					
@@ -147,7 +147,7 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				}
 				//E-> E op E
 				else if(expression->retval == TTYPE_EXPRESSION){
-					printf("[exp] Type: E op E\n");
+					fprintf(stderr,"[exp] Type: E op E\n");
 					if(stackCount(&stack) == 0)
 						return E_SYNTAX;
 					
@@ -174,21 +174,21 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 					return E_SYNTAX;
 				
 				if(iType == INSTRUCTION_NOP){
-						printf("[exp] Creating black constant\n");
+						fprintf(stderr,"[exp] Creating black constant\n");
 						destination = stInsertStaticValueEmpty(st->curr);
 						i = makeInstruction(iType, destination, source1, source2); // itype
 						listInsertEnd(&st->curr->instructions, i);					
 				}
 				
 				err = pushExpression(st, &stack, destination, TTYPE_EXPRESSION);
-				printf("[exp] Push expression to stack in E op E (stack size: %d)\n", stackCount(&stack));
+				fprintf(stderr,"[exp] Push expression to stack in E op E (stack size: %d)\n", stackCount(&stack));
 				
 				if(err != E_OK)
 					return err;
 				
 				break;
 			default:
-				printf("ERROR EXPRESSION\n");
+				fprintf(stderr,"ERROR EXPRESSION\n");
 				return E_SYNTAX;
 		}
 		
@@ -224,7 +224,7 @@ enum_RetVal getTerm(STACK_PTR stack){
 
 ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, enum_RetVal retval){
 	if(retval == TTYPE_VARIABLE){
-		printf("[exp-push] Retval is variable\n");
+		fprintf(stderr,"[exp-push] Retval is variable\n");
 		if(!(symbol = stSearchSymbol(st->curr, glob_Token.data)))
 			return E_SEMANTIC_TYPE_MISMATCH;
 			

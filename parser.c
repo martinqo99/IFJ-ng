@@ -58,18 +58,18 @@ ERROR parser(SYMBOL_TABLE_PTR st){
 
 //Vyhleda definice funkci
 ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
-	printf("Finding function definitions:\n");
+	fprintf(stderr,"Finding function definitions:\n");
 	enum_RetVal retval;
 	
 	init_Token();
 
 	while((retval = getToken()) != TTYPE_EOF){
-		//printf("Token: %s\n", glob_Token.data.data);
+		//fprintf(stderr,"Token: %s\n", glob_Token.data.data);
 		if(retval == TTYPE_KEYWORD && strCompare(glob_Token.data, "function")){
 			retval = getToken();
 			
 			if(retval == TTYPE_FUNCTION){
-				printf("- %s\n", glob_Token.data.data);
+				fprintf(stderr,"- %s\n", glob_Token.data.data);
 				stInsertFunction(st, glob_Token.data);
 			}
 			else
@@ -115,7 +115,7 @@ ERROR parserParse(SYMBOL_TABLE_PTR st){
 //Parsovani definice funkce
 //function id (<params>){ <stat_list> }
 ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
-	printf("Parsing definition function\n");
+	fprintf(stderr,"Parsing definition function\n");
 	ERROR err = E_OK;
 	
 	if(getToken() != TTYPE_FUNCTION)
@@ -126,7 +126,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	if(!st->curr)
 		return E_COMPILATOR;
 	
-	printf("Change current function to %s\n", st->curr->id.data);
+	fprintf(stderr,"Change current function to %s\n", st->curr->id.data);
 	
 	if(getToken() != TTYPE_L_BRACKET)
 		return E_SYNTAX;
@@ -151,7 +151,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 // <params> - id <params_n>
 // <params> - eps
 ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
-	printf("Parsing function definition param\n");
+	fprintf(stderr,"Parsing function definition param\n");
 	
 	enum_RetVal retval = getToken();
 	
@@ -176,7 +176,7 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 // <params_n> - , id <params_n>
 // <params_n> - eps
 ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
-	printf("Parsing function definition params\n");
+	fprintf(stderr,"Parsing function definition params\n");
 	
 	enum_RetVal retval = getToken();
 	
@@ -211,7 +211,7 @@ ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 // <stat_list> - eps
 // <stat_list> - <command> <stat_list>
 ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
-	printf("Parsing function code\n");
+	fprintf(stderr,"Parsing function code\n");
 	
 	enum_RetVal retval = getToken();
 	
@@ -220,7 +220,7 @@ ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
 	//else if(retval == TTYPE_ELSE) // why?
 	//	return E_SYNTAX;
 	else{
-		printf("Parsing function body\n");
+		fprintf(stderr,"Parsing function body\n");
 		ERROR err = parserParseCode(st, retval);
 		
 		if(err == E_OK)
@@ -231,7 +231,7 @@ ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
 }
 //Parsovani prikazu
 ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
-	printf("Parsing code [%d]: %s\n", retval, glob_Token.data.data);
+	fprintf(stderr,"Parsing code [%d]: %s\n", retval, glob_Token.data.data);
 	
 	ERROR err = E_OK;	
 	//INSTRUCTION_PTR operator1, operator2, i;
@@ -239,7 +239,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 	
 	switch(retval){
 		case TTYPE_VARIABLE:
-			printf("Found variable: %s\n", glob_Token.data.data);
+			fprintf(stderr,"Found variable: %s\n", glob_Token.data.data);
 			if(!stSearchSymbol(st->curr, glob_Token.data))
 				stInsertSymbol(st->curr, glob_Token.data);
 
@@ -255,7 +255,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			else if(retval != TTYPE_ASSIGN)
 				return E_SYNTAX;
 			else{
-				printf("Found assign and last symbol was: %s\n", stGetLastSymbol(st->curr)->id.data);
+				fprintf(stderr,"Found assign and last symbol was: %s\n", stGetLastSymbol(st->curr)->id.data);
 				err = parserControlAssign(st, stGetLastSymbol(st->curr));
 				
 				if(err != E_OK)
@@ -264,10 +264,10 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			
 			break;
 		case TTYPE_FUNCTION:
-			printf("Found function: %s\n", glob_Token.data.data);
+			fprintf(stderr,"Found function: %s\n", glob_Token.data.data);
 			break;
 		case TTYPE_KEYWORD:
-			printf("Found keyword: %s\n", glob_Token.data.data);
+			fprintf(stderr,"Found keyword: %s\n", glob_Token.data.data);
 			if(strCompare(glob_Token.data, "if")){
 				retval = getToken();
 			}
@@ -295,7 +295,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				return E_SYNTAX;
 			break;
 		default:
-			printf("[debug] SYNTAX ERROR: [%s] %s\n", debugRetval(retval), glob_Token.data.data);
+			fprintf(stderr,"[debug] SYNTAX ERROR: [%s] %s\n", debugRetval(retval), glob_Token.data.data);
 			return E_SYNTAX;
 	}
 	
@@ -315,7 +315,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 // <assign> - find_string(string, string)
 // <assign> - sort_string(string)
 ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
-	printf("Control assign\n");
+	fprintf(stderr,"Control assign\n");
 	ERROR err = E_OK;
 	
 	enum_RetVal retval = getToken();
@@ -324,10 +324,10 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	
 	switch(retval){
 		case TTYPE_RESERVED:
-			printf(" - assign reserved (NOT IMPLEMENTED YET)\n");
+			fprintf(stderr," - assign reserved (NOT IMPLEMENTED YET)\n");
 			
 			if(strCompare(glob_Token.data, "boolval")){
-				printf(" - assign lib boolval\n");
+				fprintf(stderr," - assign lib boolval\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -343,7 +343,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, symbol, NULL, NULL));
 			}
 			else if(strCompare(glob_Token.data, "doubleval")){
-				printf(" - assign lib boolval\n");
+				fprintf(stderr," - assign lib boolval\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -359,7 +359,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "intval")){
-				printf(" - assign lib intval\n");
+				fprintf(stderr," - assign lib intval\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -375,7 +375,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_INTVAL, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "strval")){
-				printf(" - assign lib strval\n");
+				fprintf(stderr," - assign lib strval\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -391,7 +391,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_STRVAL, symbol, NULL, NULL));				
 			}			
 			else if(strCompare(glob_Token.data, "get_string")){
-				printf(" - assign lib get_string\n");
+				fprintf(stderr," - assign lib get_string\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -407,7 +407,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_STRING, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "put_string")){
-				printf(" - assign lib put_string\n");
+				fprintf(stderr," - assign lib put_string\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -423,7 +423,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_PUT_STRING, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "strlen")){
-				printf(" - assign lib strlen\n");
+				fprintf(stderr," - assign lib strlen\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -439,7 +439,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_STRLEN, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "get_substring")){
-				printf(" - assign lib get_substring\n");
+				fprintf(stderr," - assign lib get_substring\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -455,7 +455,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_SUBSTRING, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "find_string")){
-				printf(" - assign lib find_string\n");
+				fprintf(stderr," - assign lib find_string\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -471,7 +471,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_FIND_STRING, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "sort_string")){
-				printf(" - assign lib sort_string\n");
+				fprintf(stderr," - assign lib sort_string\n");
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -491,7 +491,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			break;
 		// variable + 5
 		case TTYPE_VARIABLE:
-			printf(" - assign variable\n");
+			fprintf(stderr," - assign variable\n");
 			
 			SYMBOL_PTR tmp = NULL;
 			err = parserExpression(st, retval, &symbol);
@@ -501,11 +501,11 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
 			
-			printf(" - assign variable completed\n");
+			fprintf(stderr," - assign variable completed\n");
 			break;
 		// funkce(x)
 		case TTYPE_FUNCTION:
-			printf(" - assign function\n");
+			fprintf(stderr," - assign function\n");
 			
 			if(!(f = stSearchFunction(st, glob_Token.data)))
 				return E_SEMANTIC_UNDECLARED;
@@ -524,13 +524,13 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_CALL, f, NULL, NULL));
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, symbol, NULL, NULL));
 			
-			printf(" - assign function completed\n");
+			fprintf(stderr," - assign function completed\n");
 			break;
 		case TTYPE_STRING:
-			printf(" - assign string\n");
+			fprintf(stderr," - assign string\n");
 			break;
 		default:
-			printf(" - assign default: %s\n", glob_Token.data.data);
+			fprintf(stderr," - assign default: %s\n", glob_Token.data.data);
 			break;
 	}	
 	
