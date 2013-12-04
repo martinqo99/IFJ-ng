@@ -30,6 +30,8 @@ typedef void* PTR;
 #include "btree.h"
 #include "scanner.h"
 
+#define THRESHOLD 100
+
 
 typedef union VALUE{
     bool valBool;
