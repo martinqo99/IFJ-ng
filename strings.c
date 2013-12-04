@@ -35,7 +35,7 @@ void strInitRaw(STRING* str, char* raw){
 	
 	strClear(str);
 		
-	if(raw || *raw != '\0'){
+	if(raw != NULL|| *raw != '\0'){
 		char* ptr = raw;
 		
 		do{
@@ -69,8 +69,9 @@ void strInitString(STRING* strDst, STRING* strSrc){
 void strAppend(STRING* str, char c){
 	if(!str)
 		return;
-
-	if(!str->data || str->size == (str->used + 1)){
+	
+	if((str->data == NULL) || (str->size == (str->used + 1) && str->data == NULL)){
+	//if(!str->data || str->size == (str->used + 1)){
 		str->data = (char*)gcMalloc(sizeof(char) * SIZE_STEP);
 		str->size = SIZE_STEP;		
 	}
@@ -100,7 +101,8 @@ void strFree(STRING* str){
 	if(!str)
 		return;
 
-	if(str->data && str->used != 0)
+	if(str->data != NULL && str->used != 0)
+	//if(str->data && str->used != 0)
 		gcFree(str->data);
 	
 	str->data = NULL;

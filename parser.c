@@ -292,7 +292,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				return E_SYNTAX;
 			break;
 		default:
-			printf("[debug] SYNTAX ERROR: %s\n", glob_Token.data.data);
+			printf("[debug] SYNTAX ERROR: [%s] %s\n", debugRetval(retval), glob_Token.data.data);
 			return E_SYNTAX;
 	}
 	
