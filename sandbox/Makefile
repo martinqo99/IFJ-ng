@@ -1,7 +1,7 @@
 PRJ=ifj13
 
 PROGS=$(PRJ)
-FILES=main.c errors.c mmu.c strings.c scanner.c
+FILES=strings_test.c ../errors.c ../gc.c ../strings.c
 CC=gcc
 CFLAGS=-Wall -W -Wextra -g -std=c99 -pedantic
 
