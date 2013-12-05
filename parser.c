@@ -72,6 +72,8 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 				fprintf(stderr,"- %s\n", glob_Token.data.data);
 				stInsertFunction(st, glob_Token.data);
 			}
+			else if(retval == TTYPE_RESERVED)
+				return E_SEMANTIC;
 			else
 				return E_SYNTAX;
 		}
