@@ -167,14 +167,13 @@ PTR gcFopen(const char* fileName, const char* mode){
 
             root->block = fopen(fileName, mode);
 
-           // printf("root block malooc! %d\n",root->block);
+//            printf("root block malooc! %d\n",root->block);
 
             if(!root->block)
             {
               //  printf("no block allocated!\n");
                 gcAbort();
             }
-
             root->next = NULL;
             curr = root;
 
@@ -226,7 +225,8 @@ void gcFree(PTR block){
             temp = root;
             root = temp->next;
 
-            free(temp->block);
+			if(temp->block != NULL)
+				free(temp->block);
             free(temp);
 
         }
@@ -244,7 +244,8 @@ void gcFree(PTR block){
                             temp->next = NULL;
                             curr = temp;
 
-                            free(temp2->block);
+							if(temp2->block != NULL)
+								free(temp2->block);
                             free(temp2);
                             return;
                         }
@@ -253,7 +254,8 @@ void gcFree(PTR block){
                             //curr = temp;
                             temp->next = temp2->next;
 
-                            free(temp2->block);
+							if(temp2->block != NULL)
+								free(temp2->block);
                             free(temp2);
                             return;
                         }
@@ -327,10 +329,13 @@ void gcDispose(){           // global free
         temp = root;
         root = temp->next;
         if(temp->type == GC_ITEM_MEMORY)
-            free(temp->block);
-        else
-            fclose(temp->block);
-
+		{
+			if(temp->block != NULL)
+				free(temp->block);
+		}
+		else
+			if(temp->block != NULL)
+				fclose(temp->block);
         free(temp);
     }
 }
