@@ -185,6 +185,7 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				if(iType != INSTRUCTION_NOP){
 						fprintf(stderr,"[exp] Creating black constant\n");
 						destination = stInsertStaticValueEmpty(st->curr);
+						fprintf(stderr, "I: %d, dest: %d, src1: %d, src2: %d\n", iType, destination, source1, source2);
 						i = makeInstruction(iType, destination, source1, source2); // itype
 						listInsertEnd(&st->curr->instructions, i);					
 				}

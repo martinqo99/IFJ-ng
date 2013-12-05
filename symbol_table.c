@@ -105,9 +105,15 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 			symbol->items->value.valBool = false;
 			break;
 		case TTYPE_STRING:
+			break;
 		case TTYPE_NUMBER:
+			symbol->items->type = TYPE_DIGIT_INT;
+			break;
+		case TTYPE_DEC_NUMBER:
+			symbol->items->type = TYPE_DIGIT_DOUBLE;
+			break;
 		case TTYPE_VARIABLE:
-		case TTYPE_CONSTANT:
+
 			break;
 		default:
 			return NULL;
