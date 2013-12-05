@@ -2,12 +2,18 @@
 
 #define data_copy(data_src, data_dst) \
 {\
-	if((data_dst)->items != NULL)\
-		if((data_dst)->items->type == TYPE_STRING) \
-		{\
-			gcFree(&(data_dst)->items->value.valString); \
-		}\
-	\
+	if((data_dst) != NULL)\
+	{\
+		if((data_dst)->items != NULL)\
+			if((data_dst)->items->type == TYPE_STRING) \
+			{\
+				gcFree(&(data_dst)->items->value.valString); \
+			}\
+	}\
+	else\
+	{\
+		(data_dst) = gcMalloc(sizeof(struct SYMBOL));\
+	}\
 	ITEMPTR item;\
 	item = gcMalloc(sizeof(struct ITEM));\
 	(data_dst)->items = item;\
@@ -104,11 +110,11 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_MOV: 			// FUNGUJE
+				if (op1 == NULL)
+					return E_COMPILATOR;
 				if (op1->items == NULL) 
 					return E_COMPILATOR;
-				printf("ahoj\n");
 				data_copy(op1, op3);
-				printf("ahoj\n");
 			break;
 			
 			case INSTRUCTION_LOAD_NULL:	// FUNGUJE
