@@ -1,10 +1,32 @@
 <?php
+
 	function fce1(){
-		return "ahoj";
+		$a;
+	
+		$b = $a + 1;
+	
+	
+		return $b + 1;
 	}
 	
 	function fce2($text){
 		return $text;
 	}
+
 	
-	echo fce1() + fce2(" svete");
+	$x = fce1();
+	
+	$x = fce2(" svete");
+	
+	$y = intval("ahoj svete");
+	
+	$test = "agoj";
+	
+	$x = 1;
+	
+	if($x === 1){
+	
+	}
+	else{
+	
+	}
