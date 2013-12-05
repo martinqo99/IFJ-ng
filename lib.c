@@ -67,11 +67,10 @@ ITEMPTR intval(ITEM item)
 	}
 	else if(item.type == TYPE_STRING)
 	{
-		int size = strlen(item.value.valString.data);
+		int size = my_strlen(item.value.valString);
 		int i;
 		int num;
 		new->value.valInt = 0;
-		
 		for(i = 0; i < size; i++ )
 		{
 			if(isspace(item.value.valString.data[i]))
@@ -122,7 +121,7 @@ ITEMPTR doubleval(ITEM item)
 		
 		int i;
 		int start = 0;
-		int size = strlen(item.value.valString.data);
+		int size = my_strlen(item.value.valString);
 		
 		for(i = 0; i < size; i++ )
 		{

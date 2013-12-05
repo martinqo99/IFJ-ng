@@ -89,12 +89,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 		
 	while(instr_node != NULL && err == E_OK)
 	{
-		printf("while interpret\n");
+		
 		instruction = instr_node->value;
 		
 		op1 = (SYMBOL*) instruction->operand1;
 		op2 = (SYMBOL*) instruction->operand2;
 		op3 = (SYMBOL*) instruction->destionation;
+		
+		printf("while interpret : %d\n",instruction->type);
 		
 		switch(instruction->type)
 		{
@@ -104,7 +106,9 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			case INSTRUCTION_MOV: 			// FUNGUJE
 				if (op1->items == NULL) 
 					return E_COMPILATOR;
-				data_copy(op1,op3);
+				printf("ahoj\n");
+				data_copy(op1, op3);
+				printf("ahoj\n");
 			break;
 			
 			case INSTRUCTION_LOAD_NULL:	// FUNGUJE
@@ -500,9 +504,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_IF_JUMP:		// OTESTOVAT
-				if(op1->items->type == TYPE_BOOL)
-					if(op1->items->value.valBool)
-						instruction = (INSTRUCTION_PTR)op3;
+				if(op2 != NULL)
+					if(op2->items->type == TYPE_BOOL)
+						if(op2->items->value.valBool)
+							instruction = (INSTRUCTION_PTR)op3;
 			break;
 			
 			case INSTRUCTION_LABEL:		// FUNGUJE
@@ -514,7 +519,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 // 				{
 // 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
 // 				}
-				
+
 				tmp_symbol->items = boolval(*op1->items);
 				
 				data_copy(tmp_symbol,op1);
@@ -525,8 +530,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 // 				{
 // 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
 // 				}
-				
-				tmp_symbol->items = boolval(*op1->items);
+
+				tmp_symbol->items = doubleval(*op1->items);
 				
 				data_copy(tmp_symbol,op1);
 			break;
@@ -536,9 +541,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 // 				{
 // 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
 // 				}
-				
-				tmp_symbol->items = boolval(*op1->items);
-				
+
+				tmp_symbol->items = intval(*op1->items);
 				data_copy(tmp_symbol,op1);
 			break;
 			
@@ -547,8 +551,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 // 				{
 // 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
 // 				}
-				
-				tmp_symbol->items = boolval(*op1->items);
+
+				tmp_symbol->items = strval(*op1->items);
 				
 				data_copy(tmp_symbol,op1);
 			break;
