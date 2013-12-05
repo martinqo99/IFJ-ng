@@ -50,7 +50,7 @@ PTR stackPop(STACK_PTR stack){
 	stack->begin = tmp->next;
 	stack->count--;
 
-	free(tmp);	
+	gcFree(tmp);	
 	
 	return value;
 }
