@@ -620,6 +620,8 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				return E_SEMANTIC_MISS_PARAM;
 			}
 			
+			f->argumentsCalled = 0;
+			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_CALL, f, NULL, NULL));
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, symbol, NULL, NULL));
 			
