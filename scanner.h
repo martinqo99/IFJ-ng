@@ -105,6 +105,7 @@ void free_Token();
 enum_RetVal get_Token();
 //error wrapper
 enum_RetVal getToken();
+enum_RetVal getNextToken();
 enum_RetVal get_Next_Token();
 
 
