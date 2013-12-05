@@ -319,13 +319,11 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	ERROR err = E_OK;
 	
 	enum_RetVal retval = getToken();
-	INSTRUCTION_PTR i = NULL;
 	FUNCTION_PTR f = NULL;
+	SYMBOL_PTR tmp = NULL;
 	
 	switch(retval){
 		case TTYPE_RESERVED:
-			fprintf(stderr," - assign reserved (NOT IMPLEMENTED YET)\n");
-			
 			if(strCompare(glob_Token.data, "boolval")){
 				fprintf(stderr," - assign lib boolval\n");
 				
@@ -493,7 +491,6 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 		case TTYPE_VARIABLE:
 			fprintf(stderr," - assign variable\n");
 			
-			SYMBOL_PTR tmp = NULL;
 			err = parserExpression(st, retval, &symbol);
 
 			if(err != E_OK)
@@ -528,6 +525,15 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			break;
 		case TTYPE_STRING:
 			fprintf(stderr," - assign string\n");
+			
+			err = parserExpression(st, retval, &symbol);
+
+			if(err != E_OK)
+				return err;
+			
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
+			
+			fprintf(stderr," - assign function completed\n");
 			break;
 		default:
 			fprintf(stderr," - assign default: %s\n", glob_Token.data.data);
