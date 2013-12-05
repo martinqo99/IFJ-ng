@@ -70,6 +70,10 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 			
 			if(retval == TTYPE_FUNCTION){
 				fprintf(stderr,"- %s\n", glob_Token.data.data);
+				
+				if(stSearchFunction(st, glob_Token.data))
+					return E_SEMANTIC;
+				
 				stInsertFunction(st, glob_Token.data);
 			}
 			else if(retval == TTYPE_RESERVED)
