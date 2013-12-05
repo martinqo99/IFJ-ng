@@ -28,6 +28,7 @@ typedef void* PTR;
 #include <signal.h>
 #include "errors.h"
 
+
 #define GC_ITEM_MEMORY 1
 #define GC_ITEM_FILE 2
 
