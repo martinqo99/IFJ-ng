@@ -234,7 +234,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 	fprintf(stderr,"Parsing code [%d]: %s\n", retval, glob_Token.data.data);
 	
 	ERROR err = E_OK;	
-	INSTRUCTION_PTR destination1, destination2;
+	INSTRUCTION_PTR i1, i2, i3;
 	SYMBOL_PTR symbol;
 	
 	switch(retval){
@@ -283,14 +283,44 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				if(err != E_OK)
 					return err;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_IF_JUMP, NULL, symbol, NULL));
+				// Jump na else
+				listInsertEnd(&st->curr->instructions, (i1 = makeInstruction(INSTRUCTION_IF_JUMP, NULL, symbol, NULL)));
+				
+				// Navesti pro else
+				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
+				
+				i1->destionation = st->curr->instructions.end;
+				
+				if(getToken() != TTYPE_L_BRACE)
+					return E_SYNTAX;
 				
 				err = parserParseFunctionCode(st);
 				
 				if(err != E_OK)
 					return err;
 				
+				if(getToken() != TTYPE_KEYWORD || !strCompare(glob_Token.data, "else"))
+					return E_SYNTAX;
 				
+				fprintf(stderr,"Found else\n");
+				
+				//Jump na konec else
+				listInsertEnd(&st->curr->instructions, (i2 = makeInstruction(INSTRUCTION_JUMP, NULL, NULL, NULL)));
+				
+				if(getToken() != TTYPE_L_BRACE)
+					return E_SYNTAX;
+				
+				err = parserParseFunctionCode(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				// Navesti pro konec else
+				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
+				
+				i2->destionation = st->curr->instructions.end;
+				
+				fprintf(stderr, "If/else completed\n");
 			}
 			//while(<expression>){ <stat_list> }
 			else if(strCompare(glob_Token.data, "while")){
