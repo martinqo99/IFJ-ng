@@ -28,6 +28,8 @@ void stInit(SYMBOL_TABLE_PTR st){
 	listInit(&st->start.instructions);
 	
 	st->start.calledCount = 0;
+	st->start.argumentsCount = 0;
+	st->start.argumentsCalled = 0;
 	
 	st->curr = &(st->start);
 }
@@ -40,6 +42,8 @@ ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
 	listInit(&function->instructions);
 	
 	function->calledCount = 0;
+	function->argumentsCount = 0;
+	function->argumentsCalled = 0;
 	
 	strCopy(&id, &function->id);
 	

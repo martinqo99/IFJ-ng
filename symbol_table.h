@@ -132,6 +132,9 @@ typedef struct FUNCTION{
     LIST staticValues;
     
     int calledCount;
+	
+	int argumentsCount;
+	int argumentsCalled;
 } FUNCTION, *FUNCTION_PTR;
 
 typedef struct SYMBOL_TABLE{

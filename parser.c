@@ -151,7 +151,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 // <params> - id <params_n>
 // <params> - eps
 ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
-	fprintf(stderr,"Parsing function definition param\n");
+	fprintf(stderr,"Parsing function %s definition param\n", st->curr->id.data);
 	
 	enum_RetVal retval = getToken();
 	
@@ -165,6 +165,7 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 		stInsertSymbol(st->curr, glob_Token.data);
 			
 		listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, NULL, NULL, NULL));
+		st->curr->argumentsCount++;
 		
 		return parserParseFunctionParams(st);
 	}
@@ -198,6 +199,7 @@ ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 			stInsertSymbol(st->curr, glob_Token.data);
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, NULL, NULL, NULL));
+			st->curr->argumentsCount++;
 			
 			return parserParseFunctionParams(st);
 		}
@@ -611,6 +613,11 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			if(getToken() != TTYPE_SEMICOLON)
 				return E_SYNTAX;			
 			
+			fprintf(stderr, " - call function %s - arguments required %d, passed %d\n", f->id.data, f->argumentsCount, f->argumentsCalled);
+			
+			if(f->argumentsCount != f->argumentsCalled)				
+				return E_SEMANTIC_MISS_PARAM;
+			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_CALL, f, NULL, NULL));
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, symbol, NULL, NULL));
 			
@@ -657,7 +664,7 @@ ERROR parserParseCallParam(SYMBOL_TABLE_PTR st){
 	listEnd(&st->curr->instructions);
 	
 	if(retval == TTYPE_VARIABLE){
-		if(!stSearchFunction(st, glob_Token.data))
+		if(!stSearchSymbol(st->curr, glob_Token.data))
 			return E_SEMANTIC_UNDECLARED;
 		
 		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);
@@ -675,6 +682,7 @@ ERROR parserParseCallParam(SYMBOL_TABLE_PTR st){
 		return E_SYNTAX;
 
 	listInsertPost(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
+	//st->curr->argumentsCalled++;
 	
 	return parserParseCallParams(st);
 }
@@ -692,8 +700,10 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st){
 	else if(retval != TTYPE_COMMA)
 		return E_SYNTAX;
 	else{
+		retval = getToken();
+		
 		if(retval == TTYPE_VARIABLE){
-			if(!stSearchFunction(st, glob_Token.data))
+			if(!stSearchSymbol(st->curr, glob_Token.data))
 				return E_SEMANTIC_UNDECLARED;
 		
 			symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);			
@@ -707,10 +717,13 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st){
 			retval == TTYPE_STRING
 		)
 			symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);	
-		else
+		else{
+			printf("DEBUG %d %s\n", retval, debugRetval(retval));
 			return E_SYNTAX;		
+		}
 		
 		listInsertPost(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
+		//st->curr->argumentsCalled++;
 		
 		return parserParseCallParams(st);
 	}
