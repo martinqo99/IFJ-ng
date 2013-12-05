@@ -1,19 +1,19 @@
 /**
- * Predmet:  IFJ / IAL
- * Projekt:  Implementace interpretu jazyka PHP13
- * Varianta: a/1/I
- * Soubor:   gc.h
- *
- * Popis:
- *
- *
- * Datum:    28.11.2013
- *
- * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
- *           Stodulka Daniel
- *           Hermann Lukas
- *           Tran Manh Hoang
- */
+* Predmet: IFJ / IAL
+* Projekt: Implementace interpretu jazyka PHP13
+* Varianta: a/1/I
+* Soubor: gc.h
+*
+* Popis:
+*
+*
+* Datum: 28.11.2013
+*
+* Autori: Frantisek Kolacek <xkolac12@stud.fit.vutbr.cz>
+* Stodulka Daniel
+* Hermann Lukas
+* Tran Manh Hoang
+*/
 
 #ifndef TYPE_PTR_DEFINED
 #define TYPE_PTR_DEFINED
@@ -27,22 +27,16 @@ typedef void* PTR;
 #include <stdio.h>
 #include <signal.h>
 
+
 #define GC_ITEM_MEMORY 1
 #define GC_ITEM_FILE 2
 
 typedef struct GC_ITEM{
-	int type;
-	PTR block;	
+        int type;
+        struct GC_ITEM * next;
+        PTR block;
 } GC_ITEM, *GC_ITEM_PTR;
 
-typedef struct GC
-{
-    struct struct_BTree* tree;
-
-    //Pocitadla
-    long mallocs,reallocs,callocs,fopens,frees,fcloses;
-    long allocated;
-} GC;
 
 void gcInit();
 PTR gcMalloc(int size);
@@ -53,7 +47,6 @@ void gcFree(PTR);
 void gcFclose(PTR);
 void gcDispose();
 void gcAbort();
-
-extern GC garbageCollector;
+void printList();
 
 #endif
