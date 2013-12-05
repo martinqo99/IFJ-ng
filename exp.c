@@ -182,13 +182,12 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				else
 					return E_SYNTAX;
 				
-				if(iType == INSTRUCTION_NOP){
+				if(iType != INSTRUCTION_NOP){
 						fprintf(stderr,"[exp] Creating black constant\n");
 						destination = stInsertStaticValueEmpty(st->curr);
 						i = makeInstruction(iType, destination, source1, source2); // itype
 						listInsertEnd(&st->curr->instructions, i);					
 				}
-				
 				err = pushExpression(st, &stack, destination, TTYPE_EXPRESSION);
 				fprintf(stderr,"[exp] Push expression to stack in E op E (stack size: %d)\n", stackCount(&stack));
 				
