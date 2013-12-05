@@ -92,10 +92,9 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
     SYMBOL* op1 = NULL;
     SYMBOL* op2 = NULL;
     SYMBOL* op3 = NULL;
-		
+	
 	while(instr_node != NULL && err == E_OK)
 	{
-		
 		instruction = instr_node->value;
 		
 		op1 = (SYMBOL*) instruction->operand1;
@@ -114,31 +113,35 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return E_COMPILATOR;
 				if (op1->items == NULL) 
 					return E_COMPILATOR;
+				
 				data_copy(op1, op3);
 			break;
 			
 			case INSTRUCTION_LOAD_NULL:	// FUNGUJE
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
 				data_copy(null_symbol,op1); 	// from, to
 				data_copy(null_symbol,op2); 	// from, to
 				data_copy(null_symbol,op3); 	// from, to
 			break;
 			
 			case INSTRUCTION_LOADK:		// OTESTOVAT
-				op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-				data_copy(op2,op1); 			// from, to
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				
+				tmp_symbol = (listAt(&function->staticValues, op2->items->value.valInt))->value;
+				data_copy(tmp_symbol, op1); 			// from, to
 			break;
 			
 			case INSTRUCTION_ADDITION:	// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -204,14 +207,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_SUBSTRACTION:			// OTESTOVAT
-				if(op2->items->type == TTYPE_CONSTANT)
-				{
-					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-				}
-				if(op3->items->type == TTYPE_CONSTANT)
-				{
-					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -240,14 +243,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_MULTIPLICATION:			// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -276,14 +279,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_DIVISION:			// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -320,14 +323,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_LESS:		// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -346,14 +349,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_GREATER:		// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -372,14 +375,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_LESS_EQUAL:		// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -398,14 +401,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_GREATER_EQUAL:		// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -424,14 +427,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_EQUAL:		// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -450,14 +453,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_NOT_EQUAL:		// OTESTOVAT
-// 				if(op2->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op2 = (listAt(&function->staticValues,op2->items->value.valInt))->value;
-// 				}
-// 				if(op3->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op3 = (listAt(&function->staticValues,op3->items->value.valInt))->value;
-// 				}
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -476,10 +479,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_PUSH:			// OTESTOVAT
-// 				if(op1->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
-// 				}
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
 				stackPush(stack,op1);
 			break;
 			
@@ -491,29 +494,45 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				stackPush(stack,function);
 				function = (FUNCTION_PTR)op1;
 				err=recursive_interpret(function,stack);
-				tmp_symbol = stackPop(stack);
 				function = stackPop(stack);
 				stackPush(stack,tmp_symbol);
 			break;
 			
 			case INSTRUCTION_RETURN:		// OTESTOVAT
-// 				if(op1->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
-// 				}
-				stackPush(stack,op1);
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				stackPush(stack, op1);
 				return err;
 			break;
 			
 			case INSTRUCTION_JUMP:		// OTESTOVAT
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				instruction = (INSTRUCTION_PTR)op3;
 			break;
 			
 			case INSTRUCTION_IF_JUMP:		// OTESTOVAT
-				if(op2 != NULL)
-					if(op2->items->type == TYPE_BOOL)
-						if(op2->items->value.valBool)
-							instruction = (INSTRUCTION_PTR)op3;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
+				/*
+				printf("AHOJ: %d\n",op3);
+				printf("AHOJ: %d\n",op3->items);
+				
+				
+				printf("AHOJ\n");
+				
+				if(op3->items->type == TYPE_BOOL)
+					printf("AHOJ\n");
+// 					if(op3->items->value.valBool)
+// 						printf("AHOJ\n");
+// 						instruction = (INSTRUCTION_PTR)op3;
+				*/
 			break;
 			
 			case INSTRUCTION_LABEL:		// FUNGUJE
@@ -521,43 +540,43 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_BOOLVAL:		// OTESTOVAT
-// 				if(op1->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
-// 				}
-
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				
 				tmp_symbol->items = boolval(*op1->items);
 				
 				data_copy(tmp_symbol,op1);
 			break;
 			
 			case INSTRUCTION_DOUBLEVAL:	// OTESTOVAT
-// 				if(op1->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
-// 				}
-
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				
 				tmp_symbol->items = doubleval(*op1->items);
 				
 				data_copy(tmp_symbol,op1);
 			break;
 			
 			case INSTRUCTION_INTVAL:		// OTESTOVAT
-// 				if(op1->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
-// 				}
-
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				
 				tmp_symbol->items = intval(*op1->items);
 				data_copy(tmp_symbol,op1);
 			break;
 			
 			case INSTRUCTION_STRVAL: 		// OTESTOVAT
-// 				if(op1->items->type == TTYPE_CONSTANT)
-// 				{
-// 					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
-// 				}
-
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				
 				tmp_symbol->items = strval(*op1->items);
 				
 				data_copy(tmp_symbol,op1);
@@ -574,27 +593,53 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_PUT_STRING: 		// OTESTOVAT
-				
+				// DODELAT
 			break;
 			
 			case INSTRUCTION_STRLEN: 		// OTESTOVAT
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				
 				tmp_symbol->items->type = TYPE_DIGIT_INT;
 				tmp_symbol->items->value.valInt = my_strlen(op1->items->value.valString);
 				
-				data_copy(tmp_symbol,op1);
+				data_copy(tmp_symbol, op1);
 			break;
 			
 			case INSTRUCTION_GET_SUBSTRING: 		// OTESTOVAT
-				// STRING get_substring(STRING, int, int, int*);
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				if (op3 == NULL)
+					return E_COMPILATOR;
+				if (op3->items == NULL) 
+					return E_COMPILATOR;
 				
-				tmp_string = get_substring(op1->items->value.valString,op1->items->value.valInt,op1->items->value.valInt,&err);
+				tmp_string = get_substring(op1->items->value.valString,op2->items->value.valInt,op3->items->value.valInt,&err);
+				if(err != E_OK)
+					return err;
 				tmp_symbol->items->type = TYPE_STRING;
 				strCopy(&tmp_symbol->items->value.valString,&tmp_string);
 				data_copy(tmp_symbol,op1);
 			break;
 			
 			case INSTRUCTION_FIND_STRING: 		// OTESTOVAT
-				// int find_string(STRING, STRING);
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				if (op2 == NULL)
+					return E_COMPILATOR;
+				if (op2->items == NULL) 
+					return E_COMPILATOR;
+				
 				tmp_symbol->items->type = TYPE_DIGIT_INT;
 				tmp_symbol->items->value.valInt = find_string(op1->items->value.valString, op2->items->value.valString);
 				
@@ -602,35 +647,12 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_SORT_STRING: 		// OTESTOVAT
-				// void sort_string(STRING);
+				if (op1 == NULL)
+					return E_COMPILATOR;
+				if (op1->items == NULL) 
+					return E_COMPILATOR;
+				
 				sort_string(op1->items->value.valString);
-			break;
-			
-			case INSTRUCTION_POWER: 		// OTESTOVAT
-				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
-				{
-					tmp_symbol->items->type = TYPE_DIGIT_INT;
-					tmp_symbol->items->value.valInt = pow(op2->items->value.valInt, op3->items->value.valInt);
-					data_copy(tmp_symbol,op1); // from, to
-				}
-				else if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_DOUBLE)
-				{
-					tmp_symbol->items->type = TYPE_DIGIT_DOUBLE;
-					tmp_symbol->items->value.valDouble = pow(((double)op2->items->value.valInt), op3->items->value.valDouble);
-					data_copy(tmp_symbol,op1); // from, to
-				}
-				else if(op2->items->type == TYPE_DIGIT_DOUBLE && op3->items->type == TYPE_DIGIT_INT)
-				{
-					tmp_symbol->items->type = TYPE_DIGIT_DOUBLE;
-					tmp_symbol->items->value.valDouble = pow(op2->items->value.valDouble, ((double)op3->items->value.valInt));
-					data_copy(tmp_symbol,op1); // from, to
-				}
-				else if(op2->items->type == TYPE_DIGIT_DOUBLE && op3->items->type == TYPE_DIGIT_DOUBLE)
-				{
-					tmp_symbol->items->type = TYPE_DIGIT_DOUBLE;
-					tmp_symbol->items->value.valDouble = pow(op2->items->value.valDouble, op3->items->value.valDouble);
-					data_copy(tmp_symbol,op1); // from, to
-				}
 			break;
 			
 			default:

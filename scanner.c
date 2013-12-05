@@ -57,7 +57,7 @@ enum_RetVal get_Token()
 	enum_State cur_state = STATE_START;
 	
 	int cur_char;
-	int last_char;
+	int last_char=0;
 	
 	//Hlavni nacitaci smycka
     while((cur_char = getc(glob_FileHandler)))
@@ -357,7 +357,8 @@ enum_RetVal get_Token()
 					sscanf(glob_Token.data.data, "%lf", &num);
 					
 					STRING tmp;
-					char pole[50];
+// 					char pole[50];
+					char *pole;
 					sprintf(pole,"%f",num);
 					strInitRaw(&tmp, pole);
 					

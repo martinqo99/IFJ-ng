@@ -142,10 +142,13 @@ ITEMPTR doubleval(ITEM item)
 		double cislo;
 		sscanf(number.data, "%lf", &cislo);
 		
-		char pole[50];
-		sprintf(pole,"%f",cislo);
+// 		char pole[50];
+// 		sprintf(pole,"%f",cislo);
 		
-		strInitRaw(&new->value.valString, pole);
+		char* new_string = NULL;
+		sprintf(new_string, "%f", cislo);
+		
+		strInitRaw(&new->value.valString, new_string);
 	}
 	else
 	{
