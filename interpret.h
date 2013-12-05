@@ -8,7 +8,8 @@
 //#include "syntactic.h"
 #include "symbol_table.h"
 #include "strings.h"
-//#include "library.h"
+#include "lib.h"
+#include "ial.h"
 
 //#include "quicksort.h"
 //#include "kmp.h"

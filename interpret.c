@@ -53,8 +53,9 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 	ERROR err = E_OK;
 	
 	// ----- Priprava promenych ------
-	INSTRUCTION* instruction = NULL;
+	INSTRUCTION_PTR instruction = NULL;
 	
+	STRING tmp_string;
 	
 	// NULL SYMBOL
 	ITEMPTR null_item;
@@ -506,6 +507,143 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				
 				data_copy(tmp_symbol,op1); // from, to
 			break;
+			
+			case INSTRUCTION_PUSH:			// OTESTOVAT
+				if(op1->items->type == TTYPE_CONSTANT)
+				{
+					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
+				}
+				
+				stackPush(stack,op1);
+			break;
+			
+			case INSTRUCTION_POP:			// OTESTOVAT
+				op1 = stackPop(stack);
+			break;
+			
+			case INSTRUCTION_CALL:		// OTESTOVAT
+				stackPush(stack,function);
+				function = (FUNCTION_PTR)op1;
+				err=recursive_interpret(function,stack);
+				tmp_symbol = stackPop(stack);
+				function = stackPop(stack);
+				stackPush(stack,tmp_symbol);
+			break;
+			
+			case INSTRUCTION_RETURN:		// OTESTOVAT
+				if(op1->items->type == TTYPE_CONSTANT)
+				{
+					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
+				}
+				stackPush(stack,op1);
+				return err;
+			break;
+			
+			case INSTRUCTION_JUMP:		// OTESTOVAT
+				instruction = (INSTRUCTION_PTR)op3;
+			break;
+			
+			case INSTRUCTION_IF_JUMP:		// OTESTOVAT
+				if(op1->items->type == TYPE_BOOL)
+					if(op1->items->value.valBool)
+						instruction = (INSTRUCTION_PTR)op3;
+			break;
+			
+			case INSTRUCTION_LABEL:		// FUNGUJE
+				
+			break;
+			
+			case INSTRUCTION_BOOLVAL:		// OTESTOVAT
+				if(op1->items->type == TTYPE_CONSTANT)
+				{
+					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
+				}
+				
+				tmp_symbol->items = boolval(*op1->items);
+				
+				data_copy(tmp_symbol,op1);
+			break;
+			
+			case INSTRUCTION_DOUBLEVAL:	// OTESTOVAT
+				if(op1->items->type == TTYPE_CONSTANT)
+				{
+					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
+				}
+				
+				tmp_symbol->items = boolval(*op1->items);
+				
+				data_copy(tmp_symbol,op1);
+			break;
+			
+			case INSTRUCTION_INTVAL:		// OTESTOVAT
+				if(op1->items->type == TTYPE_CONSTANT)
+				{
+					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
+				}
+				
+				tmp_symbol->items = boolval(*op1->items);
+				
+				data_copy(tmp_symbol,op1);
+			break;
+			
+			case INSTRUCTION_STRVAL: 		// OTESTOVAT
+				if(op1->items->type == TTYPE_CONSTANT)
+				{
+					op1 = (listAt(&function->staticValues,op1->items->value.valInt))->value;
+				}
+				
+				tmp_symbol->items = boolval(*op1->items);
+				
+				data_copy(tmp_symbol,op1);
+			break;
+			
+			/*
+			int put_string(int count,  ...);
+			int my_strlen(STRING);
+			STRING get_substring(STRING, int, int, int*);
+			*/
+			
+			case INSTRUCTION_GET_STRING: 	// OTESTOVAT
+				tmp_string = get_string();
+				tmp_symbol->items->type = TYPE_STRING;
+				strCopy(&tmp_symbol->items->value.valString,&tmp_string);
+				data_copy(tmp_symbol,op1);
+			break;
+			
+			case INSTRUCTION_PUT_STRING: 		// OTESTOVAT
+				
+			break;
+			
+			case INSTRUCTION_STRLEN: 		// OTESTOVAT
+				tmp_symbol->items->type = TYPE_DIGIT_INT;
+				tmp_symbol->items->value.valInt = my_strlen(op1->items->value.valString);
+				
+				data_copy(tmp_symbol,op1);
+			break;
+			
+			case INSTRUCTION_GET_SUBSTRING: 		// OTESTOVAT
+				// STRING get_substring(STRING, int, int, int*);
+				
+				tmp_string = get_substring(op1->items->value.valString,op1->items->value.valInt,op1->items->value.valInt,&err);
+				tmp_symbol->items->type = TYPE_STRING;
+				strCopy(&tmp_symbol->items->value.valString,&tmp_string);
+				data_copy(tmp_symbol,op1);
+			break;
+			
+			case INSTRUCTION_FIND_STRING: 		// OTESTOVAT
+				// int find_string(STRING, STRING);
+				tmp_symbol->items->type = TYPE_DIGIT_INT;
+				tmp_symbol->items->value.valInt = find_string(op1->items->value.valString, op2->items->value.valString);
+				
+				data_copy(tmp_symbol,op1);
+			break;
+			
+			case INSTRUCTION_SORT_STRING: 		// OTESTOVAT
+				// void sort_string(STRING);
+				sort_string(op1->items->value.valString);
+// 				data_copy(op1,op3);
+			break;
+			
 			
 			default:
 				return E_OK;
