@@ -1,266 +1,299 @@
 /**
- * Predmet:  IFJ / IAL
- * Projekt:  Implementace interpretu jazyka PHP13
- * Varianta: a/1/I
- * Soubor:   gc.c
- *
- * Popis:
- *
- *
- * Datum:    28.11.2013
- *
- * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
- *           Stodulka Daniel
- *           Hermann Lukas
- *           Tran Manh Hoang
- */
+* Predmet: IFJ / IAL
+* Projekt: Implementace interpretu jazyka PHP13
+* Varianta: a/1/I
+* Soubor: gc.c
+*
+* Popis:
+*
+*
+* Datum: 28.11.2013
+*
+* Autori: Frantisek Kolacek <xkolac12@stud.fit.vutbr.cz>
+* Stodulka Daniel
+* Hermann Lukas
+* Tran Manh Hoang
+*/
 
 #include "gc.h"
 
-GC garbageCollector;
+GC_ITEM_PTR root;
+GC_ITEM_PTR curr;
 
-void gcInit(){	
+void gcInit(){
+
     signal(SIGINT, gcAbort);
-    signal(SIGABRT, gcAbort);		
+    signal(SIGABRT, gcAbort);
+
+    root = NULL;
 }
 
 PTR gcMalloc(int size){
-	PTR block = malloc(size);
-	
-	if(!block)
-		gcAbort();
-	
-	return block;
+
+        if(root == NULL)
+        {
+            root = malloc(sizeof(struct GC_ITEM));
+
+        //    printf("root malloc struct: %d\n",root);
+
+            if(!root)
+                gcAbort();
+
+            root->block = malloc(size);
+          //  printf("malloc block: %d\n",root->block);
+
+            if(!root->block)
+                gcAbort();
+
+            root->next = NULL;
+            curr = root;
+
+
+            return root->block;
+        }
+        else
+        {
+            GC_ITEM_PTR node;
+            node = malloc(sizeof(struct GC_ITEM));
+
+            //printf("malloc struct: %d\n",node);
+
+            if(!node)
+                gcAbort();
+
+            node->block = malloc(size);
+
+           // printf("malloc block: %d\n",node->block);
+
+            if(!node->block)
+                gcAbort();
+
+            node->next = NULL;
+
+            curr->next = node;
+            //printf("next address: %d\n",curr->next);
+            curr = node;
+
+            return node->block;
+        }
 }
 
 PTR gcRealloc(PTR block, int size){
-	PTR newBlock = realloc(block, size);
-	
-	if(!newBlock)
-		gcAbort();	
-	
-	return newBlock;
+
+    GC_ITEM_PTR temp;
+    if(root->block == block)
+    {
+        root->block = realloc(block,size);
+        return root->block;
+    }
+    else
+    {
+        temp = root;
+        while(temp != NULL)
+        {
+            if(temp->block == block)
+            {
+                temp->block = realloc(block,size);
+                return temp->block;
+            }
+            temp = temp->next;
+        }
+    }
+    return NULL;
 }
 
 PTR gcCalloc(int count, int size){
-	PTR block = calloc(count, size);
-	
-	if(!block)
-		gcAbort();
-	
-	return block;
+
+        if(root == NULL)
+        {
+            root = malloc(sizeof(struct GC_ITEM));
+            //printf("calloc structure: %d\n",root);
+            if(!root)
+                gcAbort();
+
+
+            root->block = calloc(count,size);
+            //printf("calloc block: %d\n",root->block);
+            if(!root->block)
+                gcAbort();
+
+            root->next = NULL;
+            curr = root;
+
+
+            return root->block;
+        }
+        else
+        {
+            GC_ITEM_PTR node;
+            node = malloc(sizeof(struct GC_ITEM));
+
+            if(!node)
+                gcAbort();
+
+
+            node->block = calloc(count,size);
+
+            if(!node->block)
+                gcAbort();
+
+
+            node->next = NULL;
+
+            curr->next = node;
+            curr = node;
+
+            return node->block;
+        }
 }
 
 PTR gcFopen(const char* fileName, const char* mode){
-	PTR block = fopen(fileName, mode);
-	
-	if(!block)
-		gcAbort();
-	
-	return block;	
+
+        if(root == NULL)
+        {
+            root = malloc(sizeof(struct GC_ITEM));
+
+           // printf("root malooc! %d\n",root);
+
+            if(!root)
+            {
+                gcAbort();
+            }
+
+            root->block = fopen(fileName, mode);
+
+           // printf("root block malooc! %d\n",root->block);
+
+            if(!root->block)
+            {
+              //  printf("no block allocated!\n");
+                gcAbort();
+            }
+
+            root->next = NULL;
+            curr = root;
+
+            return root->block;
+        }
+        else
+        {
+            GC_ITEM_PTR node;
+            node = malloc(sizeof(struct GC_ITEM));
+         //   printf("file alloc: %d\n",node);
+            if(!node)
+            {
+              //  printf("abort!\n");
+                gcAbort();
+            }
+
+            node->block = fopen(fileName, mode);
+         //   printf("file block alloc: %d\n",node->block);
+            if(!node->block)
+            {
+              //  printf("abort!\n");
+                gcAbort();
+            }
+
+            node->next = NULL;
+
+            curr->next = node;
+            //printf("next address: %d\n",curr->next);
+            curr = node;
+
+            return node->block;
+        }
 }
 
 void gcFree(PTR block){
-	if(!block)
-		return;
-	
-	free(block);	
+       // printf("root block: %d\n",root->block);
+        if(!block)
+                return;
+
+        GC_ITEM_PTR temp;
+        GC_ITEM_PTR temp2;
+
+        if(block == root->block)
+        {
+
+            temp = root;
+            root = temp->next;
+
+         //   printf("freeing block: %d\n",temp->block);
+            free(temp->block);
+          //  printf("freeing struct: %d\n",temp);
+            free(temp);
+        }
+        else
+        {
+            temp = root;
+            while(temp->next != NULL)
+            {
+                    if(temp->next->block == block)
+                    {
+                        temp2 = temp->next;
+                        if(temp->next->next == NULL)
+                        {
+                        //    printf("pointing to last: %d\n",temp);
+                            temp->next = NULL;
+                            curr = temp;
+                         //   printf("freeing last element\n");
+                         //   printf("freeing block: %d\n",temp2->block);
+                            free(temp2->block);
+                         //   printf("freeing struct: %d\n",temp2);
+                            free(temp2);
+                            return;
+                        }
+                        else
+                        {
+                            //curr = temp;
+                            temp->next = temp2->next;
+                         //   printf("freeing block: %d\n",temp2->block);
+                            free(temp2->block);
+                          //  printf("freeing struct: %d\n",temp);
+                            free(temp2);
+                            return;
+                        }
+
+                    }
+                    else
+                    {
+                        temp = temp->next;
+                    }
+            }
+        }
 }
 
 void gcFclose(PTR block){
-	if(!block)
-		return;
-	
-	fclose(block);	
+        if(!block)
+                return;
+
+        gcFree(block);
 }
 
-void gcDispose(){
-	
-	
+void gcDispose(){           // global free
+
+    GC_ITEM_PTR temp;
+    while(root != NULL)
+    {
+        temp = root;
+        root = temp->next;
+        free(temp->block);
+        free(temp);
+    }
 }
 
 void gcAbort(){
-	
+
+    gcDispose();
+    //exit();
 }
 
-/*
-void recursive_mmuGlobalFree(struct_BTree_Node node);
 
-void mmuTreeInit()
+void printList()
 {
-    signal(SIGINT, mmuGlobalFree);
-    signal(SIGABRT, mmuGlobalFree);
-
-    //Inicializace pametovych pocitatel
-    mmuTree.mallocs = 0;
-    mmuTree.reallocs = 0;
-    mmuTree.callocs = 0;
-    mmuTree.fopens = 0;
-    mmuTree.frees = 0;
-    mmuTree.fcloses = 0;
-    mmuTree.allocated = 0;
-    
-	mmuTree.tree = malloc(sizeof(void*));
-    BT_Init(mmuTree.tree);
-}
-
-void* mmuMalloc(size_t size)
-{	
-    mmuTree.mallocs++;
-    mmuTree.allocated += size;
-
-    void* newPtr = malloc(size);
-	
-    if (newPtr == NULL)
-		exit (E_COMPILATOR);
-
-    assert(newPtr);
-
-    struct_BTree_Node item = BT_Insert(mmuTree.tree,(intptr_t)newPtr);
-
-    assert(item);
-
-    item->data = newPtr;
-    item->allocated = size;
-    item->type = MMU_MEMORY;
-
-    return newPtr;
-}
-
-void* mmuRealloc(void* ptr, size_t size)
-{
-
-    mmuTree.reallocs++;
-    mmuTree.allocated += size;
-
-    void* newPtr = realloc(ptr, size);
-
-    if (newPtr == NULL)
-		exit (E_COMPILATOR);
-
-    assert(newPtr);
-
-    struct_BTree_Node item = NULL;
-
-    if(newPtr != ptr)
-	{
-        item = BT_Insert(mmuTree.tree,(intptr_t)ptr);
-        
-		assert(item);
-		
-        item->allocated = 0;
-        item->data = NULL;
-    }
-
-    item = BT_Insert(mmuTree.tree,(intptr_t)ptr);
-
-    assert(item);
-
-    item->data = newPtr;
-    item->allocated = size;
-    item->type = MMU_MEMORY;
-
-    return newPtr;
-}
-
-void* mmuCalloc(size_t num, size_t size)
-{
-    mmuTree.callocs++;
-    mmuTree.allocated += size;
-
-    void* newPtr = calloc(num, size);
-
-    if (newPtr == NULL)
-		exit (E_COMPILATOR);
-
-    assert(newPtr);
-
-    struct_BTree_Node item = BT_Insert(mmuTree.tree,(intptr_t)newPtr);
-
-    assert(item);
-
-    item->data = newPtr;
-    item->allocated = size;
-    item->type = MMU_MEMORY;
-
-    return newPtr;
-}
-
-void* mmuFopen(const char* fileName, const char* mode)
-{
-    mmuTree.fopens++;
-    mmuTree.allocated += sizeof(FILE*);
-
-    void* newPtr = (FILE*)fopen(fileName, mode);
-
-    if(!newPtr)
-        return NULL;
-
-    struct_BTree_Node item = BT_Insert(mmuTree.tree,(intptr_t)newPtr);
-
-    assert(item);
-
-    item->data = newPtr;
-    item->allocated = sizeof(FILE*);
-    item->type = MMU_FILE;
-
-    return newPtr;
-}
-
-void mmuFree(void* ptr)
-{
-    mmuTree.frees++;
-
-    if(!ptr)
-        return;
-
-    struct_BTree_Node item = BT_Search(mmuTree.tree,(intptr_t)ptr);
-
-    if(!item)
-        return;
-
-    if(item->allocated != 0)
-	{
-        free(ptr);
-        item->allocated = 0;
-        item->data = NULL;
+    while(root!=NULL)
+    {
+      //  printf("structure address: %d\n",root);
+        root = root->next;
     }
 }
-
-void mmuFclose(void* ptr)
-{
-    mmuTree.fcloses++;
-
-    if(!ptr)
-        return;
-
-    struct_BTree_Node item = BT_Search(mmuTree.tree,(intptr_t)ptr);
-
-    if(!item)
-        return;
-
-    if(item->allocated != 0){
-        fclose(ptr);
-        item->allocated = 0;
-        item->data = NULL;
-    }
-
-}
-
-void mmuGlobalFree()
-{
-//     recursive_mmuGlobalFree(mmuTree.tree->root);
-	BT_Free(mmuTree.tree);
-// 	free(mmuTree.tree);
-}
-
-void recursive_mmuGlobalFree(struct_BTree_Node node)
-{
-	if(node->left != NULL)
-		recursive_Node_Delete(node->left);
-	if(node->right != NULL)
-		recursive_Node_Delete(node->right);
-	
-	mmuFree(node);
-}
-*/
