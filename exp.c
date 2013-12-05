@@ -112,6 +112,15 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 					return err;
 				
 				retval = getToken();
+				if(getNextToken() == TTYPE_L_BRACE){
+					//UBER COOL SUPER MAGIC
+					fprintf(stderr, "[exp] Filgy magic - forcing end of expression\n");
+					
+					retval = TTYPE_SEMICOLON;
+					//optional
+					strInitRaw(&glob_Token.data, ";");
+				}
+				
 				fprintf(stderr,"[exp] Get token: %s\n", glob_Token.data.data);
 				break;
 			case '>':

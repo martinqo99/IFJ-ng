@@ -217,7 +217,7 @@ ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
 	
 	if(retval == TTYPE_R_BRACE)
 		return E_OK;
-	//else if(retval == TTYPE_ELSE) // why?
+	//else if(retval == TTYPE_ELSE) // po ifu musi byt vzdy else
 	//	return E_SYNTAX;
 	else{
 		fprintf(stderr,"Parsing function body\n");
@@ -234,7 +234,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 	fprintf(stderr,"Parsing code [%d]: %s\n", retval, glob_Token.data.data);
 	
 	ERROR err = E_OK;	
-	//INSTRUCTION_PTR operator1, operator2, i;
+	INSTRUCTION_PTR destination1, destination2;
 	SYMBOL_PTR symbol;
 	
 	switch(retval){
@@ -266,10 +266,31 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 		case TTYPE_FUNCTION:
 			fprintf(stderr,"Found function: %s\n", glob_Token.data.data);
 			break;
+		//if(<expression>){ <code> }else{ <code> }
 		case TTYPE_KEYWORD:
 			fprintf(stderr,"Found keyword: %s\n", glob_Token.data.data);
+			//Podminka
 			if(strCompare(glob_Token.data, "if")){
+				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+
+				
 				retval = getToken();
+				
+				err = parserExpression(st, retval, &symbol);
+				
+				if(err != E_OK)
+					return err;
+				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_IF_JUMP, NULL, symbol, NULL));
+				
+				err = parserParseFunctionCode(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				
 			}
 			//while(<expression>){ <stat_list> }
 			else if(strCompare(glob_Token.data, "while")){
@@ -537,6 +558,16 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			break;
 		default:
 			fprintf(stderr," - assign default: %s\n", glob_Token.data.data);
+
+			err = parserExpression(st, retval, &symbol);
+
+			if(err != E_OK)
+				return err;
+			
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
+			
+			fprintf(stderr," - assign default completed\n");			
+			
 			break;
 	}	
 	

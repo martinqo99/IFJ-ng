@@ -377,8 +377,11 @@ enum_RetVal get_Token()
 enum_RetVal getToken(){
 	enum_RetVal retval = get_Token();
 	
-	if(retval == TTYPE_ERROR)
+	if(retval == TTYPE_ERROR){
+		fprintf(stderr, "Lex error: %s\n", glob_Token.data.data);
 		ChuckSaid(E_LEXICAL, "Neplatny lexem");
+		
+	}
 		
 	return retval;
 }
@@ -408,8 +411,10 @@ enum_RetVal get_Next_Token()
 enum_RetVal getNextToken(){
 	enum_RetVal retval = get_Next_Token();
 	
-	if(retval == TTYPE_ERROR)
+	if(retval == TTYPE_ERROR){
+		fprintf(stderr, "Lex error: %s\n", glob_Token.data.data);
 		ChuckSaid(E_LEXICAL, "Neplatny lexem");
+	}
 		
 	return retval;
 }
