@@ -2,10 +2,16 @@
 
 #define data_copy(data_src, data_dst) \
 {\
-	if((data_dst)->items->type == TYPE_STRING) \
-	{\
-		gcFree(&(data_dst)->items->value.valString); \
-	}\
+	if((data_dst)->items != NULL)\
+		if((data_dst)->items->type == TYPE_STRING) \
+		{\
+			gcFree(&(data_dst)->items->value.valString); \
+		}\
+	\
+	ITEMPTR item;\
+	item = gcMalloc(sizeof(struct ITEM));\
+	(data_dst)->items = item;\
+	\
 	if((data_src)->items->type == TYPE_DIGIT_INT)\
 	{\
 		((data_dst)->items->type) = TYPE_DIGIT_INT; \
@@ -24,7 +30,8 @@
 	else if((data_src)->items->type == TYPE_STRING)\
 	{\
 		(data_dst)->items->type = TYPE_STRING;\
-		strInitString(&(data_dst)->items->value.valString,&(data_src)->items->value.valString);\
+		strInit(&(data_dst)->items->value.valString);\
+		strCopy(&(data_dst)->items->value.valString, &(data_src)->items->value.valString);\
 	}\
 	else \
 	{\
@@ -605,9 +612,12 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			
 			case INSTRUCTION_GET_STRING: 	// OTESTOVAT
 				tmp_string = get_string();
+				
 				tmp_symbol->items->type = TYPE_STRING;
+				strInit(&tmp_symbol->items->value.valString);
 				strCopy(&tmp_symbol->items->value.valString,&tmp_string);
-				data_copy(tmp_symbol,op1);
+				
+				data_copy(tmp_symbol, op1);
 			break;
 			
 			case INSTRUCTION_PUT_STRING: 		// OTESTOVAT
@@ -641,7 +651,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			case INSTRUCTION_SORT_STRING: 		// OTESTOVAT
 				// void sort_string(STRING);
 				sort_string(op1->items->value.valString);
-// 				data_copy(op1,op3);
 			break;
 			
 			
