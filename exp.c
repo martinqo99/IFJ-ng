@@ -101,6 +101,8 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 					fprintf(stderr,"[exp] Expect expression, get: %s\n", debugRetval(expression->retval));
 					return E_SYNTAX;
 				}
+				
+				//printf("2]]][[[ %d\n",  expression->symbol);
 
 				*symbol = expression->symbol;					
 				break;
@@ -247,11 +249,15 @@ ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, en
 		retval == TTYPE_NUMBER ||
 		retval == TTYPE_DEC_NUMBER
 	){
+		
 		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);
+		fprintf(stderr,"[exp-push] Insert static value: %s\n", glob_Token.data.data);
+
 		retval = TTYPE_EXPRESSION;
 	}
 	
 	stackPush(stack, makeExpression(retval, symbol));
+	//printf("1]]][[[ %d: %d\n", symbol, symbol->items);
 	
 	return E_OK;
 }

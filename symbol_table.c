@@ -90,8 +90,7 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 	SYMBOL_PTR symbol = gcMalloc(sizeof(SYMBOL));
 	
 	symbol->items = gcMalloc(sizeof(ITEM));
-	strCopy(&id, &symbol->id); //mozno ne?
-	
+	//strCopy(&id, &symbol->id); //mozno ne?
 	switch(retval){
 		case TTYPE_NULL:
 			symbol->items->type = TYPE_NULL;
@@ -107,10 +106,11 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 		case TTYPE_STRING:
 			break;
 		case TTYPE_NUMBER:
-			symbol->items->type = TYPE_DIGIT_INT;
+			//symbol->items->type = TYPE_DIGIT_INT;
+			//symbo
 			break;
 		case TTYPE_DEC_NUMBER:
-			symbol->items->type = TYPE_DIGIT_DOUBLE;
+			//symbol->items->type = TYPE_DIGIT_DOUBLE;
 			break;
 		case TTYPE_VARIABLE:
 
@@ -120,7 +120,7 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 	}
 	
 	listInsertEnd(&function->staticValues, symbol);
-	
+	//printf("POKOKOT\n");
 	return symbol;
 }
 
