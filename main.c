@@ -42,7 +42,7 @@ int main(int argc, char* argv[]){
 	
 	ERROR err = parser(&st);
 	
-	
+	err = interpret(&st);
 	
 	
 	stFree(&st);

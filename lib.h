@@ -56,15 +56,15 @@ typedef enum TYPE{
 
 // ChuckSaid(E_LEXICAL, "Neplatny lexem");
 
-ITEM boolval(ITEM);
-ITEM doubleval(ITEM);
-ITEM intval(ITEM);
-ITEM strval(ITEM);
+ITEMPTR boolval(ITEM);
+ITEMPTR doubleval(ITEM);
+ITEMPTR intval(ITEM);
+ITEMPTR strval(ITEM);
 
 STRING get_string();
 int put_string(int count,  ...);
 int my_strlen(STRING);
-STRING get_substring(STRING, int, int, int*);
+STRING get_substring(STRING, int, int, ERROR*);
 
 
 
