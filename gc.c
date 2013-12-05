@@ -22,8 +22,8 @@ GC_ITEM_PTR curr;
 
 void gcInit(){
 
-    signal(SIGINT, gcAbort);
-    signal(SIGABRT, gcAbort);
+   //signal(SIGINT, gcAbort);
+   // signal(SIGABRT, gcAbort);
 
     root = NULL;
 }
@@ -33,6 +33,7 @@ PTR gcMalloc(int size){
         if(root == NULL)
         {
             root = malloc(sizeof(struct GC_ITEM));
+            root->type = GC_ITEM_MEMORY;
 
         //    printf("root malloc struct: %d\n",root);
 
@@ -56,6 +57,7 @@ PTR gcMalloc(int size){
             GC_ITEM_PTR node;
             node = malloc(sizeof(struct GC_ITEM));
 
+            node->type = GC_ITEM_MEMORY;
             //printf("malloc struct: %d\n",node);
 
             if(!node)
@@ -108,6 +110,7 @@ PTR gcCalloc(int count, int size){
         {
             root = malloc(sizeof(struct GC_ITEM));
             //printf("calloc structure: %d\n",root);
+            root->type = GC_ITEM_MEMORY;
             if(!root)
                 gcAbort();
 
@@ -127,6 +130,7 @@ PTR gcCalloc(int count, int size){
         {
             GC_ITEM_PTR node;
             node = malloc(sizeof(struct GC_ITEM));
+            node->type = GC_ITEM_MEMORY;
 
             if(!node)
                 gcAbort();
@@ -153,6 +157,7 @@ PTR gcFopen(const char* fileName, const char* mode){
         {
             root = malloc(sizeof(struct GC_ITEM));
 
+            root->type = GC_ITEM_FILE;
            // printf("root malooc! %d\n",root);
 
             if(!root)
@@ -180,6 +185,9 @@ PTR gcFopen(const char* fileName, const char* mode){
             GC_ITEM_PTR node;
             node = malloc(sizeof(struct GC_ITEM));
          //   printf("file alloc: %d\n",node);
+
+            node->type = GC_ITEM_FILE;
+
             if(!node)
             {
               //  printf("abort!\n");
@@ -218,9 +226,62 @@ void gcFree(PTR block){
             temp = root;
             root = temp->next;
 
-         //   printf("freeing block: %d\n",temp->block);
             free(temp->block);
-          //  printf("freeing struct: %d\n",temp);
+            free(temp);
+
+        }
+        else
+        {
+            temp = root;
+            while(temp->next != NULL)
+            {
+                    if(temp->next->block == block)
+                    {
+                        temp2 = temp->next;
+                        if(temp->next->next == NULL)
+                        {
+                        //    printf("pointing to last: %d\n",temp);
+                            temp->next = NULL;
+                            curr = temp;
+
+                            free(temp2->block);
+                            free(temp2);
+                            return;
+                        }
+                        else
+                        {
+                            //curr = temp;
+                            temp->next = temp2->next;
+
+                            free(temp2->block);
+                            free(temp2);
+                            return;
+                        }
+
+                    }
+                    else
+                    {
+                        temp = temp->next;
+                    }
+            }
+        }
+}
+
+void gcFclose(PTR block){
+
+        if(!block)
+                return;
+
+        GC_ITEM_PTR temp;
+        GC_ITEM_PTR temp2;
+
+        if(block == root->block)
+        {
+
+            temp = root;
+            root = temp->next;
+
+            fclose(temp->block);
             free(temp);
         }
         else
@@ -236,24 +297,19 @@ void gcFree(PTR block){
                         //    printf("pointing to last: %d\n",temp);
                             temp->next = NULL;
                             curr = temp;
-                         //   printf("freeing last element\n");
-                         //   printf("freeing block: %d\n",temp2->block);
-                            free(temp2->block);
-                         //   printf("freeing struct: %d\n",temp2);
+
+                            fclose(temp2->block);
                             free(temp2);
                             return;
                         }
                         else
                         {
-                            //curr = temp;
                             temp->next = temp2->next;
-                         //   printf("freeing block: %d\n",temp2->block);
-                            free(temp2->block);
-                          //  printf("freeing struct: %d\n",temp);
+
+                            fclose(temp2->block);
                             free(temp2);
                             return;
                         }
-
                     }
                     else
                     {
@@ -263,13 +319,6 @@ void gcFree(PTR block){
         }
 }
 
-void gcFclose(PTR block){
-        if(!block)
-                return;
-
-        gcFree(block);
-}
-
 void gcDispose(){           // global free
 
     GC_ITEM_PTR temp;
@@ -277,13 +326,16 @@ void gcDispose(){           // global free
     {
         temp = root;
         root = temp->next;
-        free(temp->block);
+        if(temp->type == GC_ITEM_MEMORY)
+            free(temp->block);
+        else
+            fclose(temp->block);
+
         free(temp);
     }
 }
 
 void gcAbort(){
-
     gcDispose();
     exit(E_COMPILATOR);
 }
@@ -292,8 +344,5 @@ void gcAbort(){
 void printList()
 {
     while(root!=NULL)
-    {
-      //  printf("structure address: %d\n",root);
         root = root->next;
-    }
 }
