@@ -113,7 +113,7 @@ ERROR parserParse(SYMBOL_TABLE_PTR st){
 }
 
 //Parsovani definice funkce
-//function id (<params>){ <stat_list> }
+//function id (<params>){ <code> }
 ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	fprintf(stderr,"Parsing definition function\n");
 	ERROR err = E_OK;
@@ -208,8 +208,8 @@ ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 		return E_SYNTAX;	
 }
 //Parsovani tela definice funkce
-// <stat_list> - eps
-// <stat_list> - <command> <stat_list>
+// <code> - eps
+// <code> - <command> <code>
 ERROR parserParseFunctionCode(SYMBOL_TABLE_PTR st){
 	fprintf(stderr,"Parsing function code\n");
 	
@@ -266,10 +266,11 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 		case TTYPE_FUNCTION:
 			fprintf(stderr,"Found function: %s\n", glob_Token.data.data);
 			break;
-		//if(<expression>){ <code> }else{ <code> }
+		
 		case TTYPE_KEYWORD:
 			fprintf(stderr,"Found keyword: %s\n", glob_Token.data.data);
-			//Podminka
+			
+			//if(<expression>){ <code> }else{ <code> }
 			if(strCompare(glob_Token.data, "if")){
 				
 				if(getToken() != TTYPE_L_BRACKET)
@@ -278,6 +279,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				
 				retval = getToken();
 				
+				//Parsovani podminky
 				err = parserExpression(st, retval, &symbol);
 				
 				if(err != E_OK)
@@ -294,6 +296,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				if(getToken() != TTYPE_L_BRACE)
 					return E_SYNTAX;
 				
+				// Parsovani tela podminky
 				err = parserParseFunctionCode(st);
 				
 				if(err != E_OK)
@@ -322,9 +325,48 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				
 				fprintf(stderr, "If/else completed\n");
 			}
-			//while(<expression>){ <stat_list> }
+// 			//while(<expression>){ <code> }
 			else if(strCompare(glob_Token.data, "while")){
+				
+				i2 = makeInstruction(INSTRUCTION_JUMP, NULL, NULL, NULL);
+				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
 				retval = getToken();
+				
+				//Parsovani podminky
+				err = parserExpression(st, retval, &symbol);
+				
+				if(err != E_OK)
+					return err;
+				
+				//Navesti pro while
+				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
+				
+				i2->destionation = st->curr->instructions.end;
+				
+				//Jump na konec while
+				listInsertPost(&st->curr->instructions, (i1 = makeInstruction(INSTRUCTION_IF_JUMP, NULL, symbol, NULL)));
+				
+				if(getToken() != TTYPE_L_BRACE)
+					return E_SYNTAX;
+				
+				//Parsovani tela cyklu
+				err = parserParseFunctionCode(st);
+				
+				if(err != E_OK)
+					return err;
+				
+				//Jump na zacatek while
+				listInsertPost(&st->curr->instructions, i2);
+				
+				//Navesti konce while
+				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
+				
+				i1->destionation = st->curr->instructions.end;
+				
+				fprintf(stderr, "While completed\n");
 			}
 			//return expression;
 			else if(strCompare(glob_Token.data, "return")){
