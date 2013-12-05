@@ -358,7 +358,7 @@ enum_RetVal get_Token()
 					
 					STRING tmp;
 // 					char pole[50];
-					char *pole;
+					char *pole = NULL;
 					sprintf(pole,"%f",num);
 					strInitRaw(&tmp, pole);
 					
