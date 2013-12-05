@@ -285,7 +285,7 @@ void gcDispose(){           // global free
 void gcAbort(){
 
     gcDispose();
-    //exit();
+    exit(E_COMPILATOR);
 }
 
 
