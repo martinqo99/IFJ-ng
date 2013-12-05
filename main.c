@@ -23,6 +23,7 @@
 #include "scanner.h"
 #include "symbol_table.h"
 #include "parser.h"
+#include "interpret.h"
 
 void programAbort();
 
@@ -42,8 +43,8 @@ int main(int argc, char* argv[]){
 	
 	ERROR err = parser(&st);
 	
-	err = interpret(&st);
-	
+	if(err == E_OK)
+		err = interpret(&st);
 	
 	stFree(&st);
 	
