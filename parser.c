@@ -425,7 +425,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -441,7 +441,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -457,7 +457,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -473,7 +473,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -489,7 +489,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -505,7 +505,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -521,7 +521,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -537,7 +537,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -553,7 +553,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -569,7 +569,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st);
+				err = parserParseCallParam(st, NULL);
 				
 				if(err != E_OK)
 					return err;
@@ -605,7 +605,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			if(getToken() != TTYPE_L_BRACKET)
 				return E_SYNTAX;
 			
-			err = parserParseCallParam(st);
+			err = parserParseCallParam(st, f);
 			
 			if(err != E_OK)
 				return err;
@@ -613,10 +613,10 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			if(getToken() != TTYPE_SEMICOLON)
 				return E_SYNTAX;			
 			
-			fprintf(stderr, " - call function %s - arguments required %d, passed %d\n", f->id.data, f->argumentsCount, f->argumentsCalled);
-			
-			if(f->argumentsCount != f->argumentsCalled)				
+			if(f->argumentsCount != f->argumentsCalled){
+				fprintf(stderr, " - error call function %s - arguments required %d, passed %d\n", f->id.data, f->argumentsCount, f->argumentsCalled);
 				return E_SEMANTIC_MISS_PARAM;
+			}
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_CALL, f, NULL, NULL));
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, symbol, NULL, NULL));
@@ -653,7 +653,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 	return err;	
 }
 
-ERROR parserParseCallParam(SYMBOL_TABLE_PTR st){	
+ERROR parserParseCallParam(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){	
 	enum_RetVal retval = getToken();
 	SYMBOL_PTR symbol = NULL;
 	
@@ -682,12 +682,13 @@ ERROR parserParseCallParam(SYMBOL_TABLE_PTR st){
 		return E_SYNTAX;
 
 	listInsertPost(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
-	//st->curr->argumentsCalled++;
 	
-	return parserParseCallParams(st);
+	if(f) f->argumentsCalled++;
+	
+	return parserParseCallParams(st, f);
 }
 
-ERROR parserParseCallParams(SYMBOL_TABLE_PTR st){
+ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 	enum_RetVal retval = getToken();
 	SYMBOL_PTR symbol = NULL;
 	
@@ -717,14 +718,13 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st){
 			retval == TTYPE_STRING
 		)
 			symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);	
-		else{
-			printf("DEBUG %d %s\n", retval, debugRetval(retval));
+		else
 			return E_SYNTAX;		
-		}
 		
 		listInsertPost(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
-		//st->curr->argumentsCalled++;
 		
-		return parserParseCallParams(st);
+		if(f) f->argumentsCalled++;
+		
+		return parserParseCallParams(st, f);
 	}
 }
