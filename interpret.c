@@ -1,5 +1,32 @@
 #include "interpret.h"
 
+ERROR op_check(SYMBOL_PTR smb)
+{
+	if(smb == NULL)
+		return 1;
+	else
+	{
+		if(smb->id.data == NULL)
+		{
+			if(smb->items == NULL)
+				return 2;
+			else
+				return E_OK;
+		}
+		else
+		{
+			if(smb->items == NULL)
+			{
+				smb->items = gcMalloc(sizeof(struct ITEM));
+				return E_OK;
+			}
+			else
+				return E_OK;
+		}
+	}
+	return E_OK;
+}
+
 #define data_copy(data_src, data_dst) \
 {\
 	if((data_dst) != NULL)\
@@ -109,10 +136,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_MOV: 			// FUNGUJE
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				printf("bum: %s a %d\n",op1->id.data,op1->type);
+				if ((err = op_check(op1)) != E_OK)
+					return err;
+				printf("bac\n");
 				
 				data_copy(op1, op3);
 			break;
@@ -124,24 +151,18 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_LOADK:		// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
 				
 				tmp_symbol = (listAt(&function->staticValues, op2->items->value.valInt))->value;
 				data_copy(tmp_symbol, op1); 			// from, to
 			break;
 			
 			case INSTRUCTION_ADDITION:	// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -207,14 +228,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_SUBSTRACTION:			// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -243,14 +260,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_MULTIPLICATION:			// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -279,14 +292,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_DIVISION:			// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -323,14 +332,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_LESS:		// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -349,14 +354,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_GREATER:		// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -375,14 +376,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_LESS_EQUAL:		// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -401,14 +398,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_GREATER_EQUAL:		// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -427,14 +420,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_EQUAL:		// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -453,14 +442,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_NOT_EQUAL:		// OTESTOVAT
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -479,10 +464,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_PUSH:			// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
 				stackPush(stack,op1);
 			break;
 			
@@ -499,40 +482,28 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_RETURN:		// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
 				stackPush(stack, op1);
 				return err;
 			break;
 			
 			case INSTRUCTION_JUMP:		// OTESTOVAT
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				instruction = (INSTRUCTION_PTR)op3;
 			break;
 			
 			case INSTRUCTION_IF_JUMP:		// OTESTOVAT
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
-				/*
-				printf("AHOJ: %d\n",op3);
-				printf("AHOJ: %d\n",op3->items);
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
+				if(op2->items->type == TYPE_BOOL)
+					if(op2->items->value.valBool)
+						instruction = (INSTRUCTION_PTR)op3;
 				
-				printf("AHOJ\n");
-				
-				if(op3->items->type == TYPE_BOOL)
-					printf("AHOJ\n");
-// 					if(op3->items->value.valBool)
-// 						printf("AHOJ\n");
-// 						instruction = (INSTRUCTION_PTR)op3;
-				*/
 			break;
 			
 			case INSTRUCTION_LABEL:		// FUNGUJE
@@ -540,10 +511,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_BOOLVAL:		// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
 				
 				tmp_symbol->items = boolval(*op1->items);
 				
@@ -551,10 +520,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_DOUBLEVAL:	// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
 				
 				tmp_symbol->items = doubleval(*op1->items);
 				
@@ -562,20 +529,16 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_INTVAL:		// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
 				
 				tmp_symbol->items = intval(*op1->items);
 				data_copy(tmp_symbol,op1);
 			break;
 			
 			case INSTRUCTION_STRVAL: 		// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
 				
 				tmp_symbol->items = strval(*op1->items);
 				
@@ -597,10 +560,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_STRLEN: 		// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
 				
 				tmp_symbol->items->type = TYPE_DIGIT_INT;
 				tmp_symbol->items->value.valInt = my_strlen(op1->items->value.valString);
@@ -609,18 +570,12 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_GET_SUBSTRING: 		// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
-				if (op3 == NULL)
-					return E_COMPILATOR;
-				if (op3->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
+				if ((err = op_check(op3)) != E_OK)
+					return err;
 				
 				tmp_string = get_substring(op1->items->value.valString,op2->items->value.valInt,op3->items->value.valInt,&err);
 				if(err != E_OK)
@@ -631,14 +586,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_FIND_STRING: 		// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				if (op2->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
+				if ((err = op_check(op2)) != E_OK)
+					return err;
 				
 				tmp_symbol->items->type = TYPE_DIGIT_INT;
 				tmp_symbol->items->value.valInt = find_string(op1->items->value.valString, op2->items->value.valString);
@@ -647,10 +598,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_SORT_STRING: 		// OTESTOVAT
-				if (op1 == NULL)
-					return E_COMPILATOR;
-				if (op1->items == NULL) 
-					return E_COMPILATOR;
+				if ((err = op_check(op1)) != E_OK)
+					return err;
 				
 				sort_string(op1->items->value.valString);
 			break;

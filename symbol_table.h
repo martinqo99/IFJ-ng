@@ -78,7 +78,7 @@ typedef enum INSTRUCTION_TYPE{
 	
 	INSTRUCTION_JUMP,		// C - dest
 	INSTRUCTION_IF_JUMP,	// B - symbol C - dest 
-	INSTRUCTION_LABEL,	// 
+	INSTRUCTION_LABEL,	// 21
 	
 	INSTRUCTION_CALL,
 	
