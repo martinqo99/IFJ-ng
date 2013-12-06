@@ -92,7 +92,9 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 	*symbol = gcMalloc(sizeof(SYMBOL));
 	
 	(*symbol)->items = gcMalloc(sizeof(ITEM));
-	//strCopy(&id, &symbol->id); //mozno ne?
+	strCopy(&id, &(*symbol)->id); //mozno ne?
+	
+	
 	switch(retval){
 		case TTYPE_NULL:
 			(*symbol)->items->type = TYPE_NULL;
@@ -107,13 +109,17 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 			break;
 		case TTYPE_STRING:
 			(*symbol)->items->type = TYPE_STRING;
+			strCopy(&((*symbol)->items->value.valString), &id);
 			break;
 		case TTYPE_NUMBER:
 			(*symbol)->items->type = TYPE_DIGIT_INT;
-			//symbo
+		
+			sscanf(id.data, "%d", &((*symbol)->items->value.valInt));
 			break;
 		case TTYPE_DEC_NUMBER:
 			(*symbol)->items->type = TYPE_DIGIT_DOUBLE;
+			
+			sscanf(id.data, "%lf", &((*symbol)->items->value.valDouble));
 			break;
 		case TTYPE_VARIABLE:
 			(*symbol)->items->type = TYPE_CALLABLE;
