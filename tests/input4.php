@@ -1,12 +1,13 @@
 <?php
 
 	function fce1(){
-		$a;
+		//parser.c 599
+		//$a;
 	
-		$b = $a + 1;
+		//$b = $a + 1;
 	
 	
-		return $b + 1;
+		//return $b + 1;
 	}
 	
 	function fce2($text){
@@ -20,7 +21,8 @@
 	
 	$y = intval("ahoj svete");
 	
-	$test = "agoj";
+	// parser.c 642
+	//$test = "agoj";
 	
 	$x = 1;
 	
