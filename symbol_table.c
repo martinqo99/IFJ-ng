@@ -207,8 +207,6 @@ const char* debugInstruction(INSTRUCTION_TYPE i){
 			return "push";
 		case INSTRUCTION_MOV:
 			return "mov";
-		case INSTRUCTION_LOADK:
-			return "loadk";
 		case INSTRUCTION_LOAD_NULL:
 			return "loadnull";
 		case INSTRUCTION_NOP:

@@ -59,8 +59,7 @@ typedef enum INSTRUCTION_TYPE{
 	
 	
 	INSTRUCTION_MOV,         	//	A B		R(A) := R(B)  		(konstantu move nepresouva)
-    INSTRUCTION_LOADK,   	// 	A Bx    R(A) := Kst(Bx)    indexujeme konstanty od 0     
-	INSTRUCTION_LOAD_NULL,	//	A B     R(A) := ... := R(B) := nil       local a;
+    INSTRUCTION_LOAD_NULL,	//	A B     R(A) := ... := R(B) := nil       local a;
     INSTRUCTION_NOP,
 	
 	INSTRUCTION_ADDITION, //TTYPE_ADDITION
