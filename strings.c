@@ -116,6 +116,9 @@ void strFree(STRING* str){
 }
 
 int strCompare(STRING str1, char* str2){
+	if(!str1.data)
+		return 0;
+	
 	return !strcmp(str1.data, str2);
 }
 
