@@ -86,22 +86,24 @@ FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id){
 	return (FUNCTION_PTR)node->data;	
 }
 
-SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal retval){
-	SYMBOL_PTR symbol = gcMalloc(sizeof(SYMBOL));
+SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal retval, SYMBOL_PTR* symbol){
+		
+	printf("|| Static val in %s : %s\n", id.data, debugRetval(retval));
+	*symbol = gcMalloc(sizeof(SYMBOL));
 	
-	symbol->items = gcMalloc(sizeof(ITEM));
+	(*symbol)->items = gcMalloc(sizeof(ITEM));
 	//strCopy(&id, &symbol->id); //mozno ne?
 	switch(retval){
 		case TTYPE_NULL:
-			symbol->items->type = TYPE_NULL;
+			(*symbol)->items->type = TYPE_NULL;
 			break;
 		case TTYPE_TRUE:
-			symbol->items->type = TYPE_BOOL;
-			symbol->items->value.valBool = true;
+			(*symbol)->items->type = TYPE_BOOL;
+			(*symbol)->items->value.valBool = true;
 			break;
 		case TTYPE_FALSE:
-			symbol->items->type = TYPE_BOOL;
-			symbol->items->value.valBool = false;
+			(*symbol)->items->type = TYPE_BOOL;
+			(*symbol)->items->value.valBool = false;
 			break;
 		case TTYPE_STRING:
 			break;
@@ -119,9 +121,9 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 			return NULL;
 	}
 	
-	listInsertEnd(&function->staticValues, symbol);
+	listInsertEnd(&function->staticValues, (*symbol));
 	//printf("POKOKOT\n");
-	return symbol;
+	return (*symbol);
 }
 
 SYMBOL_PTR stInsertStaticValueEmpty(FUNCTION_PTR function){

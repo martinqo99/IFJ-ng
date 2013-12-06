@@ -188,6 +188,11 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 						fprintf(stderr,"[exp] Creating black constant\n");
 						destination = stInsertStaticValueEmpty(st->curr);
 						fprintf(stderr, "I: %d, dest: %d, src1: %d, src2: %d\n", iType, destination, source1, source2);
+						
+						if(iType == INSTRUCTION_MULTIPLICATION){
+							fprintf(stderr, "src1->items: %d, src2->items: %d\n",  source1->items, source2->items);
+							
+						}
 						i = makeInstruction(iType, destination, source1, source2); // itype
 						listInsertEnd(&st->curr->instructions, i);					
 				}
@@ -250,7 +255,7 @@ ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, en
 		retval == TTYPE_DEC_NUMBER
 	){
 		
-		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);
+		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);
 		fprintf(stderr,"[exp-push] Insert static value: %s\n", glob_Token.data.data);
 
 		retval = TTYPE_EXPRESSION;

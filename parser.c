@@ -675,7 +675,7 @@ ERROR parserParseCallParam(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 		if(!stSearchSymbol(st->curr, glob_Token.data))
 			return E_SEMANTIC_UNDECLARED;
 		
-		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);
+		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);
 	}
 	else if(
 		retval == TTYPE_NUMBER ||
@@ -685,7 +685,7 @@ ERROR parserParseCallParam(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 		retval == TTYPE_NULL ||
 		retval == TTYPE_STRING
 	)
-		symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);		
+		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);		
 	else
 		return E_SYNTAX;
 
@@ -715,7 +715,7 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 			if(!stSearchSymbol(st->curr, glob_Token.data))
 				return E_SEMANTIC_UNDECLARED;
 		
-			symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);			
+			stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);			
 		}
 		else if(
 			retval == TTYPE_NUMBER ||
@@ -725,7 +725,7 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 			retval == TTYPE_NULL ||
 			retval == TTYPE_STRING
 		)
-			symbol = stInsertStaticValue(st->curr, glob_Token.data, retval);	
+			stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);	
 		else
 			return E_SYNTAX;		
 		
