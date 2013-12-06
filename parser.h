@@ -21,6 +21,8 @@
 #include "scanner.h"
 #include "exp.h"
 
+#include <assert.h>
+
 ERROR parser(SYMBOL_TABLE_PTR st);
 ERROR parserFindFunctions(SYMBOL_TABLE_PTR st);
 ERROR parserParse(SYMBOL_TABLE_PTR st);

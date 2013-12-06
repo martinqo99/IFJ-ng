@@ -590,7 +590,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 		case TTYPE_VARIABLE:
 			fprintf(stderr," - assign variable\n");
 			
-			err = parserExpression(st, retval, &symbol);
+			err = parserExpression(st, retval, &tmp);
 
 			if(err != E_OK)
 				return err;
@@ -632,19 +632,19 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 		case TTYPE_STRING:
 			fprintf(stderr," - assign string\n");
 			
-			err = parserExpression(st, retval, &symbol);
+			err = parserExpression(st, retval, &tmp);
 
 			if(err != E_OK)
 				return err;
 			
-			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
-
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));			
+			
 			fprintf(stderr," - assign function completed\n");
 			break;
 		default:
 			fprintf(stderr," - assign default: %s\n", glob_Token.data.data);
 
-			err = parserExpression(st, retval, &symbol);
+			err = parserExpression(st, retval, &tmp);
 
 			if(err != E_OK)
 				return err;
