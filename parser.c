@@ -640,7 +640,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				return err;
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));			
-			assert(tmp->id.data && tmp->items);
+			//assert(tmp->id.data && tmp->items);
 			
 			fprintf(stderr," - assign function completed\n");
 			break;
@@ -653,7 +653,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				return err;
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
-			assert(tmp->id.data && tmp->items);
+// 			//assert(tmp->id.data && tmp->items);
 			
 			fprintf(stderr," - assign default completed\n");			
 			
