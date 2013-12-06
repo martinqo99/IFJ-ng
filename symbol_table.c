@@ -106,19 +106,21 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 			(*symbol)->items->value.valBool = false;
 			break;
 		case TTYPE_STRING:
+			(*symbol)->items->type = TYPE_STRING;
 			break;
 		case TTYPE_NUMBER:
-			//symbol->items->type = TYPE_DIGIT_INT;
+			(*symbol)->items->type = TYPE_DIGIT_INT;
 			//symbo
 			break;
 		case TTYPE_DEC_NUMBER:
-			//symbol->items->type = TYPE_DIGIT_DOUBLE;
+			(*symbol)->items->type = TYPE_DIGIT_DOUBLE;
 			break;
 		case TTYPE_VARIABLE:
-
+			(*symbol)->items->type = TYPE_CALLABLE;
 			break;
 		default:
-			return NULL;
+			(*symbol)->items->type = TYPE_OTHER;
+			break;
 	}
 	
 	listInsertEnd(&function->staticValues, (*symbol));
