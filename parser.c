@@ -170,7 +170,7 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 		
 		stInsertSymbol(st->curr, glob_Token.data);
 			
-		listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, NULL, NULL, NULL));
+		listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, stGetLastSymbol(st->curr), NULL, NULL));
 		st->curr->argumentsCount++;
 		
 		return parserParseFunctionParams(st);
@@ -204,7 +204,7 @@ ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 			
 			stInsertSymbol(st->curr, glob_Token.data);
 			
-			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, NULL, NULL, NULL));
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, stGetLastSymbol(st->curr), NULL, NULL));
 			st->curr->argumentsCount++;
 			
 			return parserParseFunctionParams(st);
@@ -627,7 +627,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_CALL, f, NULL, NULL));
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, symbol, NULL, NULL));
-			
+
 			fprintf(stderr," - assign function completed\n");
 			break;
 		//string
