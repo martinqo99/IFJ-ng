@@ -3,13 +3,13 @@
 ERROR op_check(SYMBOL_PTR smb)
 {
 	if(smb == NULL)
-		return 1;
+		return 666;
 	else
 	{
 		if(smb->id.data == NULL)
 		{
 			if(smb->items == NULL)
-				return 2;
+				return 667;
 			else
 				return E_OK;
 		}
