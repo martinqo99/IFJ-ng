@@ -129,7 +129,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 		op2 = (SYMBOL*) instruction->operand2;
 		op3 = (SYMBOL*) instruction->destionation;
 		
-		printf("while interpret : %d\n",instruction->type);
+		printf("while interpret : %d (%s)\n",instruction->type, debugInstruction(instruction->type));
 		
 		switch(instruction->type)
 		{

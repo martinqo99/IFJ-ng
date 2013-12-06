@@ -195,3 +195,74 @@ INSTRUCTION_PTR makeInstruction(INSTRUCTION_TYPE type, PTR operand1, PTR operand
 	
 	return i;
 }
+
+const char* debugInstruction(INSTRUCTION_TYPE i){
+	switch(i){
+		case INSTRUCTION_RETURN:
+			return "return";
+		case INSTRUCTION_POP:
+			return "pop";
+		case INSTRUCTION_PUSH:
+			return "push";
+		case INSTRUCTION_MOV:
+			return "mov";
+		case INSTRUCTION_LOADK:
+			return "loadk";
+		case INSTRUCTION_LOAD_NULL:
+			return "loadnull";
+		case INSTRUCTION_NOP:
+			return "nop";
+		case INSTRUCTION_ADDITION:
+			return "addition";
+		case INSTRUCTION_SUBSTRACTION:
+			return "substraction";
+		case INSTRUCTION_MULTIPLICATION:
+			return "multiplication";
+		case INSTRUCTION_DIVISION:
+			return "division";
+		case INSTRUCTION_CONCATE:
+			return "concate";
+		case INSTRUCTION_EQUAL:
+			return "equal";
+		case INSTRUCTION_NOT_EQUAL:
+			return "not equal";
+		case INSTRUCTION_LESS:
+			return "less?";
+		case INSTRUCTION_LESS_EQUAL:
+			return "less_equal";
+		case INSTRUCTION_GREATER:
+			return "greater";
+		case INSTRUCTION_GREATER_EQUAL:
+			return "greater_equal";
+		case INSTRUCTION_JUMP:
+			return "jump";
+		case INSTRUCTION_IF_JUMP:
+			return "jump_if";
+		case INSTRUCTION_LABEL:
+			return "label";
+		case INSTRUCTION_CALL:
+			return "call";
+		case INSTRUCTION_BOOLVAL:
+			return "boolval";
+		case INSTRUCTION_DOUBLEVAL:
+			return "doubleval()";
+		case INSTRUCTION_INTVAL:
+			return "intval";
+		case INSTRUCTION_STRVAL:
+			return "strval";
+		case INSTRUCTION_GET_STRING:
+			return "get_string";		
+		case INSTRUCTION_PUT_STRING:
+			return "put_string";
+		case INSTRUCTION_STRLEN:
+			return "strlen";
+		case INSTRUCTION_GET_SUBSTRING:
+			return "get_substring";
+		case INSTRUCTION_FIND_STRING:
+			return "find_string";
+		case INSTRUCTION_SORT_STRING:
+			return "sort_string";
+		default:
+			return "undefined";
+	}
+}

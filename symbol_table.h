@@ -161,6 +161,8 @@ void stFree(SYMBOL_TABLE_PTR st);
 INSTRUCTION_PTR makeInstruction(INSTRUCTION_TYPE type, PTR operand1, PTR operand2, PTR destionation);
 
 
+const char* debugInstruction(INSTRUCTION_TYPE i);
+
 /*
 enum enum_instruction
 {// R = registr,  kst -pole konstant, load nil -  RK - registr nebo konstanta
