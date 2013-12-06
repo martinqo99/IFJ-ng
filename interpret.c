@@ -9,7 +9,14 @@ ERROR op_check(SYMBOL_PTR smb, char IO)
 		if(smb->id.data == NULL)
 		{
 			if(smb->items == NULL)
-				return 51;
+				if(IO == 'o' || IO == 'O')
+				{
+					printf("ALOKuJu\n");
+					smb->items = gcMalloc(sizeof(struct ITEM));
+					return E_OK;
+				}
+				else
+					return E_COMPILATOR;
 			else
 				return E_OK;
 		}
@@ -650,6 +657,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				
 				op1 = stackPop(stack);
+				if ((err = op_check(op1,'I')) != E_OK)
+					return err;
 				tmp_symbol->items->type = TYPE_DIGIT_INT;
 				tmp_symbol->items->value.valInt = my_strlen(op1->items->value.valString);
 				
@@ -686,22 +695,39 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_FIND_STRING: 		// OTESTOVAT
-				if ((err = op_check(op1,'I')) != E_OK)
+				if ((err = op_check(op1,'O')) != E_OK)
 					return err;
+				
+				op2 = stackPop(stack);
 				if ((err = op_check(op2,'I')) != E_OK)
 					return err;
 				
-				tmp_symbol->items->type = TYPE_DIGIT_INT;
-				tmp_symbol->items->value.valInt = find_string(op1->items->value.valString, op2->items->value.valString);
+				op1 = stackPop(stack);
+				if ((err = op_check(op1,'I')) != E_OK)
+					return err;
 				
+				
+				printf("ahoj :%d , %d\n",op1->items->type, op2->items->type);
+				printf("string op1: %s, %s\n",op1->items->value.valString,op1->items->value.valString.data);
+				printf("string op2: %s, %s\n",op2->items->value.valString,op2->items->value.valString.data);
+				
+				tmp_symbol->items->type = TYPE_DIGIT_INT;
+				printf("ahoj11\n");
+				tmp_symbol->items->value.valInt = find_string(op1->items->value.valString, op2->items->value.valString);
+				printf("ahoj22\n");
 				data_copy(tmp_symbol,op1);
 			break;
 			
 			case INSTRUCTION_SORT_STRING: 		// OTESTOVAT
-				if ((err = op_check(op1,'I')) != E_OK)
+				if ((err = op_check(op1,'O')) != E_OK)
 					return err;
 				
-				sort_string(op1->items->value.valString);
+				tmp_symbol = stackPop(stack);
+				if ((err = op_check(tmp_symbol,'I')) != E_OK)
+					return err;
+				
+				sort_string(tmp_symbol->items->value.valString);
+				data_copy(tmp_symbol,op1);
 			break;
 			
 			default:
