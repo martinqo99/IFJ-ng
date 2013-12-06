@@ -63,7 +63,7 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 	
 	init_Token();
 
-	while((retval = getToken()) != TTYPE_EOF){
+	while((retval = getToken()) != TTYPE_EOF){		
 		//fprintf(stderr,"Token: %s\n", glob_Token.data.data);
 		if(retval == TTYPE_KEYWORD && strCompare(glob_Token.data, "function")){
 			retval = getToken();
@@ -83,7 +83,7 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 		}
 		else if(retval == TTYPE_ERROR)
 			return E_SYNTAX;
-	}
+	}	
 	
 	free_Token();
 	
@@ -707,10 +707,11 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 	//Bez dalsich parametru
 	if(retval == TTYPE_R_BRACKET)
 		return E_OK;
+	
 	//Parametry oddelene carkou
-	else if(retval != TTYPE_COMMA)
+	if(retval != TTYPE_COMMA)
 		return E_SYNTAX;
-	else{
+	//else{
 		retval = getToken();
 		
 		if(retval == TTYPE_VARIABLE){
@@ -736,5 +737,5 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 		if(f) f->argumentsCalled++;
 		
 		return parserParseCallParams(st, f);
-	}
+	//}
 }
