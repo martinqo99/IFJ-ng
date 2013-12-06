@@ -17,6 +17,7 @@
 
 #include "exp.h"
 
+/*
 const char expressionPrecedentTable[EXPRESSION_TABLE_SIZE][EXPRESSION_TABLE_SIZE] = {
   //Tokeny									id  (   )   +   -   *   /   **  ==  !=  <   <=  >   >=
   [TTYPE_VARIABLE]			={[TTYPE_VARIABLE]= 0 , 0 ,'>','>','>','>','>','>','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
@@ -34,6 +35,25 @@ const char expressionPrecedentTable[EXPRESSION_TABLE_SIZE][EXPRESSION_TABLE_SIZE
   [TTYPE_GREATER]			={[TTYPE_VARIABLE]='<','<','>','<','<','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
   [TTYPE_GREATER_EQUAL]		={[TTYPE_VARIABLE]='<','<','>','<','<','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
   [TTYPE_SEMICOLON]			={[TTYPE_VARIABLE]='<','<', 0 ,'<','<','<','<','<','<','<','<','<','<','<',[TTYPE_SEMICOLON]='$'},
+};
+*/
+const char expressionPrecedentTable[EXPRESSION_TABLE_SIZE][EXPRESSION_TABLE_SIZE] = {
+  //Tokeny									id  (   )   +   -   *   /   .  ==  !=  <   <=  >   >=
+  [TTYPE_VARIABLE]			={[TTYPE_VARIABLE]= 0 , 0 ,'>','>','>','>','>','>','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_L_BRACKET]			={[TTYPE_VARIABLE]='<','<','=','<','<','<','=','<','<','<','<','<','<','<',[TTYPE_SEMICOLON]= 0 },
+  [TTYPE_R_BRACKET]			={[TTYPE_VARIABLE]= 0 , 0 ,'>','>','>','>','>','>','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_ADDITION]			={[TTYPE_VARIABLE]='<','<','>','>','>','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_SUBTRACTION]		={[TTYPE_VARIABLE]='<','<','>','>','>','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_MULTIPLICATION]	={[TTYPE_VARIABLE]='<','<','>','>','>','>','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_DIVISION]			={[TTYPE_VARIABLE]='<','<','>','>','>','>','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_DOT]				={[TTYPE_VARIABLE]='<','<','>','>','>','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_EQUAL]				={[TTYPE_VARIABLE]='<','<','>','<','<','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_NOT_EQUAL]			={[TTYPE_VARIABLE]='<','<','>','<','<','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_LESSER]			={[TTYPE_VARIABLE]='<','<','>','<','<','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_LESSER_EQUAL]		={[TTYPE_VARIABLE]='<','<','>','<','<','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_GREATER]			={[TTYPE_VARIABLE]='<','<','>','<','<','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_GREATER_EQUAL]		={[TTYPE_VARIABLE]='<','<','>','<','<','<','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
+  [TTYPE_SEMICOLON]			={[TTYPE_VARIABLE]='<','<', 0 ,'<','<','<', 0 ,'<','<','<','<','<','<','<',[TTYPE_SEMICOLON]='$'},
 };
 
 ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symbol){

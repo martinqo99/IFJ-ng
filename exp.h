@@ -32,7 +32,7 @@
 	r == TTYPE_SUBTRACTION || \
 	r == TTYPE_MULTIPLICATION || \
 	r == TTYPE_DIVISION || \
-	r == TTYPE_POWER || \
+	r == TTYPE_DOT || \
 	r == TTYPE_LESSER || \
 	r == TTYPE_GREATER || \
 	r == TTYPE_LESSER_EQUAL || \
