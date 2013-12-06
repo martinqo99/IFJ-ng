@@ -136,12 +136,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_MOV: 			// FUNGUJE
-				printf("bum: %s a %d\n",op1->id.data,op1->type);
-				if ((err = op_check(op1)) != E_OK)
+				if ((err = op_check(op2)) != E_OK)
 					return err;
-				printf("bac\n");
 				
-				data_copy(op1, op3);
+				data_copy(op2, op1);
 			break;
 			
 			case INSTRUCTION_LOAD_NULL:	// FUNGUJE
