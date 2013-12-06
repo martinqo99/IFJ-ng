@@ -337,6 +337,10 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			else if(strCompare(glob_Token.data, "while")){
 				
 				i2 = makeInstruction(INSTRUCTION_JUMP, NULL, NULL, NULL);
+				i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL);
+				
+				listInsertEnd(&st->curr->instructions, i3);
+				i2->destionation = st->curr->instructions.end;
 				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
@@ -349,13 +353,8 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				if(err != E_OK)
 					return err;
 				
-				//Navesti pro while
-				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
-				
-				i2->destionation = st->curr->instructions.end;
-				
-				//Jump na konec while
-				listInsertPost(&st->curr->instructions, (i1 = makeInstruction(INSTRUCTION_IF_JUMP, NULL, symbol, NULL)));
+				i1 = makeInstruction(INSTRUCTION_IF_JUMP, NULL, symbol, NULL);
+				listInsertEnd(&st->curr->instructions, i1);
 				
 				if(getToken() != TTYPE_L_BRACE)
 					return E_SYNTAX;
@@ -366,11 +365,10 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				if(err != E_OK)
 					return err;
 				
-				//Jump na zacatek while
-				listInsertPost(&st->curr->instructions, i2);
+				listInsertEnd(&st->curr->instructions, i2);
 				
-				//Navesti konce while
-				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
+				i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL);
+				listInsertEnd(&st->curr->instructions, i3);
 				
 				i1->destionation = st->curr->instructions.end;
 				
