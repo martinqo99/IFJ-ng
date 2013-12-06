@@ -296,27 +296,27 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				// Jump na else
 				listInsertEnd(&st->curr->instructions, (i1 = makeInstruction(INSTRUCTION_IF_JUMP, NULL, symbol, NULL)));
 				
-				// Navesti pro else
-				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
-				
-				i1->destionation = st->curr->instructions.end;
-				
 				if(getToken() != TTYPE_L_BRACE)
 					return E_SYNTAX;
-				
+
 				// Parsovani tela podminky
 				err = parserParseFunctionCode(st);
 				
 				if(err != E_OK)
 					return err;
 				
+				//Jump na konec else
+				listInsertEnd(&st->curr->instructions, (i2 = makeInstruction(INSTRUCTION_JUMP, NULL, NULL, NULL)));
+				
+				// Navesti pro else
+				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
+				
+				i1->destionation = st->curr->instructions.end;
+				
 				if(getToken() != TTYPE_KEYWORD || !strCompare(glob_Token.data, "else"))
 					return E_SYNTAX;
 				
 				fprintf(stderr,"Found else\n");
-				
-				//Jump na konec else
-				listInsertEnd(&st->curr->instructions, (i2 = makeInstruction(INSTRUCTION_JUMP, NULL, NULL, NULL)));
 				
 				if(getToken() != TTYPE_L_BRACE)
 					return E_SYNTAX;
@@ -325,7 +325,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				
 				if(err != E_OK)
 					return err;
-				
+
 				// Navesti pro konec else
 				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
 				
