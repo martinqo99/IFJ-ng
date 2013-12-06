@@ -3,13 +3,13 @@
 ERROR op_check(SYMBOL_PTR smb)
 {
 	if(smb == NULL)
-		return 666;
+		return 50;
 	else
 	{
 		if(smb->id.data == NULL)
 		{
 			if(smb->items == NULL)
-				return 667;
+				return 51;
 			else
 				return E_OK;
 		}
@@ -17,6 +17,7 @@ ERROR op_check(SYMBOL_PTR smb)
 		{
 			if(smb->items == NULL)
 			{
+				printf("ALOKuJu\n");
 				smb->items = gcMalloc(sizeof(struct ITEM));
 				return E_OK;
 			}
@@ -138,7 +139,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			case INSTRUCTION_MOV: 			// FUNGUJE
 				if ((err = op_check(op2)) != E_OK)
 					return err;
-				
+				printf("address: %d\n",op2->items);
 				data_copy(op2, op1);
 			break;
 			
