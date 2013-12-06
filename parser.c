@@ -711,31 +711,30 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 	//Parametry oddelene carkou
 	if(retval != TTYPE_COMMA)
 		return E_SYNTAX;
-	//else{
-		retval = getToken();
+
+	retval = getToken();
 		
-		if(retval == TTYPE_VARIABLE){
-			if(!stSearchSymbol(st->curr, glob_Token.data))
-				return E_SEMANTIC_UNDECLARED;
+	if(retval == TTYPE_VARIABLE){
+		if(!stSearchSymbol(st->curr, glob_Token.data))
+			return E_SEMANTIC_UNDECLARED;
 		
-			stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);			
-		}
-		else if(
-			retval == TTYPE_NUMBER ||
-			retval == TTYPE_DEC_NUMBER ||		
-			retval == TTYPE_TRUE ||
-			retval == TTYPE_FALSE || 
-			retval == TTYPE_NULL ||
-			retval == TTYPE_STRING
-		)
-			stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);	
-		else
-			return E_SYNTAX;		
+		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);			
+	}
+	else if(
+		retval == TTYPE_NUMBER ||
+		retval == TTYPE_DEC_NUMBER ||		
+		retval == TTYPE_TRUE ||
+		retval == TTYPE_FALSE || 
+		retval == TTYPE_NULL ||
+		retval == TTYPE_STRING
+	)
+		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);	
+	else
+		return E_SYNTAX;		
 		
-		listInsertPost(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
+	listInsertPost(&st->curr->instructions, makeInstruction(INSTRUCTION_PUSH, symbol, NULL, NULL));
 		
-		if(f) f->argumentsCalled++;
+	if(f) f->argumentsCalled++;
 		
-		return parserParseCallParams(st, f);
-	//}
+	return parserParseCallParams(st, f);
 }

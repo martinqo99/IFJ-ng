@@ -108,7 +108,6 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 			(*symbol)->items->value.valBool = false;
 			break;
 		case TTYPE_STRING:
-			printf("-| stringuju: %s\n", id);
 			(*symbol)->items->type = TYPE_STRING;
 			strCopy(&((*symbol)->items->value.valString), &id);
 			break;
