@@ -44,12 +44,10 @@ void stInitLibFunctions(SYMBOL_TABLE_PTR st){
 	
 	strInitRaw(&id, "boolval");
 	stInsertFunction(st, id);
-	assert(stSearchFunction(st, id));	
-	
+		
 	strInitRaw(&id, "doubleval");
 	stInsertFunction(st, id);
-	assert(stSearchFunction(st, id));
-	
+		
 	strInitRaw(&id, "intval");
 	stInsertFunction(st, id);
 	
@@ -73,7 +71,6 @@ void stInitLibFunctions(SYMBOL_TABLE_PTR st){
 
 	strInitRaw(&id, "sort_string");
 	stInsertFunction(st, id);	
-
 }
 
 ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
