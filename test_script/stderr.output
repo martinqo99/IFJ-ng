@@ -1,0 +1,18 @@
+Finding function definitions:
+Parsing code [7]: $x
+Found variable: $x
+Found assign and last symbol was: $x
+Control assign
+ - assign lib put_string
+Parsing code [27]: return
+Found keyword: return
+[exp] Parse expression, begin: 42
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [number]
+[exp] Weight: '<', stack size 1
+[exp] Push term2 [number] to stack
+[exp-push] Insert static value: 42
+[exp] Get token: ;
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [;]
+[exp] Weight: '$', stack size 2

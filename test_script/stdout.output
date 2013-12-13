@@ -1,0 +1,8 @@
+|| Static val in Hello world!
+ : string
+|| Static val in 42 : number
+Zavolana funkce: -84632192
+while interpret : 3 (push)
+while interpret : 27 (put_string)
+while interpret : 3 (push)
+while interpret : 1 (return)
