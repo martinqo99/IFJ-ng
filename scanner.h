@@ -90,9 +90,6 @@ typedef enum enum_State
 
 typedef struct struct_Token
 {
-	unsigned int row;
-	unsigned int column;
-
 	STRING data;
 } struct_Token;
 
