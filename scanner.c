@@ -94,6 +94,8 @@ enum_RetVal get_Token()
                 else if(cur_char == '"'){ cur_state = STATE_STRING; break;}
                 else if(is_a_z(cur_char)){ add_Token_Data(cur_char); cur_state = STATE_TEXT; break;}
                 else if(is_num(cur_char)){ add_Token_Data(cur_char); cur_state = STATE_NUMBER; break;}
+                else if(cur_char == ' ' || cur_char == '\r' || cur_char == '\t' || cur_char == '\n') {}
+                else return TTYPE_ERROR;
                 break;
 			case STATE_LESSER:
                 if(cur_char == EOF)
@@ -151,7 +153,8 @@ enum_RetVal get_Token()
                 break;
 			case STATE_SLASH:
                 if(cur_char == EOF)
-                    return TTYPE_ERROR;
+					return TTYPE_DIVISION;
+//                     return TTYPE_ERROR;
                 else if(cur_char == '/'){
 					clear_Token();
 					cur_state = STATE_LINE_COMMENT; }
