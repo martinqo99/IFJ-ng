@@ -32,21 +32,20 @@ char* list_KeyWords[5] = {"function", "else", "if", "return", "while"};
 char* list_Reserved[10] = {"boolval", "doubleval", "intval", "strval", "get_string", "put_string",
 	"strlen", "get_substring", "find_string", "sort_string"};
 
-void init_Token(){
-    glob_Token.row = 1;
-    glob_Token.column = 0;
-
+void init_Token()
+{
     rewind(glob_FileHandler);
-
     strInit(&(glob_Token.data));
 }
 
-void clear_Token(){
+void clear_Token()
+{
     strFree(&(glob_Token.data));
     strInit(&(glob_Token.data));
 }
 
-void free_Token(){
+void free_Token()
+{
 	strFree(&(glob_Token.data));
 }
 
@@ -61,14 +60,7 @@ enum_RetVal get_Token()
 	
 	//Hlavni nacitaci smycka
     while((cur_char = getc(glob_FileHandler)))
-	{
-        glob_Token.column++;
-		
-        if(cur_char == '\n'){
-            glob_Token.row++;
-            glob_Token.column = 0;
-        }
-        
+	{    
         switch(cur_state)
 		{
             case STATE_START:
@@ -99,7 +91,7 @@ enum_RetVal get_Token()
                 break;
 			case STATE_LESSER:
                 if(cur_char == EOF)
-                    return TTYPE_ERROR;
+                    return TTYPE_LESSER;
                 else if(cur_char == '='){
 					add_Token_Data(cur_char);
                     return TTYPE_LESSER_EQUAL; }
@@ -112,7 +104,7 @@ enum_RetVal get_Token()
                 break;
 			case STATE_GREATER:
                 if(cur_char == EOF)
-                    return TTYPE_ERROR;
+                    return TTYPE_GREATER;
                 else if(cur_char == '='){
 					add_Token_Data(cur_char);
                     return TTYPE_GREATER_EQUAL; }
@@ -143,7 +135,7 @@ enum_RetVal get_Token()
                 break;
 			case STATE_ASSIGN:
                 if(cur_char == EOF)
-                    return TTYPE_ERROR;
+                    return TTYPE_ASSIGN;
                 else if(cur_char == '='){
 					add_Token_Data(cur_char);
 					cur_state = STATE_EQUAL; }
@@ -154,7 +146,6 @@ enum_RetVal get_Token()
 			case STATE_SLASH:
                 if(cur_char == EOF)
 					return TTYPE_DIVISION;
-//                     return TTYPE_ERROR;
                 else if(cur_char == '/'){
 					clear_Token();
 					cur_state = STATE_LINE_COMMENT; }
@@ -201,8 +192,13 @@ enum_RetVal get_Token()
                 break;
 			case STATE_VARIABLE:
 				if(cur_char == EOF)
-                    return TTYPE_ERROR;
-                else if(is_a_z(cur_char) || is_num(cur_char) || cur_char == '_')
+				{
+					if(strCompare(glob_Token.data , "$"))
+						return TTYPE_ERROR;
+					else
+						return TTYPE_VARIABLE;
+				}
+				else if(is_a_z(cur_char) || is_num(cur_char) || cur_char == '_')
 				{
 					if((cur_char >= '0' && cur_char <= '9') && strCompare(glob_Token.data , "$"))
 						return TTYPE_ERROR;
@@ -278,9 +274,9 @@ enum_RetVal get_Token()
 				}
                 break;
 			case STATE_TEXT:
-				if(cur_char == EOF)
-                    return TTYPE_ERROR;
-                else if(is_a_z(cur_char) || is_num(cur_char) || cur_char == '_')
+// 				if(cur_char == EOF)
+//                     return TTYPE_ERROR;
+                if(is_a_z(cur_char) || is_num(cur_char) || cur_char == '_')
 				{
 					add_Token_Data(cur_char);
 				}
@@ -309,11 +305,12 @@ enum_RetVal get_Token()
 					return TTYPE_FUNCTION;}
                 break;
 			case STATE_NUMBER:
-				if(cur_char == EOF)
-                    return TTYPE_ERROR;
-				else if(is_num(cur_char))
+// 				if(cur_char == EOF)
+//                     return TTYPE_ERROR;
+				if(is_num(cur_char))
 					add_Token_Data(cur_char);
 				else if(cur_char == '.'){
+					last_char = cur_char;
 					cur_state = STATE_NUMBER_DOT;
 					add_Token_Data(cur_char); }
 				else if(cur_char == 'e' || cur_char == 'E'){
@@ -327,31 +324,50 @@ enum_RetVal get_Token()
                 break;
 			case STATE_NUMBER_DOT:
 				if(cur_char == EOF)
-                    return TTYPE_ERROR;
+				{
+					if(last_char == '.')
+						return TTYPE_ERROR;
+					else	
+						return TTYPE_NUMBER;
+				}
 				else if(is_num(cur_char))
+				{
+					last_char = 0;
 					add_Token_Data(cur_char);
+				}
 				else if(cur_char == 'e' || cur_char == 'E'){
 					cur_state = STATE_NUMBER_EXP;
 					last_char = cur_char;
 					add_Token_Data(cur_char); }
 				else
 				{
+					last_char = 0;
 					ungetc(cur_char, glob_FileHandler);
 					return TTYPE_DEC_NUMBER;
 				}
                 break;
 			case STATE_NUMBER_EXP:
 				if(cur_char == EOF)
-                    return TTYPE_ERROR;
+				{
+					if((last_char == 'e' || last_char == 'E' || last_char == '+' || last_char == '-' ))
+						return TTYPE_ERROR;
+					else	
+						return TTYPE_NUMBER;
+				}
 				else if((last_char == 'e' || last_char == 'E') && (cur_char == '+' || cur_char == '-'))
 				{
-					last_char = cur_char;
+// 					last_char = cur_char;
+					last_char = 0;
 					add_Token_Data(cur_char);
 				}
 				else if(is_num(cur_char))
+				{
+					last_char = 0;
 					add_Token_Data(cur_char);
+				}
 				else
 				{
+					last_char = 0;
 					ungetc(cur_char, glob_FileHandler);
 					if((last_char == 'e' || last_char == 'E') || (last_char == '+' || last_char == '-'))
 						return TTYPE_ERROR;
@@ -360,7 +376,6 @@ enum_RetVal get_Token()
 					sscanf(glob_Token.data.data, "%lf", &num);
 					
 					STRING tmp;
-// 					char pole[50];
 					char *pole = NULL;
 					sprintf(pole,"%f",num);
 					strInitRaw(&tmp, pole);
