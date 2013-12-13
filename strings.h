@@ -24,7 +24,7 @@
 
 #include "gc.h"
 
-#define SIZE_STEP 8
+#define SIZE_STEP 16
 
 typedef struct string{
 	char* data;

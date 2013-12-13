@@ -37,13 +37,18 @@ void stInit(SYMBOL_TABLE_PTR st){
 }
 
 void stInitLibFunctions(SYMBOL_TABLE_PTR st){
+
 	STRING id;	
+
+	strInit(&id);
 	
 	strInitRaw(&id, "boolval");
 	stInsertFunction(st, id);
+	assert(stSearchFunction(st, id));	
 	
 	strInitRaw(&id, "doubleval");
 	stInsertFunction(st, id);
+	assert(stSearchFunction(st, id));
 	
 	strInitRaw(&id, "intval");
 	stInsertFunction(st, id);
@@ -68,6 +73,7 @@ void stInitLibFunctions(SYMBOL_TABLE_PTR st){
 
 	strInitRaw(&id, "sort_string");
 	stInsertFunction(st, id);	
+
 }
 
 ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
@@ -86,7 +92,7 @@ ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){
 	ERROR err = BT_Insert(&st->functions, &function->id, function);
 	
 	if(err != E_OK){
-		
+		fprintf(stderr, "Are you Chuck? insert function\n");
 		
 	}
 	
@@ -103,7 +109,7 @@ ERROR stInsertSymbol(FUNCTION_PTR function, STRING id){
 	ERROR err = BT_Insert(&function->symbols, &symbol->id, symbol);
 	
 	if(err != E_OK){
-		
+		fprintf(stderr, "Are you Chuck? insert symbol\n");
 		
 	}
 	
@@ -115,7 +121,7 @@ FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id){
 	
 	if(!node)
 		return NULL;
-	
+
 	if(!node->data)
 		return NULL;
 	

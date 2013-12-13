@@ -91,17 +91,18 @@ void strCopy(STRING* strSrc, STRING* strDst){
 
 void strClear(STRING* str){
 	if(!str)
-		return;
+		return;	
 	
-	strFree(str);
+	//strFree(str);
 	strInit(str);
 }
 
 void strFree(STRING* str){
-	if(!str)
+
+	if(str == NULL)
 		return;
 		
-	if(str->data != NULL)
+	if(str->data == NULL)
 		return;
 		
 	if(str->data != NULL && str->used != 0)

@@ -27,6 +27,7 @@ typedef void* PTR;
 #include <assert.h>
 
 #include "strings.h"
+#include "gc.h"
 #include "list.h"
 #include "btree.h"
 #include "scanner.h"

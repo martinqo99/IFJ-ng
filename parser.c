@@ -19,6 +19,7 @@
 
 //Hlavni funkce parseru
 ERROR parser(SYMBOL_TABLE_PTR st){
+	
 	ERROR err;	
 	
 	if(getToken() != TTYPE_PHP_START)
@@ -410,10 +411,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			if(strCompare(glob_Token.data, "boolval")){
 				fprintf(stderr," - assign lib boolval\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -426,10 +429,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "doubleval")){
 				fprintf(stderr," - assign lib boolval\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -442,10 +447,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "intval")){
 				fprintf(stderr," - assign lib intval\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -458,10 +465,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "strval")){
 				fprintf(stderr," - assign lib strval\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -474,10 +483,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "get_string")){
 				fprintf(stderr," - assign lib get_string\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -490,10 +501,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "put_string")){
 				fprintf(stderr," - assign lib put_string\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -506,10 +519,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "strlen")){
 				fprintf(stderr," - assign lib strlen\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -522,10 +537,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "get_substring")){
 				fprintf(stderr," - assign lib get_substring\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -538,10 +555,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "find_string")){
 				fprintf(stderr," - assign lib find_string\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
@@ -554,10 +573,12 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			else if(strCompare(glob_Token.data, "sort_string")){
 				fprintf(stderr," - assign lib sort_string\n");
 				
+				f = stSearchFunction(st, glob_Token.data);
+				
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
+				err = parserParseCallParam(st, f);
 				
 				if(err != E_OK)
 					return err;
