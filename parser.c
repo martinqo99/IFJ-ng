@@ -424,7 +424,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, symbol, NULL, NULL));
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, f, symbol, NULL));
 			}
 			else if(strCompare(glob_Token.data, "doubleval")){
 				fprintf(stderr," - assign lib boolval\n");
@@ -442,7 +442,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, f, symbol, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "intval")){
 				fprintf(stderr," - assign lib intval\n");
@@ -460,7 +460,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_INTVAL, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_INTVAL, f, symbol, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "strval")){
 				fprintf(stderr," - assign lib strval\n");
@@ -478,7 +478,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_STRVAL, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_STRVAL, f, symbol, NULL));				
 			}			
 			else if(strCompare(glob_Token.data, "get_string")){
 				fprintf(stderr," - assign lib get_string\n");
@@ -496,7 +496,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_STRING, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_STRING, f, symbol, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "put_string")){
 				fprintf(stderr," - assign lib put_string\n");
@@ -514,7 +514,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_PUT_STRING, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_PUT_STRING, f, symbol, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "strlen")){
 				fprintf(stderr," - assign lib strlen\n");
@@ -532,7 +532,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_STRLEN, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_STRLEN, f, symbol, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "get_substring")){
 				fprintf(stderr," - assign lib get_substring\n");
@@ -550,7 +550,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_SUBSTRING, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_SUBSTRING, f, symbol, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "find_string")){
 				fprintf(stderr," - assign lib find_string\n");
@@ -568,7 +568,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_FIND_STRING, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_FIND_STRING, f, symbol, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "sort_string")){
 				fprintf(stderr," - assign lib sort_string\n");
@@ -586,7 +586,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_SORT_STRING, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_SORT_STRING, f, symbol, NULL));				
 			}
 			else
 				return E_SYNTAX;
