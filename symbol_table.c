@@ -145,7 +145,7 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 			break;
 		case TTYPE_STRING:
 			(*symbol)->items->type = TYPE_STRING;
-			strCopy(&((*symbol)->items->value.valString), &id);
+			strCopy(&id, &((*symbol)->items->value.valString));
 			break;
 		case TTYPE_NUMBER:
 			(*symbol)->items->type = TYPE_DIGIT_INT;
