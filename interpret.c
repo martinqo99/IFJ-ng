@@ -136,6 +136,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 	
 	FUNCTION_PTR tmp_function = NULL;
 	
+	int pocet = 4;
+	
 	while(instr_node != NULL && err == E_OK)
 	{
 		instruction = instr_node->value;
@@ -639,7 +641,19 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_PUT_STRING:
-				// DODELAT
+				pocet = function->argumentsCount;
+// 				printf("POCET: %d\n",pocet);
+// 				pocet = 1;
+				for(int i=0;i<pocet;i++)
+				{
+					tmp_symbol = stackPop(stack);
+					if ((err = op_check(tmp_symbol,'I')) != E_OK)
+						return err;
+// 					printf("typ : %d\n",tmp_symbol->items->type);
+// 					printf("TEXT ::::::: %s\n", tmp_symbol->items->value.valString.data);
+					put_string(tmp_symbol->items->value.valString.data);
+				}
+				put_string("\n");
 			break;
 			
 			case INSTRUCTION_STRLEN:

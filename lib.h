@@ -62,7 +62,8 @@ ITEMPTR intval(ITEM);
 ITEMPTR strval(ITEM);
 
 STRING get_string();
-int put_string(int count,  ...);
+// int put_string(int count,  ...);
+void put_string(char*);
 int my_strlen(STRING);
 STRING get_substring(STRING, int, int, ERROR*);
 

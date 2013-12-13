@@ -216,21 +216,26 @@ STRING get_string()
 }
 
 //funkcni - OK // parametr.data
-int put_string(int count, ...)
+// int put_string(int count, ...)
+// {
+//     va_list list;
+//     int j = 0;
+// 
+//     va_start(list,count);
+// 
+//     for(j=0; j<count; j++)
+//     {
+//         printf("%s", va_arg(list, char*));
+//     }
+// 
+//    va_end(list);
+// 
+//    return count;
+// }
+
+void put_string(char* string)
 {
-    va_list list;
-    int j = 0;
-
-    va_start(list,count);
-
-    for(j=0; j<count; j++)
-    {
-        printf("%s", va_arg(list, char*));
-    }
-
-   va_end(list);
-
-   return count;
+    printf("%s", string);
 }
 
 //funkcni - OK
