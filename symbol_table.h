@@ -24,6 +24,7 @@ typedef void* PTR;
 #define SYMBOL_TABLE_H_INCLUDED
 
 #include <stdbool.h>
+#include <assert.h>
 
 #include "strings.h"
 #include "list.h"
@@ -145,6 +146,8 @@ typedef struct SYMBOL_TABLE{
 } SYMBOL_TABLE, *SYMBOL_TABLE_PTR;
 
 void stInit(SYMBOL_TABLE_PTR st);
+void stInitLibFunctions(SYMBOL_TABLE_PTR st);
+
 ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id);
 ERROR stInsertSymbol(FUNCTION_PTR function, STRING id);
 

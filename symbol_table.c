@@ -32,6 +32,42 @@ void stInit(SYMBOL_TABLE_PTR st){
 	st->start.argumentsCalled = 0;
 	
 	st->curr = &(st->start);
+	
+	stInitLibFunctions(st);
+}
+
+void stInitLibFunctions(SYMBOL_TABLE_PTR st){
+	STRING id;	
+	
+	strInitRaw(&id, "boolval");
+	stInsertFunction(st, id);
+	
+	strInitRaw(&id, "doubleval");
+	stInsertFunction(st, id);
+	
+	strInitRaw(&id, "intval");
+	stInsertFunction(st, id);
+	
+	strInitRaw(&id, "strval");
+	stInsertFunction(st, id);
+	
+	strInitRaw(&id, "get_string");
+	stInsertFunction(st, id);
+	
+	strInitRaw(&id, "put_string");
+	stInsertFunction(st, id);	
+	
+	strInitRaw(&id, "strlen");
+	stInsertFunction(st, id);	
+
+	strInitRaw(&id, "get_substring");
+	stInsertFunction(st, id);	
+
+	strInitRaw(&id, "find_string");
+	stInsertFunction(st, id);	
+
+	strInitRaw(&id, "sort_string");
+	stInsertFunction(st, id);	
 }
 
 ERROR stInsertFunction(SYMBOL_TABLE_PTR st, STRING id){

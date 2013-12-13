@@ -17,25 +17,6 @@
 
 #include "parser.h"
 
-/* LEX
-enum_RetVal - kw
-//typedef struct struct_Token
-{
-	unsigned int row;
-	unsigned int column;
-
-	STRING data;
-} struct_Token;
-
-extern struct_Token glob_Token;
-
-void init_Token();
-void clear_Token();
-
-enum_RetVal getToken();
-enum_RetVal getNextToken();
-*/
-
 //Hlavni funkce parseru
 ERROR parser(SYMBOL_TABLE_PTR st){
 	ERROR err;	
@@ -271,8 +252,11 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			}
 			
 			break;
+			
+		//FILGY-TODO - samotne volani funkce
 		case TTYPE_FUNCTION:
 			fprintf(stderr,"Found function: %s\n", glob_Token.data.data);
+			fprintf(stderr, "FILGY-TODO: samotne volani funkce\n");
 			break;
 		
 		case TTYPE_KEYWORD:
@@ -429,7 +413,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -445,7 +429,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -461,7 +445,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -477,7 +461,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -493,7 +477,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -509,7 +493,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -525,7 +509,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -541,7 +525,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -557,7 +541,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
@@ -573,7 +557,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_L_BRACKET)
 					return E_SYNTAX;
 				
-				err = parserParseCallParam(st, NULL);
+				err = parserParseCallParam(st, stSearchFunction(st, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
