@@ -128,12 +128,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 	
 	// TMP SYMBOL
 	ITEMPTR tmp_item;
-	tmp_item = gcMalloc(sizeof(struct ITEM));
 	
 	SYMBOL* tmp_symbol;
-	tmp_symbol = gcMalloc(sizeof(struct SYMBOL));
-	tmp_symbol->items = tmp_item;
-	
 	
     SYMBOL* op1 = NULL;
     SYMBOL* op2 = NULL;
@@ -145,7 +141,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 	{
 		instruction = instr_node->value;
 		
-		
+		tmp_item = gcMalloc(sizeof(struct ITEM));
+		tmp_symbol = gcMalloc(sizeof(struct SYMBOL));
+		tmp_symbol->items = tmp_item;
+	
 		op1 = (SYMBOL*) instruction->operand1;
 		op2 = (SYMBOL*) instruction->operand2;
 		op3 = (SYMBOL*) instruction->destionation;
@@ -162,16 +161,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op2,'I')) != E_OK)
 					return err;
-				
 					
-				
-// 				fprintf(stderr,"op1mem: %d\n",op1);
-// 				fprintf(stderr,"op2mem: %d\n",op2);
 				data_copy(op2, op1);
-// 				fprintf(stderr,"op1 :%d , %d\n",op1->items->type, op1->items->value.valInt);
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
-				fprintf(stderr,"OP2: %d, typ: %d\n",op2,op2->items->type);
-				
 			break;
 			
 			case INSTRUCTION_LOAD_NULL:
@@ -181,6 +172,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'O')) != E_OK)
 					return err;
+				
 				data_copy(null_symbol,op1);
 				data_copy(null_symbol,op2);
 				data_copy(null_symbol,op3);
@@ -255,6 +247,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_SUBSTRACTION:
@@ -264,15 +257,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
-				
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
-				fprintf(stderr,"OP2: %d, typ: %d\n",op2,op2->items->type);
-				fprintf(stderr,"OP3: %d, typ: %d\n",op3,op3->items->type);
-				
-// 				fprintf(stderr,"OP2: %d data: %d\n",op2->items->type, op2->items->value.valInt);
-// 				fprintf(stderr,"OP3: %d data: %d\n",op3->items->type, op3->items->value.valInt);
-// 				fprintf(stderr,"op2mem: %d\n",op2);
-// 				fprintf(stderr,"op3mem: %d\n",op3);
 				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -299,8 +283,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble - op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
-// 				fprintf(stderr,"OP1: %d data: %d\n",op1->items->type, op1->items->value.valInt);
-// 				fprintf(stderr,"op1mem: %d\n",op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_MULTIPLICATION:
@@ -311,8 +294,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
 				
-// 				fprintf(stderr,"op2mem: %d\n",op2);
-// 				fprintf(stderr,"op3mem: %d\n",op3);
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
 					tmp_symbol->items->type = TYPE_DIGIT_INT;
@@ -337,7 +318,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble * op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
-// 				fprintf(stderr,"op1mem: %d\n",op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_DIVISION:
@@ -347,6 +328,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
+				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
 					if(op3->items->value.valInt == 0)
@@ -379,6 +361,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble / op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_LESS:
@@ -388,12 +371,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
-				
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
-				fprintf(stderr,"OP2: %d, typ: %d\n",op2,op2->items->type);
-				fprintf(stderr,"OP3: %d, typ: %d\n",op3,op3->items->type);
-// 				fprintf(stderr,"op2: %d\n",op2->items->value.valInt);
-// 				fprintf(stderr,"op3: %d\n",op3->items->value.valInt);
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -411,7 +388,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else
 					return E_COMPILATOR;
 				data_copy(tmp_symbol,op1);
-// 				fprintf(stderr,"true?: %d\n",op1->items->value.valBool);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_GREATER:
@@ -421,10 +398,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
-				
-// 				fprintf(stderr,"op2: %d\n",op2->items->value.valInt);
-// 				fprintf(stderr,"op2mem: %d\n",op2);
-// 				fprintf(stderr,"op3: %d\n",op3->items->value.valInt);
 				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
@@ -442,7 +415,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else
 					return E_COMPILATOR;
 				data_copy(tmp_symbol,op1);
-// 				fprintf(stderr,"true?: %d\n",op1->items->value.valBool);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_LESS_EQUAL:
@@ -452,6 +425,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
+				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -468,6 +442,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else
 					return E_COMPILATOR;
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_GREATER_EQUAL:
@@ -477,6 +452,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
+				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -493,6 +469,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else
 					return E_COMPILATOR;
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_EQUAL:
@@ -502,6 +479,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
+				
 				tmp_symbol->items->type = TYPE_BOOL;
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
@@ -518,6 +496,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else
 					tmp_symbol->items->value.valBool = false;
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_NOT_EQUAL:
@@ -527,12 +506,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
-				tmp_symbol->items->type = TYPE_BOOL;
 				
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
-				fprintf(stderr,"OP2: %d, typ: %d\n",op2,op2->items->type);
-				fprintf(stderr,"OP3: %d, typ: %d\n",op3,op3->items->type);
-				
+				tmp_symbol->items->type = TYPE_BOOL;				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
 					tmp_symbol->items->value.valBool = op2->items->value.valInt != op3->items->value.valInt;
@@ -548,20 +523,20 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else
 					tmp_symbol->items->value.valBool = false;
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_PUSH:
-// 				fprintf(stderr,"ZACATEK PUSH: %d, %s\n",op1->items->type,op1->items->value.valString.data);
 				if ((err = op_check(op1,'I')) != E_OK)
 					return err;
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
-// 				fprintf(stderr,"typ: %d\n",op1->items->type);
+				
 				stackPush(stack,op1);
 			break;
 			
 			case INSTRUCTION_POP:
 				if ((err = op_check(op1,'O')) != E_OK)
 					return err;
+				
 				op1 = stackPop(stack);
 			break;
 			
@@ -587,12 +562,9 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if(op3 == NULL)
 					return E_COMPILATOR;
 				
-				fprintf(stderr,"OP3: %d\n",op3);
-				
 				instr_node = function->instructions.begin;
-				while(instr_node != op3)
+				while(instr_node != (LIST_NODE_PTR)op3)
 				{
-// 					fprintf(stderr,"while address: %d compare with: %d\n",instr_node, op3);
 					if(instr_node->next == NULL)
 					{
 						fprintf(stderr,"NENALEZENO!!!\n");
@@ -602,8 +574,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					}
 					instr_node = instr_node->next;
 				}
-// 				fprintf(stderr,"NALEZENO: %d compare with: %d\n",instr_node, op3);
-// 				instr_node = instr_node->next;
 				continue;
 			break;
 			
@@ -613,19 +583,12 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if(op3 == NULL)
 					return E_COMPILATOR;
 				
-				fprintf(stderr,"OP2: %d, typ: %d\n",op2,op2->items->type);
-				
-// 				fprintf(stderr,"JUMP IF INPUT:: %d\n", op2->items->value.valBool);
-				
 				if(op2->items->type == TYPE_BOOL)
 					if(!op2->items->value.valBool)
 					{
-// 						fprintf(stderr,"SKOOOK address: %d\n",op3);
-						
 						instr_node = function->instructions.begin;
-						while(instr_node != op3)
+						while(instr_node != (LIST_NODE_PTR)op3)
 						{
-// 							fprintf(stderr,"while address: %d compare with: %d\n",instr_node, op3);
 							if(instr_node->next == NULL)
 								break;
 							instr_node = instr_node->next;
@@ -646,6 +609,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items = boolval(*tmp_symbol->items);
 				
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_DOUBLEVAL:
@@ -656,26 +620,20 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items = doubleval(*tmp_symbol->items);
 				
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_INTVAL:	
 				if ((err = op_check(op1,'O')) != E_OK)
 					return err;
 				
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
 				op1 = stackPop(stack);
 				if ((err = op_check(op1,'I')) != E_OK)
 					return err;
 				
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
-				
-// 				fprintf(stderr,"strval: %s\n",op1->items->value.valString.data);
 				tmp_symbol->items = intval(*op1->items);
-// 				fprintf(stderr,"strval: %s\n",op1->items->value.valString.data);
-// 				fprintf(stderr,"intval: %d\n",tmp_symbol->items->value.valInt);
 				data_copy(tmp_symbol,op1);
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
-// 				fprintf(stderr,"op1mem: %d\n",op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_STRVAL:
@@ -686,14 +644,13 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items = strval(*tmp_symbol->items);
 				
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_GET_STRING:
 				if ((err = op_check(op1,'O')) != E_OK)
 					return err;
-				
-				fprintf(stderr,"OP1: %d, typ: %d\n",op1,op1->items->type);
-				
+
 				tmp_string = get_string();
 				
 				tmp_symbol->items->type = TYPE_STRING;
@@ -701,7 +658,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				strCopy(&tmp_string, &tmp_symbol->items->value.valString);
 				
 				data_copy(tmp_symbol, op1);
-// 				fprintf(stderr,"KONEC GET_STRING: %d, %s\n",op1->items->type,op1->items->value.valString.data);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_CONCATE:
@@ -749,6 +706,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_PUT_STRING:
@@ -758,7 +716,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return E_COMPILATOR;
 				
 				tmp_count = *((int*)op2);
-				fprintf(stderr,"pocet: %d\n",tmp_count);
 				for(int i=0;i<tmp_count;i++)
 				{
 					tmp_symbol = stackPop(stack);
@@ -769,21 +726,14 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				for(int i=0;i<tmp_count;i++)
 				{
 					tmp_symbol = stackPop(tmp_stack);
-					fprintf(stderr,"tmp_symbol IIIIIIIIIII: %d, typ: %d\n",tmp_symbol,tmp_symbol->items->type);
 					if(tmp_symbol->items->type == 2)
 						printf("%d",tmp_symbol->items->value.valInt);
 					else if(tmp_symbol->items->type == 3)
 						printf("%lf",tmp_symbol->items->value.valDouble);
 					else if(tmp_symbol->items->type == 4)
 						printf("%s",tmp_symbol->items->value.valString.data);
-					else if(tmp_symbol->items->type == 0)
-						printf("NULA\n");
-					else if(tmp_symbol->items->type == 1)
-						printf("JEDNA\n");
-					else
-						printf("typ: %d\n",tmp_symbol->items->type);
 				}
-// 				tmp_symbol = NULL;
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_STRLEN:
@@ -791,9 +741,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if (op2 == NULL)
 					return E_COMPILATOR;
+				
 				tmp_count = *((int*)op2);
 				if (tmp_count != 1)
-					E_COMPILATOR;
+					return E_COMPILATOR;
 				
 				op1 = stackPop(stack);
 				if ((err = op_check(op1,'I')) != E_OK)
@@ -802,6 +753,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items->value.valInt = my_strlen(op1->items->value.valString);
 				
 				data_copy(tmp_symbol, op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_GET_SUBSTRING:
@@ -811,7 +763,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return E_COMPILATOR;
 				tmp_count = *((int*)op2);
 				if (tmp_count != 3)
-					E_COMPILATOR;
+					return E_COMPILATOR;
 				
 				// TO
 				tmp_symbol = stackPop(stack);
@@ -833,9 +785,11 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_string = get_substring(tmp_symbol->items->value.valString,str_from,str_to,&err);
 				if(err != E_OK)
 					return err;
+				
 				tmp_symbol->items->type = TYPE_STRING;
 				strCopy(&tmp_symbol->items->value.valString,&tmp_string);
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_FIND_STRING:
@@ -850,15 +804,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if ((err = op_check(op1,'I')) != E_OK)
 					return err;
 				
-// 				fprintf(stderr,"ahoj :%d , %d\n",op1->items->type, op2->items->type);
-// 				fprintf(stderr,"string op1: %s, %s\n",op1->items->value.valString,op1->items->value.valString.data);
-// 				fprintf(stderr,"string op2: %s, %s\n",op2->items->value.valString,op2->items->value.valString.data);
-				
 				tmp_symbol->items->type = TYPE_DIGIT_INT;
-// 				fprintf(stderr,"ahoj11\n");
 				tmp_symbol->items->value.valInt = find_string(op1->items->value.valString, op2->items->value.valString);
-// 				fprintf(stderr,"ahoj22\n");
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_SORT_STRING:
@@ -868,7 +817,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return E_COMPILATOR;
 				tmp_count = *((int*)op2);
 				if (tmp_count != 1)
-					E_COMPILATOR;
+					return E_COMPILATOR;
 				
 				tmp_symbol = stackPop(stack);
 				if ((err = op_check(tmp_symbol,'I')) != E_OK)
@@ -876,6 +825,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				
 				sort_string(tmp_symbol->items->value.valString);
 				data_copy(tmp_symbol,op1);
+				tmp_symbol = NULL;
 			break;
 			
 			default:
