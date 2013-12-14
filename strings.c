@@ -137,6 +137,6 @@ unsigned int strUsed(STRING* str){
 
 void strConcatenate(STRING_PTR first,STRING_PTR second)
 {
-	for(int i = 0;i<second->used;i++)
+	for(unsigned int i = 0;i<second->used;i++)
 		strAppend(first, second->data[i]);
 }
