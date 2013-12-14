@@ -11,7 +11,7 @@ ERROR op_check(SYMBOL_PTR smb, char IO)
 			if(smb->items == NULL)
 				if(IO == 'o' || IO == 'O')
 				{
-// 					printf("ALOKuJu\n");
+// 					fprintf(stderr,"ALOKuJu\n");
 					smb->items = gcMalloc(sizeof(struct ITEM));
 					return E_OK;
 				}
@@ -26,7 +26,7 @@ ERROR op_check(SYMBOL_PTR smb, char IO)
 			{
 				if(IO == 'o' || IO == 'O')
 				{
-// 					printf("ALOKuJu\n");
+// 					fprintf(stderr,"ALOKuJu\n");
 					smb->items = gcMalloc(sizeof(struct ITEM));
 					return E_OK;
 				}
@@ -103,7 +103,7 @@ ERROR interpret(SYMBOL_TABLE* table)
 ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 {
 	
-// 	printf("Zavolana funkce: %d\n",function);
+// 	fprintf(stderr,"Zavolana funkce: %d\n",function);
 	LIST_NODE_PTR instr_node = function->instructions.begin;
 	ERROR err = E_OK;
 	
@@ -489,9 +489,9 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_PUSH:
+				fprintf(stderr,"ZACATEK PUSH: %d, %s\n",op1->items->type,op1->items->value.valString.data);
 				if ((err = op_check(op1,'I')) != E_OK)
 					return err;
-				printf("strval: %d, %s\n",op1->items->type,op1->items->value.valString.data);
 				stackPush(stack,op1);
 			break;
 			
@@ -582,10 +582,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				op1 = stackPop(stack);
 				if ((err = op_check(op1,'I')) != E_OK)
 					return err;
-// 				printf("strval: %s\n",op1->items->value.valString.data);
+// 				fprintf(stderr,"strval: %s\n",op1->items->value.valString.data);
 				tmp_symbol->items = intval(*op1->items);
-// 				printf("strval: %s\n",op1->items->value.valString.data);
-// 				printf("intval: %d\n",tmp_symbol->items->value.valInt);
+// 				fprintf(stderr,"strval: %s\n",op1->items->value.valString.data);
+// 				fprintf(stderr,"intval: %d\n",tmp_symbol->items->value.valInt);
 				data_copy(tmp_symbol,op1);
 			break;
 			
@@ -615,7 +615,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				strCopy(&tmp_string, &tmp_symbol->items->value.valString);
 				
 				data_copy(tmp_symbol, op1);
-				printf("strval: %s\n",op1->items->value.valString.data);
+				fprintf(stderr,"KONEC GET_STRING: %d, %s\n",op1->items->type,op1->items->value.valString.data);
 			break;
 			
 			case INSTRUCTION_CONCATE:
