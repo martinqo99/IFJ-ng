@@ -160,6 +160,25 @@ ITEMPTR doubleval(ITEM item)
 		ERROR err;
 		number = get_substring(item.value.valString, start, size, &err);
 		
+		for(int i = 0;(i<number.used);i++)
+		{
+			if(!isdigit(number.data[i]))
+			{
+				if(number.data[i] == 'e' || number.data[i] == 'E' || number.data[i] == '.')
+				{
+					if(i+1 <= number.used)
+					{
+						if(!isdigit(number.data[i+1]))
+							return NULL;
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		
 		if(!isdigit(number.data[0]))
 		{
 			if(number.data[0] == '-' && isdigit(number.data[1]))
@@ -171,14 +190,18 @@ ITEMPTR doubleval(ITEM item)
 			}
 			else
 			{
-				new->value.valDouble = 0.0;
+				new->type = TYPE_DIGIT_INT;
+				new->value.valInt = 0;
 			}
 		}
 		else
 		{
 			double cislo;
-			sscanf(number.data, "%lf", &cislo);
+			int ret = sscanf(number.data, "%lf", &cislo);
+			if(ret <= 0)
+				return NULL;
 			
+			printf("ret :%d, %lf",ret,cislo);
 			new->value.valDouble = cislo;
 		}
 	}

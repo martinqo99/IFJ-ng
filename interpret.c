@@ -623,6 +623,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				
 				tmp_symbol = stackPop(stack);
 				tmp_symbol->items = doubleval(*tmp_symbol->items);
+				if(tmp_symbol->items == NULL)
+					return E_SEMANTIC_DOUBLEVAL;
 				
 				data_copy(tmp_symbol,op1);
 				tmp_symbol = NULL;
