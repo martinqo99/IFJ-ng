@@ -67,23 +67,32 @@ ITEMPTR intval(ITEM item)
 	}
 	else if(item.type == TYPE_STRING)
 	{
-		int size = my_strlen(item.value.valString);
 		int i;
-		int num;
-		new->value.valInt = 0;
+		int start = 0;
+		int size = my_strlen(item.value.valString);
+		
 		for(i = 0; i < size; i++ )
 		{
-			if(isspace(item.value.valString.data[i]))
+			if(isdigit(item.value.valString.data[i]))
 			{
+				if(i>0 && item.value.valString.data[i-1] == '-')
+					start = i-1;
+				else
+					start = i;
+				break;
 			}
-			else if(isdigit(item.value.valString.data[i]))
-			{
-				num = item.value.valString.data[i] - '0';
-				new->value.valInt = new->value.valInt*10+num;
-			}
-			else
-				return new;
 		}
+		
+		STRING number;
+		strInit(&number);
+		
+		ERROR err;
+		number = get_substring(item.value.valString, start, size, &err);
+		
+		int cislo;
+		sscanf(number.data, "%d", &cislo);
+		
+		new->value.valInt = cislo;
 	}
 	else
 	{
@@ -119,6 +128,38 @@ ITEMPTR doubleval(ITEM item)
 	else if(item.type == TYPE_STRING)
 	{
 		
+// 		int i;
+// 		int start = 0;
+// 		int size = my_strlen(item.value.valString);
+// 		
+// 		for(i = 0; i < size; i++ )
+// 		{
+// 			if(isdigit(item.value.valString.data[i]))
+// 			{
+// 				start = i;
+// 				break;
+// 			}
+// 		}
+// 		
+// 		
+// 		STRING number;
+// 		strInit(&number);
+// 		
+// 		ERROR err;
+// 		number = get_substring(item.value.valString, start, size, &err);
+// 		
+// 		double cislo;
+// 		sscanf(number.data, "%lf", &cislo);
+// 		
+// // 		char pole[50];
+// // 		sprintf(pole,"%f",cislo);
+// 		
+// 		char* new_string = NULL;
+// 		sprintf(new_string, "%f", cislo);
+// 		
+// 		strInitRaw(&new->value.valString, new_string);
+		
+		
 		int i;
 		int start = 0;
 		int size = my_strlen(item.value.valString);
@@ -127,11 +168,13 @@ ITEMPTR doubleval(ITEM item)
 		{
 			if(isdigit(item.value.valString.data[i]))
 			{
-				start = i;
+				if(i>0 && item.value.valString.data[i-1] == '-')
+					start = i-1;
+				else
+					start = i;
 				break;
 			}
 		}
-		
 		
 		STRING number;
 		strInit(&number);
@@ -142,13 +185,7 @@ ITEMPTR doubleval(ITEM item)
 		double cislo;
 		sscanf(number.data, "%lf", &cislo);
 		
-// 		char pole[50];
-// 		sprintf(pole,"%f",cislo);
-		
-		char* new_string = NULL;
-		sprintf(new_string, "%f", cislo);
-		
-		strInitRaw(&new->value.valString, new_string);
+		new->value.valDouble = cislo;
 	}
 	else
 	{

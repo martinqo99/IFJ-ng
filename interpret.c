@@ -254,6 +254,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
+				
+				fprintf(stderr,"OP2: %d data: %d\n",op2->items->type, op2->items->value.valInt);
+				fprintf(stderr,"OP3: %d data: %d\n",op3->items->type, op3->items->value.valInt);
+				
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
 					tmp_symbol->items->type = TYPE_DIGIT_INT;
@@ -278,6 +282,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble - op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				fprintf(stderr,"OP1: %d data: %d\n",op1->items->type, op1->items->value.valInt);
 			break;
 			
 			case INSTRUCTION_MULTIPLICATION:
@@ -573,6 +578,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if(op3 == NULL)
 					return E_COMPILATOR;
 				
+				fprintf(stderr,"JUMP IF INPUT:: %d\n", op2->items->value.valBool);
+				
 				if(op2->items->type == TYPE_BOOL)
 					if(!op2->items->value.valBool)
 					{
@@ -636,10 +643,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				op1 = stackPop(stack);
 				if ((err = op_check(op1,'I')) != E_OK)
 					return err;
-// 				fprintf(stderr,"strval: %s\n",op1->items->value.valString.data);
+				fprintf(stderr,"strval: %s\n",op1->items->value.valString.data);
 				tmp_symbol->items = intval(*op1->items);
-// 				fprintf(stderr,"strval: %s\n",op1->items->value.valString.data);
-// 				fprintf(stderr,"intval: %d\n",tmp_symbol->items->value.valInt);
+				fprintf(stderr,"strval: %s\n",op1->items->value.valString.data);
+				fprintf(stderr,"intval: %d\n",tmp_symbol->items->value.valInt);
 				data_copy(tmp_symbol,op1);
 			break;
 			
