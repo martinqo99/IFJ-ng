@@ -122,9 +122,7 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 					return E_SYNTAX;
 				}
 				
-				fprintf(stderr, "[exp-out] %d\n", expression->symbol->type);
-				
-				//printf("2]]][[[ %d\n",  expression->symbol);
+				fprintf(stderr, "[exp-out] Return symbol type: %d\n", expression->symbol->type);
 
 				*symbol = expression->symbol;					
 				break;

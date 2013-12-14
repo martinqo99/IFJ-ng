@@ -447,7 +447,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				if(getToken() != TTYPE_SEMICOLON) //weak
 					return E_SYNTAX;
 				
-				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_BOOLVAL, symbol, NULL, NULL));				
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_DOUBLEVAL, symbol, NULL, NULL));				
 			}
 			else if(strCompare(glob_Token.data, "intval")){
 				fprintf(stderr," - assign lib intval\n");
@@ -614,7 +614,9 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
 			//printf("DEBUG: %d\n", tmp->type);
-			//assert(tmp);
+			
+			//if(tmp->type == TYPE_OTHER && tmp->items == NULL && symbol->type == TYPE_OTHER && symbol->items == NULL)
+			//	return E_SEMANTIC_UNDECLARED;
 			
 			fprintf(stderr," - assign variable completed\n");
 			break;
