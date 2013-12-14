@@ -657,7 +657,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				
 				tmp_string = get_string();
-// 				fprintf("AAA\n");
+				
 				tmp_symbol->items->type = TYPE_STRING;
 				strInit(&tmp_symbol->items->value.valString);
 				strCopy(&tmp_string, &tmp_symbol->items->value.valString);

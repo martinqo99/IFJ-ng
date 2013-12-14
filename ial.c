@@ -71,7 +71,10 @@ void quicksort(STRING text, int left, int right)
 void sort_string(STRING text)
 {
 	int left = 0;
-	int right = strlen(text.data)-1;
-	
-	quicksort(text, left, right);
+	if(text.data != NULL)
+	{
+		int right = strlen(text.data)-1;
+		if(right > 0)
+			quicksort(text, left, right);
+	}
 }
