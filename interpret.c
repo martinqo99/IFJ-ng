@@ -161,8 +161,12 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if ((err = op_check(op2,'I')) != E_OK)
 					return err;
-					
+				
+// 				fprintf(stderr,"MMU op1: %d\n",op1);
 				data_copy(op2, op1);
+// 				fprintf(stderr,"DATA op1 type: %d string: %s\n",op1->items->type,op1->items->value.valString.data);
+// 				
+// 				fprintf(stderr,"MMU op2: %d\n\n",op2);
 			break;
 			
 			case INSTRUCTION_LOAD_NULL:
@@ -537,7 +541,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if ((err = op_check(op1,'O')) != E_OK)
 					return err;
 				
-				op1 = stackPop(stack);
+				tmp_symbol = stackPop(stack);
+				data_copy(tmp_symbol,op1);
 			break;
 			
 			case INSTRUCTION_CALL:
@@ -669,13 +674,19 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if ((err = op_check(op3,'I')) != E_OK)
 					return err;
 				
+// 				fprintf(stderr,"MMU op1: %d\n",op1);
+// 				fprintf(stderr,"MMU op2: %d\n",op2);
+// 				fprintf(stderr,"MMU op3: %d\n",op3);
+// 				
+// 				fprintf(stderr,"DATA op2 type: %d string: %s\n",op2->items->type,op2->items->value.valString.data);
+// 				fprintf(stderr,"DATA op3 type: %d string: %s\n\n",op3->items->type,op3->items->value.valString.data);
+// 				
 				if(op2->items->type == TYPE_STRING && op3->items->type == TYPE_STRING)
 				{
 					tmp_symbol->items->type = TYPE_STRING;
-					
+					strInit(&tmp_symbol->items->value.valString);
 					strConcatenate(&tmp_symbol->items->value.valString, &op2->items->value.valString);
 					strConcatenate(&tmp_symbol->items->value.valString, &op3->items->value.valString);
-					
 					data_copy(tmp_symbol,op1); // from, to
 				}
 				else if(op2->items->type == TYPE_STRING && op3->items->type == TYPE_DIGIT_INT)
