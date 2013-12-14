@@ -230,6 +230,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 	switch(retval){
 		case TTYPE_VARIABLE:
 			fprintf(stderr,"Found variable: %s\n", glob_Token.data.data);
+			
 			if(!stSearchSymbol(st->curr, glob_Token.data))
 				stInsertSymbol(st->curr, glob_Token.data);
 
@@ -245,8 +246,10 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			else if(retval != TTYPE_ASSIGN)
 				return E_SYNTAX;
 			else{
-				fprintf(stderr,"Found assign and last symbol was: %s\n", stGetLastSymbol(st->curr)->id.data);
-				err = parserControlAssign(st, stGetLastSymbol(st->curr));
+				//DEBUG FILGY
+				fprintf(stderr,"Found assign and last symbol was: %s\n", stSearchSymbol(st->curr, glob_Token.data));
+				//err = parserControlAssign(st, stGetLastSymbol(st->curr));
+				err = parserControlAssign(st, stSearchSymbol(st->curr, glob_Token.data));
 				
 				if(err != E_OK)
 					return err;
