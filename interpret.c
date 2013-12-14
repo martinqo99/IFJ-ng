@@ -277,6 +277,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				else
+					return E_SEMANTIC_TYPE_MISMATCH;
 				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
@@ -314,6 +316,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble - op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				else
+					return E_SEMANTIC_TYPE_MISMATCH;
 				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
@@ -350,6 +354,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble * op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				else
+					return E_SEMANTIC_TYPE_MISMATCH;
 				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
@@ -394,6 +400,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble / op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				else
+					return E_SEMANTIC_TYPE_MISMATCH;
 				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
@@ -753,6 +761,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				else
+					return E_SEMANTIC_TYPE_MISMATCH;
 				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
