@@ -615,8 +615,9 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
 			//printf("DEBUG: %d\n", tmp->type);
 			
-			//if(tmp->type == TYPE_OTHER && tmp->items == NULL && symbol->type == TYPE_OTHER && symbol->items == NULL)
-			//	return E_SEMANTIC_UNDECLARED;
+			//HOTFIX BY FILGY
+			if(tmp == symbol && tmp->type == TYPE_OTHER)
+				return E_SEMANTIC_UNDECLARED;
 			
 			fprintf(stderr," - assign variable completed\n");
 			break;
