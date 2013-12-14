@@ -122,6 +122,8 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 					return E_SYNTAX;
 				}
 				
+				fprintf(stderr, "[exp-out] %d\n", expression->symbol->type);
+				
 				//printf("2]]][[[ %d\n",  expression->symbol);
 
 				*symbol = expression->symbol;					
@@ -268,7 +270,8 @@ ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, en
 		retval == TTYPE_FALSE || 
 		retval == TTYPE_STRING ||
 		retval == TTYPE_NUMBER ||
-		retval == TTYPE_DEC_NUMBER
+		retval == TTYPE_DEC_NUMBER ||
+		retval == TYPE_OTHER
 	){
 		
 		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);

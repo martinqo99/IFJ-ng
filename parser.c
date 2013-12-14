@@ -613,7 +613,8 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 				return err;
 			
 			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_MOV, symbol, tmp, NULL));
-			//assert(tmp->id.data && tmp->items);
+			//printf("DEBUG: %d\n", tmp->type);
+			//assert(tmp);
 			
 			fprintf(stderr," - assign variable completed\n");
 			break;
@@ -697,7 +698,7 @@ ERROR parserParseCallParam(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 		symbol = stSearchSymbol(st->curr, glob_Token.data);
 		
 		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);
-		fprintf(stderr, "DELL call function with symbol: %d\n", symbol);
+		fprintf(stderr, "DELL call function with symbol: %d - %s\n", symbol, symbol->id);
 		
 	}
 	else if(
@@ -741,7 +742,8 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 		
 		symbol = stSearchSymbol(st->curr, glob_Token.data);
 		
-		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);			
+		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);
+		fprintf(stderr, "DELL call function with symbol: %d - %s\n", symbol, symbol->id);
 	}
 	else if(
 		retval == TTYPE_NUMBER ||
