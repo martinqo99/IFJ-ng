@@ -132,7 +132,8 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 	if(!(*symbol))
 		*symbol = gcMalloc(sizeof(SYMBOL));
 	
-	(*symbol)->items = gcMalloc(sizeof(ITEM));
+	if(!(*symbol)->items)
+		(*symbol)->items = gcMalloc(sizeof(ITEM));
 	//strCopy(&id, &(*symbol)->id); //mozno ne?
 	
 	
