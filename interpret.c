@@ -11,14 +11,23 @@ ERROR op_check(SYMBOL_PTR smb, char IO)
 			if(smb->items == NULL)
 				if(IO == 'o' || IO == 'O')
 				{
-// 					fprintf(stderr,"ALOKuJu\n");
 					smb->items = gcMalloc(sizeof(struct ITEM));
 					return E_OK;
 				}
 				else
 					return E_COMPILATOR;
 			else
-				return E_OK;
+			{
+				if(IO == 'i' || IO == 'I')
+				{
+					if(smb->filgy == false)
+						return E_SEMANTIC_UNDECLARED;
+					else
+						return E_OK;
+				}
+				else
+					return E_OK;
+			}
 		}
 		else
 		{
@@ -26,7 +35,6 @@ ERROR op_check(SYMBOL_PTR smb, char IO)
 			{
 				if(IO == 'o' || IO == 'O')
 				{
-// 					fprintf(stderr,"ALOKuJu\n");
 					smb->items = gcMalloc(sizeof(struct ITEM));
 					return E_OK;
 				}
@@ -34,10 +42,28 @@ ERROR op_check(SYMBOL_PTR smb, char IO)
 					return E_COMPILATOR;
 			}
 			else
-				return E_OK;
+			{
+				if(IO == 'i' || IO == 'I')
+				{
+					if(smb->filgy == false)
+						return E_SEMANTIC_UNDECLARED;
+					else
+						return E_OK;
+				}
+				else
+					return E_OK;
+			}
 		}
 	}
-	return E_OK;
+	if(IO == 'i' || IO == 'I')
+	{
+		if(smb->filgy == false)
+			return E_SEMANTIC_UNDECLARED;
+		else
+			return E_OK;
+	}
+	else
+		return E_OK;
 }
 
 #define data_copy(data_src, data_dst) \
@@ -163,6 +189,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				
 				data_copy(op2, op1);
+				op1->filgy = true;
 			break;
 			
 			case INSTRUCTION_LOAD_NULL:
@@ -176,6 +203,9 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				data_copy(null_symbol,op1);
 				data_copy(null_symbol,op2);
 				data_copy(null_symbol,op3);
+				op1->filgy = true;
+				op2->filgy = true;
+				op3->filgy = true;
 			break;
 			
 			case INSTRUCTION_ADDITION:
@@ -247,6 +277,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -283,6 +314,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble - op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -318,6 +350,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble * op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -361,6 +394,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble / op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -543,6 +577,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				
 				tmp_symbol = stackPop(stack);
 				data_copy(tmp_symbol,op1);
+				op1->filgy = true;
 			break;
 			
 			case INSTRUCTION_CALL:
@@ -583,8 +618,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_IF_JUMP:	
-				if ((err = op_check(op2,'I')) != E_OK)
-					return err;
+// 				if ((err = op_check(op2,'I')) != E_OK)
+// 					return err;
 				if(op3 == NULL)
 					return E_COMPILATOR;
 				
@@ -614,6 +649,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items = boolval(*tmp_symbol->items);
 				
 				data_copy(tmp_symbol,op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -627,6 +663,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return E_SEMANTIC_DOUBLEVAL;
 				
 				data_copy(tmp_symbol,op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -640,6 +677,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				
 				tmp_symbol->items = intval(*op1->items);
 				data_copy(tmp_symbol,op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -651,6 +689,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items = strval(*tmp_symbol->items);
 				
 				data_copy(tmp_symbol,op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -665,6 +704,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				strCopy(&tmp_string, &tmp_symbol->items->value.valString);
 				
 				data_copy(tmp_symbol, op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -712,6 +752,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					
 					data_copy(tmp_symbol,op1); // from, to
 				}
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -720,6 +761,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				if (op2 == NULL)
 					return E_COMPILATOR;
+				
+				// DODELAT VRACENI POCTU VYPSANYCH! DO OP1
 				
 				tmp_count = *((int*)op2);
 				for(int i=0;i<tmp_count;i++)
@@ -759,6 +802,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items->value.valInt = my_strlen(op1->items->value.valString);
 				
 				data_copy(tmp_symbol, op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -795,6 +839,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items->type = TYPE_STRING;
 				strCopy(&tmp_symbol->items->value.valString,&tmp_string);
 				data_copy(tmp_symbol,op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -813,6 +858,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				tmp_symbol->items->type = TYPE_DIGIT_INT;
 				tmp_symbol->items->value.valInt = find_string(op3->items->value.valString, op2->items->value.valString);
 				data_copy(tmp_symbol,op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
@@ -826,6 +872,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				
 				sort_string(tmp_symbol->items->value.valString);
 				data_copy(tmp_symbol,op1);
+				op1->filgy = true;
 				tmp_symbol = NULL;
 			break;
 			
