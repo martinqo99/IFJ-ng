@@ -743,7 +743,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					else if(tmp_symbol->items->type == 4)
 						printf("%s",tmp_symbol->items->value.valString.data);
 				}
-				put_string("\n");
 			break;
 			
 			case INSTRUCTION_STRLEN:
