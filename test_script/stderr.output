@@ -1,18 +1,295 @@
 Finding function definitions:
+- MyMain
+Parsing definition function
+Change current function to MyMain
+Parsing function MyMain definition param
+Creating instruction: pop
+Parsing function definition params
+Creating instruction: nop
+Parsing function code
+Parsing function body
+Parsing code [7]: $str1
+Found variable: $str1
+Found assign and last symbol was: $str1
+Control assign
+ - assign variable
+[exp] Parse expression, begin: $str
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [$var]
+[exp] Weight: '<', stack size 1
+[exp] Push term2 [$var] to stack
+[exp-push] Retval is variable
+[exp] Get token: ;
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [;]
+[exp] Weight: '$', stack size 2
+[exp-out] 7
+Creating instruction: mov
+ - assign variable completed
+Parsing function code
+Parsing function body
+Parsing code [7]: $str2
+Found variable: $str2
+Found assign and last symbol was: $str2
+Control assign
+ - assign variable
+[exp] Parse expression, begin: $str1
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [$var]
+[exp] Weight: '<', stack size 1
+[exp] Push term2 [$var] to stack
+[exp-push] Retval is variable
+[exp] Get token: .
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [.]
+[exp] Weight: '<', stack size 2
+[exp] Push term2 [.] to stack
+[exp] Get token: , ktery jeste trochu obohatime
+[exp] Get term1 from stack [.]
+[exp] Get term2 from retval [string]
+[exp] Weight: '<', stack size 3
+[exp] Push term2 [string] to stack
+|| Static val in , ktery jeste trochu obohatime : string
+[exp-push] Insert static value: , ktery jeste trochu obohatime
+[exp] Get token: ;
+[exp] Get term1 from stack [.]
+[exp] Get term2 from retval [;]
+[exp] Weight: '>', stack size 4
+[exp] Pop expression [expression] from stack
+[exp] Type: E op E
+[exp] Creating blank constant
+I: concate, dest: 25037136, src1: 25036016, src2: 25036992
+Creating instruction: concate
+[exp] Push expression to stack in E op E (stack size: 2)
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [;]
+[exp] Weight: '$', stack size 2
+[exp-out] 6
+Creating instruction: mov
+ - assign variable completed
+Parsing function code
+Parsing function body
 Parsing code [7]: $x
 Found variable: $x
 Found assign and last symbol was: $x
 Control assign
  - assign lib put_string
+|| Static val in $str1 : $var
+DELL call function with symbol: 25036016 - $str1
+Creating instruction: push
+|| Static val in 
+ : string
+Creating instruction: push
+|| Static val in $str2 : $var
+DELL call function with symbol: 25036576 - $str2
+Creating instruction: push
+|| Static val in 
+ : string
+Creating instruction: push
+Creating instruction: put_string
+Parsing function code
+Parsing function body
+Parsing code [7]: $p
+Found variable: $p
+Found assign and last symbol was: $p
+Control assign
+ - assign lib find_string
+|| Static val in $str2 : $var
+DELL call function with symbol: 25036576 - $str2
+Creating instruction: push
+|| Static val in text : string
+Creating instruction: push
+Creating instruction: find_string
+Parsing function code
+Parsing function body
+Parsing code [7]: $x
+Found variable: $x
+Found assign and last symbol was: $x
+Control assign
+ - assign lib put_string
+|| Static val in Pozice retezce "text" v $str2:  : string
+Creating instruction: push
+|| Static val in $p : $var
+DELL call function with symbol: 25039584 - $p
+Creating instruction: push
+|| Static val in 
+ : string
+Creating instruction: push
+Creating instruction: put_string
+Parsing function code
+Parsing function body
+Parsing code [7]: $x
+Found variable: $x
+Found assign and last symbol was: $x
+Control assign
+ - assign lib put_string
+|| Static val in Zadejte posloupnost vsech malych pismen a-h,  : string
+Creating instruction: push
+Creating instruction: put_string
+Parsing function code
+Parsing function body
+Parsing code [7]: $x
+Found variable: $x
+Found assign and last symbol was: $x
+Control assign
+ - assign lib put_string
+|| Static val in aby se pismena v posloupnosti neopakovala:
+ : string
+Creating instruction: push
+Creating instruction: put_string
+Parsing function code
+Parsing function body
+Parsing code [7]: $str1
+Found variable: $str1
+Found assign and last symbol was: $str1
+Control assign
+ - assign lib get_string
+Creating instruction: get_string
+DELL get_string push symbol: 25036016
+Parsing function code
+Parsing function body
+Parsing code [7]: $str2
+Found variable: $str2
+Found assign and last symbol was: $str2
+Control assign
+ - assign lib sort_string
+|| Static val in $str1 : $var
+DELL call function with symbol: 25036016 - $str1
+Creating instruction: push
+Creating instruction: sort_string
+Parsing function code
+Parsing function body
+Parsing code [27]: while
+Found keyword: while
+Creating instruction: jump
+Creating instruction: label
+[exp] Parse expression, begin: $str2
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [$var]
+[exp] Weight: '<', stack size 1
+[exp] Push term2 [$var] to stack
+[exp-push] Retval is variable
+[exp] Get token: !==
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [!=]
+[exp] Weight: '<', stack size 2
+[exp] Push term2 [!=] to stack
+[exp] Get token: abcdefgh
+[exp] Get term1 from stack [!=]
+[exp] Get term2 from retval [string]
+[exp] Weight: '<', stack size 3
+[exp] Push term2 [string] to stack
+|| Static val in abcdefgh : string
+[exp-push] Insert static value: abcdefgh
+[exp] Filgy magic - forcing end of expression
+[exp] Get token: ;
+[exp] Get term1 from stack [!=]
+[exp] Get term2 from retval [;]
+[exp] Weight: '>', stack size 4
+[exp] Pop expression [expression] from stack
+[exp] Type: E op E
+[exp] Creating blank constant
+I: not equal, dest: 25044880, src1: 25036576, src2: 25044480
+Creating instruction: not equal
+[exp] Push expression to stack in E op E (stack size: 2)
+[exp] Get term1 from stack [;]
+[exp] Get term2 from retval [;]
+[exp] Weight: '$', stack size 2
+[exp-out] 6
+Creating instruction: jump_if
+Parsing function code
+Parsing function body
+Parsing code [7]: $x
+Found variable: $x
+Found assign and last symbol was: $x
+Control assign
+ - assign lib put_string
+|| Static val in Spatne zadana posloupnost, zkuste znovu:
+ : string
+Creating instruction: push
+Creating instruction: put_string
+Parsing function code
+Parsing function body
+Parsing code [7]: $str1
+Found variable: $str1
+Found assign and last symbol was: $str1
+Control assign
+ - assign lib get_string
+Creating instruction: get_string
+DELL get_string push symbol: 25036016
+Parsing function code
+Parsing function body
+Parsing code [7]: $str2
+Found variable: $str2
+Found assign and last symbol was: $str2
+Control assign
+ - assign lib sort_string
+|| Static val in $str1 : $var
+DELL call function with symbol: 25036016 - $str1
+Creating instruction: push
+Creating instruction: sort_string
+Parsing function code
+Creating instruction: label
+While completed
+Parsing function code
+Parsing function body
 Parsing code [27]: return
 Found keyword: return
-[exp] Parse expression, begin: 42
+[exp] Parse expression, begin: 0
 [exp] Get term1 from stack [;]
 [exp] Get term2 from retval [number]
 [exp] Weight: '<', stack size 1
 [exp] Push term2 [number] to stack
-[exp-push] Insert static value: 42
+|| Static val in 0 : number
+[exp-push] Insert static value: 0
 [exp] Get token: ;
 [exp] Get term1 from stack [;]
 [exp] Get term2 from retval [;]
 [exp] Weight: '$', stack size 2
+[exp-out] 0
+Creating instruction: push
+Creating instruction: return
+Parsing function code
+Parsing code [7]: $foo
+Found variable: $foo
+Found assign and last symbol was: $foo
+Control assign
+ - assign function
+|| Static val in Toto je nejaky text v programu jazyka IFJ13 : string
+Creating instruction: push
+Creating instruction: call
+Creating instruction: pop
+ - assign function completed
+while interpret : 3 (push)
+while interpret : 21 (call)
+while interpret : 2 (pop)
+while interpret : 6 (nop)
+while interpret : 4 (mov)
+while interpret : 11 (concate)
+while interpret : 4 (mov)
+while interpret : 3 (push)
+while interpret : 3 (push)
+while interpret : 3 (push)
+while interpret : 3 (push)
+while interpret : 27 (put_string)
+while interpret : 3 (push)
+while interpret : 3 (push)
+while interpret : 30 (find_string)
+while interpret : 3 (push)
+while interpret : 3 (push)
+while interpret : 3 (push)
+while interpret : 27 (put_string)
+while interpret : 3 (push)
+while interpret : 27 (put_string)
+while interpret : 3 (push)
+while interpret : 27 (put_string)
+while interpret : 26 (get_string)
+while interpret : 3 (push)
+while interpret : 31 (sort_string)
+while interpret : 20 (label)
+while interpret : 13 (not equal)
+while interpret : 19 (jump_if)
+while interpret : 20 (label)
+while interpret : 3 (push)
+while interpret : 1 (return)
+while interpret : 2 (pop)
