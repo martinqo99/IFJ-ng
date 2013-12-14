@@ -20,6 +20,10 @@
 			$str1 = get_string();
 			$str2 = sort_string($str1);
 		}
-		return 0;
+		
+		$tuxik = 1;
+		return $tuxik;
 	}
 	$foo = MyMain("Toto je nejaky text v programu jazyka IFJ13");
+	
+	$x = put_string("Fakt: ", $foo, "\n");
