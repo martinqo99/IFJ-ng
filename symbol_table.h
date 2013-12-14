@@ -109,7 +109,8 @@ typedef struct ITEM{
 typedef struct SYMBOL{
     STRING id;
     TYPE type;    
-    ITEMPTR items;    
+    ITEMPTR items;
+	bool filgy;
 } SYMBOL, *SYMBOL_PTR;
 
 /*

@@ -102,6 +102,7 @@ ERROR stInsertSymbol(FUNCTION_PTR function, STRING id){
 	strCopy(&id, &symbol->id);
 	symbol->type = TYPE_OTHER;
 	symbol->items = NULL;
+	symbol->filgy = false;
 	
 	ERROR err = BT_Insert(&function->symbols, &symbol->id, symbol);
 	
@@ -144,31 +145,38 @@ SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal ret
 	switch(retval){
 		case TTYPE_NULL:
 			(*symbol)->items->type = TYPE_NULL;
+			(*symbol)->filgy = true;
 			break;
 		case TTYPE_TRUE:
 			(*symbol)->items->type = TYPE_BOOL;
 			(*symbol)->items->value.valBool = true;
+			(*symbol)->filgy = true;
 			break;
 		case TTYPE_FALSE:
 			(*symbol)->items->type = TYPE_BOOL;
 			(*symbol)->items->value.valBool = false;
+			(*symbol)->filgy = true;
 			break;
 		case TTYPE_STRING:
 			(*symbol)->items->type = TYPE_STRING;
 			strCopy(&id, &((*symbol)->items->value.valString));
+			(*symbol)->filgy = true;
 			break;
 		case TTYPE_NUMBER:
 			(*symbol)->items->type = TYPE_DIGIT_INT;
 		
 			sscanf(id.data, "%d", &((*symbol)->items->value.valInt));
+			(*symbol)->filgy = true;
 			break;
 		case TTYPE_DEC_NUMBER:
 			(*symbol)->items->type = TYPE_DIGIT_DOUBLE;
 			
 			sscanf(id.data, "%lf", &((*symbol)->items->value.valDouble));
+			(*symbol)->filgy = true;
 			break;
 		case TTYPE_VARIABLE:
 			(*symbol)->items->type = TYPE_CALLABLE;
+			(*symbol)->filgy = true;
 			break;
 		default:
 			(*symbol)->items->type = TYPE_OTHER;
@@ -186,6 +194,8 @@ SYMBOL_PTR stInsertStaticValueEmpty(FUNCTION_PTR function){
 	symbol->id.data = NULL;
 	symbol->type = TTYPE_CONSTANT;
 	symbol->items = NULL;
+	symbol->filgy = false;
+	
 	
 	listInsertEnd(&function->staticValues, symbol);
 	
