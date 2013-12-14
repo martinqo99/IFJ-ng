@@ -811,12 +811,12 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if ((err = op_check(op2,'I')) != E_OK)
 					return err;
 				
-				op1 = stackPop(stack);
+				op3 = stackPop(stack);
 				if ((err = op_check(op1,'I')) != E_OK)
 					return err;
 				
 				tmp_symbol->items->type = TYPE_DIGIT_INT;
-				tmp_symbol->items->value.valInt = find_string(op1->items->value.valString, op2->items->value.valString);
+				tmp_symbol->items->value.valInt = find_string(op3->items->value.valString, op2->items->value.valString);
 				data_copy(tmp_symbol,op1);
 				tmp_symbol = NULL;
 			break;
@@ -824,11 +824,6 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			case INSTRUCTION_SORT_STRING:
 				if ((err = op_check(op1,'O')) != E_OK)
 					return err;
-				if (op2 == NULL)
-					return E_COMPILATOR;
-				tmp_count = *((int*)op2);
-				if (tmp_count != 1)
-					return E_COMPILATOR;
 				
 				tmp_symbol = stackPop(stack);
 				if ((err = op_check(tmp_symbol,'I')) != E_OK)
