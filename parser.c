@@ -616,8 +616,8 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			//printf("DEBUG: %d\n", tmp->type);
 			
 			//HOTFIX BY FILGY
-			if(tmp == symbol && tmp->type == TYPE_OTHER)
-				return E_SEMANTIC_UNDECLARED;
+			//if(!tmp->filgy)
+			//	return E_SEMANTIC_UNDECLARED;
 			
 			fprintf(stderr," - assign variable completed\n");
 			break;
