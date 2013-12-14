@@ -2,7 +2,7 @@
 ## autor: Vitezslav Kriz (xkrizv01)
 
 
-MAIN=../main
+MAIN=../ifj13
 
 STDOUT=stdout.output
 STDERR=stderr.output
