@@ -233,7 +233,9 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 			
 			if(!stSearchSymbol(st->curr, glob_Token.data))
 				stInsertSymbol(st->curr, glob_Token.data);
-
+			
+			SYMBOL_PTR tmpSymbol = stSearchSymbol(st->curr, glob_Token.data);
+	
 			//Stejny nazev parametru a funkce - ale nemozne v PHP
 			//if(!stSearchFunction(st, glob_Token.data))
 			//	return E_SEMANTIC;
@@ -247,9 +249,9 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				return E_SYNTAX;
 			else{
 				//DEBUG FILGY
-				fprintf(stderr,"Found assign and last symbol was: %s\n", stSearchSymbol(st->curr, glob_Token.data));
+				fprintf(stderr,"Found assign and last symbol was: %s\n", tmpSymbol->id);
 				//err = parserControlAssign(st, stGetLastSymbol(st->curr));
-				err = parserControlAssign(st, stSearchSymbol(st->curr, glob_Token.data));
+				err = parserControlAssign(st, tmpSymbol);
 				
 				if(err != E_OK)
 					return err;
