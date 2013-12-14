@@ -565,6 +565,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			break;
 			
 			case INSTRUCTION_PUSH:
+				printf("ahoj %d\n",op1->filgy);
 				if ((err = op_check(op1,'I')) != E_OK)
 					return err;
 				

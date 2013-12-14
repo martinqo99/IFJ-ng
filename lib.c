@@ -160,7 +160,7 @@ ITEMPTR doubleval(ITEM item)
 		ERROR err;
 		number = get_substring(item.value.valString, start, size, &err);
 		
-		for(int i = 0;(i<number.used);i++)
+		for(unsigned int i = 0;(i<number.used);i++)
 		{
 			if(!isdigit(number.data[i]))
 			{
