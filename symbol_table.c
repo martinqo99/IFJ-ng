@@ -127,8 +127,10 @@ FUNCTION_PTR stSearchFunction(SYMBOL_TABLE_PTR st, STRING id){
 
 SYMBOL_PTR stInsertStaticValue(FUNCTION_PTR function, STRING id, enum_RetVal retval, SYMBOL_PTR* symbol){
 		
-	printf("|| Static val in %s : %s\n", id.data, debugRetval(retval));
-	*symbol = gcMalloc(sizeof(SYMBOL));
+ 	fprintf(stderr, "|| Static val in %s : %s\n", id.data, debugRetval(retval));
+	
+	if(!(*symbol))
+		*symbol = gcMalloc(sizeof(SYMBOL));
 	
 	(*symbol)->items = gcMalloc(sizeof(ITEM));
 	//strCopy(&id, &(*symbol)->id); //mozno ne?
@@ -226,7 +228,7 @@ void stFree(SYMBOL_TABLE_PTR st){
 
 INSTRUCTION_PTR makeInstruction(INSTRUCTION_TYPE type, PTR operand1, PTR operand2, PTR destionation){
 	INSTRUCTION_PTR i = gcMalloc(sizeof(INSTRUCTION));
-	
+	fprintf(stderr, "Creating instruction: %s\n", debugInstruction(type));
 	i->type = type;
 	i->operand1 = operand1;
 	i->operand2 = operand2;

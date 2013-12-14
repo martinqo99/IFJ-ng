@@ -461,6 +461,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 					return E_SYNTAX;
 				
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_INTVAL, symbol, NULL, NULL));				
+				fprintf(stderr, "DELL intval push symbol: %d\n", symbol);
 			}
 			else if(strCompare(glob_Token.data, "strval")){
 				fprintf(stderr," - assign lib strval\n");
@@ -497,6 +498,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 					return E_SYNTAX;
 				
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_STRING, symbol, NULL, NULL));				
+				fprintf(stderr, "DELL get_string push symbol: %d\n", symbol);
 			}
 			else if(strCompare(glob_Token.data, "put_string")){
 				fprintf(stderr," - assign lib put_string\n");
@@ -687,7 +689,11 @@ ERROR parserParseCallParam(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 		if(!stSearchSymbol(st->curr, glob_Token.data))
 			return E_SEMANTIC_UNDECLARED;
 		
+		symbol = stSearchSymbol(st->curr, glob_Token.data);
+		
 		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);
+		fprintf(stderr, "DELL call function with symbol: %d\n", symbol);
+		
 	}
 	else if(
 		retval == TTYPE_NUMBER ||
@@ -727,6 +733,8 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 	if(retval == TTYPE_VARIABLE){
 		if(!stSearchSymbol(st->curr, glob_Token.data))
 			return E_SEMANTIC_UNDECLARED;
+		
+		symbol = stSearchSymbol(st->curr, glob_Token.data);
 		
 		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);			
 	}
