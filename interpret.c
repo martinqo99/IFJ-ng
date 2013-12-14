@@ -145,6 +145,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 	{
 		instruction = instr_node->value;
 		
+		
 		op1 = (SYMBOL*) instruction->operand1;
 		op2 = (SYMBOL*) instruction->operand2;
 		op3 = (SYMBOL*) instruction->destionation;
@@ -277,6 +278,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				{
 					tmp_symbol->items->type = TYPE_DIGIT_INT;
 					tmp_symbol->items->value.valInt = op2->items->value.valInt - op3->items->value.valInt;
+					
 					data_copy(tmp_symbol,op1); // from, to
 				}
 				else if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_DOUBLE)
@@ -781,6 +783,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					else
 						printf("typ: %d\n",tmp_symbol->items->type);
 				}
+// 				tmp_symbol = NULL;
 			break;
 			
 			case INSTRUCTION_STRLEN:
