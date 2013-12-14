@@ -85,7 +85,6 @@ ITEMPTR intval(ITEM item)
 		
 		ERROR err;
 		number = get_substring(item.value.valString, start, size, &err);
-		printf("STRING >>>%s<<<",number.data);
 		
 		if(!isdigit(number.data[0]))
 		{
@@ -160,7 +159,6 @@ ITEMPTR doubleval(ITEM item)
 		
 		ERROR err;
 		number = get_substring(item.value.valString, start, size, &err);
-		printf("STRING >>>%s<<<",number.data);
 		
 		if(!isdigit(number.data[0]))
 		{
