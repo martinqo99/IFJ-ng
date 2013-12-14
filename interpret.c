@@ -557,7 +557,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 // 				instr_node = function->instructions.begin;
 // 				while(instr_node != op3)
 // 				{
-// 					fprintf(stderr,"while address: %d compare with: %d\n",instr_node, op3);
+// // 					fprintf(stderr,"while address: %d compare with: %d\n",instr_node, op3);
 // 					if(instr_node->next == NULL)
 // 					{
 // 						fprintf(stderr,"NENALEZENO!!!\n");
@@ -567,8 +567,8 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 // 					}
 // 					instr_node = instr_node->next;
 // 				}
-// 				fprintf(stderr,"NALEZENO: %d compare with: %d\n",instr_node, op3);
-// 				instr_node = instr_node->next;
+// // 				fprintf(stderr,"NALEZENO: %d compare with: %d\n",instr_node, op3);
+// // 				instr_node = instr_node->next;
 // 				continue;
 			break;
 			

@@ -73,12 +73,9 @@ ITEMPTR intval(ITEM item)
 		
 		for(i = 0; i < size; i++ )
 		{
-			if(isdigit(item.value.valString.data[i]))
+			if(item.value.valString.data[i] != '\n' && item.value.valString.data[i] != '\r' && item.value.valString.data[i] != '\t' && item.value.valString.data[i] != ' ')
 			{
-				if(i>0 && item.value.valString.data[i-1] == '-')
-					start = i-1;
-				else
-					start = i;
+				start = i;
 				break;
 			}
 		}
@@ -88,11 +85,29 @@ ITEMPTR intval(ITEM item)
 		
 		ERROR err;
 		number = get_substring(item.value.valString, start, size, &err);
+		printf("STRING >>>%s<<<",number.data);
 		
-		int cislo;
-		sscanf(number.data, "%d", &cislo);
-		
-		new->value.valInt = cislo;
+		if(!isdigit(number.data[0]))
+		{
+			if(number.data[0] == '-' && isdigit(number.data[1]))
+			{
+				int cislo;
+				sscanf(number.data, "%d", &cislo);
+				
+				new->value.valInt = cislo;
+			}
+			else
+			{
+				new->value.valInt = 0;
+			}
+		}
+		else
+		{
+			int cislo;
+			sscanf(number.data, "%d", &cislo);
+			
+			new->value.valInt = cislo;
+		}
 	}
 	else
 	{
@@ -127,51 +142,15 @@ ITEMPTR doubleval(ITEM item)
 	}
 	else if(item.type == TYPE_STRING)
 	{
-		
-// 		int i;
-// 		int start = 0;
-// 		int size = my_strlen(item.value.valString);
-// 		
-// 		for(i = 0; i < size; i++ )
-// 		{
-// 			if(isdigit(item.value.valString.data[i]))
-// 			{
-// 				start = i;
-// 				break;
-// 			}
-// 		}
-// 		
-// 		
-// 		STRING number;
-// 		strInit(&number);
-// 		
-// 		ERROR err;
-// 		number = get_substring(item.value.valString, start, size, &err);
-// 		
-// 		double cislo;
-// 		sscanf(number.data, "%lf", &cislo);
-// 		
-// // 		char pole[50];
-// // 		sprintf(pole,"%f",cislo);
-// 		
-// 		char* new_string = NULL;
-// 		sprintf(new_string, "%f", cislo);
-// 		
-// 		strInitRaw(&new->value.valString, new_string);
-		
-		
 		int i;
 		int start = 0;
 		int size = my_strlen(item.value.valString);
 		
 		for(i = 0; i < size; i++ )
 		{
-			if(isdigit(item.value.valString.data[i]))
+			if(item.value.valString.data[i] != '\n' && item.value.valString.data[i] != '\r' && item.value.valString.data[i] != '\t' && item.value.valString.data[i] != ' ')
 			{
-				if(i>0 && item.value.valString.data[i-1] == '-')
-					start = i-1;
-				else
-					start = i;
+				start = i;
 				break;
 			}
 		}
@@ -181,11 +160,29 @@ ITEMPTR doubleval(ITEM item)
 		
 		ERROR err;
 		number = get_substring(item.value.valString, start, size, &err);
+		printf("STRING >>>%s<<<",number.data);
 		
-		double cislo;
-		sscanf(number.data, "%lf", &cislo);
-		
-		new->value.valDouble = cislo;
+		if(!isdigit(number.data[0]))
+		{
+			if(number.data[0] == '-' && isdigit(number.data[1]))
+			{
+				double cislo;
+				sscanf(number.data, "%lf", &cislo);
+				
+				new->value.valDouble = cislo;
+			}
+			else
+			{
+				new->value.valDouble = 0.0;
+			}
+		}
+		else
+		{
+			double cislo;
+			sscanf(number.data, "%lf", &cislo);
+			
+			new->value.valDouble = cislo;
+		}
 	}
 	else
 	{
