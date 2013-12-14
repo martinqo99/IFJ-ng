@@ -112,6 +112,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 	int str_from,str_to,tmp_count;
 	STRING tmp_string;
 	
+	STACK_PTR tmp_stack;
+	tmp_stack = gcMalloc(sizeof(struct STACK));
+	stackInit(tmp_stack);
+	
 	// NULL SYMBOL
 	ITEMPTR null_item;
 	null_item = gcMalloc(sizeof(struct ITEM));
@@ -548,17 +552,15 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if(op3 == NULL)
 					return E_COMPILATOR;
 				
-				fprintf(stderr,"true ifjump?: %d\n",op2->items->value.valBool);
-				
 				if(op2->items->type == TYPE_BOOL)
 					if(!op2->items->value.valBool)
 					{
-						fprintf(stderr,"SKOOOK address: %d\n",op3);
+// 						fprintf(stderr,"SKOOOK address: %d\n",op3);
 						
 						instr_node = function->instructions.begin;
-						while(instr_node->value != (INSTRUCTION_PTR)op3)
+						while(instr_node != op3)
 						{
-							fprintf(stderr,"while address: %d compare with: %d\n",instr_node->value,(INSTRUCTION_PTR)op3);
+// 							fprintf(stderr,"while address: %d compare with: %d\n",instr_node, op3);
 							if(instr_node->next == NULL)
 								break;
 							instr_node = instr_node->next;
@@ -709,7 +711,17 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol = stackPop(stack);
 					if ((err = op_check(tmp_symbol,'I')) != E_OK)
 						return err;
-					put_string(tmp_symbol->items->value.valString.data);
+					stackPush(tmp_stack,tmp_symbol);
+				}
+				for(int i=0;i<tmp_count;i++)
+				{
+					tmp_symbol = stackPop(tmp_stack);
+					if(tmp_symbol->items->type == 2)
+						printf("%d",tmp_symbol->items->value.valInt);
+					else if(tmp_symbol->items->type == 3)
+						printf("%lf",tmp_symbol->items->value.valDouble);
+					else if(tmp_symbol->items->type == 4)
+						printf("%s",tmp_symbol->items->value.valString.data);
 				}
 				put_string("\n");
 			break;
