@@ -294,7 +294,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				listInsertEnd(&st->curr->instructions, (i2 = makeInstruction(INSTRUCTION_JUMP, NULL, NULL, NULL)));
 				
 				// Navesti pro else
-				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
+				listInsertEnd(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
 				
 				i1->destionation = st->curr->instructions.end;
 				
@@ -312,7 +312,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 					return err;
 
 				// Navesti pro konec else
-				listInsertPost(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
+				listInsertEnd(&st->curr->instructions, (i3 = makeInstruction(INSTRUCTION_LABEL, NULL, NULL, NULL)));
 				
 				i2->destionation = st->curr->instructions.end;
 				
