@@ -519,6 +519,10 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else if(op2->items->type == TYPE_STRING && op3->items->type == TYPE_STRING)
 				{
 					tmp_symbol->items->value.valBool = op2->items->value.valString.used != op3->items->value.valString.used;
+					if(!tmp_symbol->items->value.valBool)
+					{
+						tmp_symbol->items->value.valBool = !strCompare(op2->items->value.valString, op3->items->value.valString.data);
+					}
 				}
 				else
 					tmp_symbol->items->value.valBool = false;
@@ -651,9 +655,9 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 			case INSTRUCTION_GET_STRING:
 				if ((err = op_check(op1,'O')) != E_OK)
 					return err;
-
-				tmp_string = get_string();
 				
+				tmp_string = get_string();
+// 				fprintf("AAA\n");
 				tmp_symbol->items->type = TYPE_STRING;
 				strInit(&tmp_symbol->items->value.valString);
 				strCopy(&tmp_string, &tmp_symbol->items->value.valString);
