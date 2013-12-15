@@ -388,7 +388,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_INT)
 				{
 					if(op3->items->value.valInt == 0)
-						return E_COMPILATOR;
+						return E_SEMANTIC_ZERO_DIV;
 					tmp_symbol->items->type = TYPE_DIGIT_INT;
 					tmp_symbol->items->value.valInt = op2->items->value.valInt / op3->items->value.valInt;
 					data_copy(tmp_symbol,op1); // from, to
@@ -396,7 +396,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else if(op2->items->type == TYPE_DIGIT_INT && op3->items->type == TYPE_DIGIT_DOUBLE)
 				{
 					if(op3->items->value.valDouble == 0.0)
-						return E_COMPILATOR;
+						return E_SEMANTIC_ZERO_DIV;
 					tmp_symbol->items->type = TYPE_DIGIT_DOUBLE;
 					tmp_symbol->items->value.valDouble = op2->items->value.valInt / op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
@@ -404,7 +404,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else if(op2->items->type == TYPE_DIGIT_DOUBLE && op3->items->type == TYPE_DIGIT_INT)
 				{
 					if(op3->items->value.valInt == 0)
-						return E_COMPILATOR;
+						return E_SEMANTIC_ZERO_DIV;
 					tmp_symbol->items->type = TYPE_DIGIT_DOUBLE;
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble / op3->items->value.valInt;
 					data_copy(tmp_symbol,op1); // from, to
@@ -412,7 +412,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else if(op2->items->type == TYPE_DIGIT_DOUBLE && op3->items->type == TYPE_DIGIT_DOUBLE)
 				{
 					if(op3->items->value.valDouble == 0.0)
-						return E_COMPILATOR;
+						return E_SEMANTIC_ZERO_DIV;
 					tmp_symbol->items->type = TYPE_DIGIT_DOUBLE;
 					tmp_symbol->items->value.valDouble = op2->items->value.valDouble / op3->items->value.valDouble;
 					data_copy(tmp_symbol,op1); // from, to
