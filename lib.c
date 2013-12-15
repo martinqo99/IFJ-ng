@@ -88,17 +88,7 @@ ITEMPTR intval(ITEM item)
 		
 		if(!isdigit(number.data[0]))
 		{
-			if(number.data[0] == '-' && isdigit(number.data[1]))
-			{
-				int cislo;
-				sscanf(number.data, "%d", &cislo);
-				
-				new->value.valInt = cislo;
-			}
-			else
-			{
-				new->value.valInt = 0;
-			}
+			new->value.valInt = 0;
 		}
 		else
 		{

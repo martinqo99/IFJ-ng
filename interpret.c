@@ -428,7 +428,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valBool = op2->items->value.valString.used < op3->items->value.valString.used;
 				}
 				else
-					return E_COMPILATOR;
+					return E_SEMANTIC_TYPE_MISMATCH;
 				data_copy(tmp_symbol,op1);
 				tmp_symbol = NULL;
 			break;
@@ -455,7 +455,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valBool = op2->items->value.valString.used > op3->items->value.valString.used;
 				}
 				else
-					return E_COMPILATOR;
+					return E_SEMANTIC_TYPE_MISMATCH;
 				data_copy(tmp_symbol,op1);
 				tmp_symbol = NULL;
 			break;
@@ -482,7 +482,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valBool = op2->items->value.valString.used <= op3->items->value.valString.used;
 				}
 				else
-					return E_COMPILATOR;
+					return E_SEMANTIC_TYPE_MISMATCH;
 				data_copy(tmp_symbol,op1);
 				tmp_symbol = NULL;
 			break;
@@ -509,7 +509,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					tmp_symbol->items->value.valBool = op2->items->value.valString.used >= op3->items->value.valString.used;
 				}
 				else
-					return E_COMPILATOR;
+					return E_SEMANTIC_TYPE_MISMATCH;
 				data_copy(tmp_symbol,op1);
 				tmp_symbol = NULL;
 			break;
@@ -633,6 +633,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return E_COMPILATOR;
 				
 				if(op2->items->type == TYPE_BOOL)
+				{
 					if(!op2->items->value.valBool)
 					{
 						instr_node = function->instructions.begin;
@@ -644,6 +645,22 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 						}
 						continue;						
 					}
+				}
+// 				if(op2->items->type == TYPE_DIGIT_INT)
+// 				{
+// 					printf("AHOJ\n");
+// 					if(!op2->items->value.valInt)
+// 					{
+// 						instr_node = function->instructions.begin;
+// 						while(instr_node != (LIST_NODE_PTR)op3)
+// 						{
+// 							if(instr_node->next == NULL)
+// 								break;
+// 							instr_node = instr_node->next;
+// 						}
+// 						continue;						
+// 					}
+// 				}
 			break;
 			
 			case INSTRUCTION_LABEL:

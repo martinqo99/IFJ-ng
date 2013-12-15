@@ -16,5 +16,6 @@ echo $?
 echo "**********************************"
 echo "************* RUN 3 **************"
 echo "**********************************"
-./ifj13 tests/input3.php
+#./ifj13 tests/input3.php
+./ifj13 tests/a.php
 echo $?

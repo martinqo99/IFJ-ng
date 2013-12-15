@@ -22,7 +22,7 @@
 #define is_a_z( a ) ((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z'))
 
 #define is_hexa( a ) (( a >= '0' && a <= '9') || (a >= 'a' && a <= 'f') || (a >= 'A' && a <= 'F'))
-#define get_hexa( a ) (( a >= 9)? a - '0' : ( (a <= 'F') ? ( ( a - 'A' ) + 10 ):( ( a - 'a' ) + 10 )))
+#define get_hexa( a ) (( a <= '9')? a - '0' : ( (a <= 'F') ? ( ( a - 'A' ) + 10 ):( ( a - 'a' ) + 10 )))
 
 FILE* glob_FileHandler = NULL;
 struct_Token glob_Token;
@@ -165,7 +165,7 @@ enum_RetVal get_Token()
                 break;
 			case STATE_BLOCK_COMMENT:
                 if(cur_char == EOF)
-                    return TTYPE_EOF;
+                    return TTYPE_ERROR;
                 else if(cur_char == '*'){
 					clear_Token();
 					add_Token_Data(cur_char);}
@@ -180,12 +180,12 @@ enum_RetVal get_Token()
 					add_Token_Data(cur_char); 
 					break;}
 				else if(cur_char == 'p' && strCompare(glob_Token.data , "<?ph")){		
-					add_Token_Data(cur_char); 
-					break;}
+					add_Token_Data(cur_char);
+					return TTYPE_PHP_START;}
                 else if(cur_char == 'h' && strCompare(glob_Token.data , "<?p"))
 					add_Token_Data(cur_char); 
-				else if((cur_char == '\n' || cur_char == ' ' || cur_char == '\t') && strCompare(glob_Token.data , "<?php"))
-					return TTYPE_PHP_START; 
+// 				else if((cur_char == '\n' || cur_char == ' ' || cur_char == '\t') && strCompare(glob_Token.data , "<?php"))
+// 					return TTYPE_PHP_START; 
                 else{
                     ungetc(cur_char, glob_FileHandler);
                     return TTYPE_ERROR;}
@@ -250,10 +250,40 @@ enum_RetVal get_Token()
 				else if(cur_char == 'x' && last_char == '\\')
 				{
 					int tmp1 = getc(glob_FileHandler);
-					int tmp2 = getc(glob_FileHandler);
+					if(!is_hexa(tmp1))
+					{
+						if(tmp1 == '\\')
+						{
+							add_Token_Data('\\');
+							add_Token_Data(cur_char);
+							last_char = '\\';
+							break;
+						}
+						add_Token_Data('\\');
+						add_Token_Data(cur_char);
+						add_Token_Data(tmp1);
+						last_char = 0;
+						break;
+					}
 					
-					if(!is_hexa(tmp1) || !is_hexa(tmp2))
-						return TTYPE_ERROR;
+					int tmp2 = getc(glob_FileHandler);
+					if(!is_hexa(tmp2))
+					{
+						if(tmp1 == '\\')
+						{
+							add_Token_Data('\\');
+							add_Token_Data(cur_char);
+							add_Token_Data(tmp1);
+							last_char = '\\';
+							break;
+						}
+						add_Token_Data('\\');
+						add_Token_Data(cur_char);
+						add_Token_Data(tmp1);
+						add_Token_Data(tmp2);
+						last_char = 0;
+						break;
+					}
 					
 					tmp1 = get_hexa(tmp1);
 					tmp2 = get_hexa(tmp2);
@@ -268,9 +298,11 @@ enum_RetVal get_Token()
 					if(last_char == '\\')
 					{
 						add_Token_Data('\\');
+						add_Token_Data(cur_char); // ASI
 						last_char = 0;
 					}
-					add_Token_Data(cur_char);
+					else
+						add_Token_Data(cur_char);
 				}
                 break;
 			case STATE_TEXT:
