@@ -252,7 +252,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else if(op2->items->type == TYPE_STRING && op3->items->type == TYPE_DIGIT_INT)
 				{
 					STRING new_string;
-					char* new_char_string = NULL;
+					char* new_char_string = gcMalloc(sizeof(char*));;
 					sprintf(new_char_string, "%d", op3->items->value.valInt);
 					strInitRaw(&new_string, new_char_string);
 					
@@ -266,7 +266,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else if(op2->items->type == TYPE_STRING && op3->items->type == TYPE_DIGIT_DOUBLE)
 				{
 					STRING new_string;
-					char* new_char_string = NULL;
+					char* new_char_string = gcMalloc(sizeof(char*));
 					sprintf(new_char_string, "%lf", op3->items->value.valDouble);
 					strInitRaw(&new_string, new_char_string);
 					
@@ -753,12 +753,11 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else if(op2->items->type == TYPE_STRING && op3->items->type == TYPE_DIGIT_INT)
 				{
 					STRING new_string;
-					char* new_char_string = NULL;
+					char* new_char_string = gcMalloc(sizeof(char*));
 					sprintf(new_char_string, "%d", op3->items->value.valInt);
 					strInitRaw(&new_string, new_char_string);
 					
 					tmp_symbol->items->type = TYPE_STRING;
-					
 					strConcatenate(&tmp_symbol->items->value.valString, &op2->items->value.valString);
 					strConcatenate(&tmp_symbol->items->value.valString, &op3->items->value.valString);
 					
@@ -767,7 +766,7 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 				else if(op2->items->type == TYPE_STRING && op3->items->type == TYPE_DIGIT_DOUBLE)
 				{
 					STRING new_string;
-					char* new_char_string = NULL;
+					char* new_char_string = gcMalloc(sizeof(char*));
 					sprintf(new_char_string, "%lf", op3->items->value.valDouble);
 					strInitRaw(&new_string, new_char_string);
 					

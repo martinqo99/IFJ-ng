@@ -408,7 +408,7 @@ enum_RetVal get_Token()
 					sscanf(glob_Token.data.data, "%lf", &num);
 					
 					STRING tmp;
-					char *pole = NULL;
+					char *pole = gcMalloc(sizeof(char*));
 					sprintf(pole,"%f",num);
 					strInitRaw(&tmp, pole);
 					

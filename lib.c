@@ -221,13 +221,13 @@ ITEMPTR strval(ITEM item)
 	}
 	else if(item.type == TYPE_DIGIT_INT)
 	{
-		char* new_string = NULL;
+		char* new_string = gcMalloc(sizeof(char*));
 		sprintf(new_string, "%d", item.value.valInt);
 		strInitRaw(&new->value.valString, new_string);
 	}
 	else if(item.type == TYPE_DIGIT_DOUBLE)
 	{
-		char* new_string = NULL;
+		char* new_string = gcMalloc(sizeof(char*));
 		sprintf(new_string, "%f", item.value.valDouble);
 		strInitRaw(&new->value.valString, new_string);
 	}
