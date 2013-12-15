@@ -36,6 +36,7 @@ void init_Token()
 {
     rewind(glob_FileHandler);
     strInit(&(glob_Token.data));
+	glob_Token.start = 0;
 }
 
 void clear_Token()
@@ -86,7 +87,7 @@ enum_RetVal get_Token()
                 else if(cur_char == '"'){ cur_state = STATE_STRING; break;}
                 else if(is_a_z(cur_char)){ add_Token_Data(cur_char); cur_state = STATE_TEXT; break;}
                 else if(is_num(cur_char)){ add_Token_Data(cur_char); cur_state = STATE_NUMBER; break;}
-                else if(cur_char == ' ' || cur_char == '\r' || cur_char == '\t' || cur_char == '\n') {}
+                else if(cur_char == ' ' || cur_char == '\r' || cur_char == '\t' || cur_char == '\n') {if(!glob_Token.start){return TTYPE_SYNTAX;}}
                 else return TTYPE_ERROR;
                 break;
 			case STATE_LESSER:
@@ -175,20 +176,41 @@ enum_RetVal get_Token()
                 break;
 			case STATE_PHP_START:
                 if(cur_char == EOF)
-                    return TTYPE_ERROR;
+				{
+					if(strCompare(glob_Token.data , "<?php"))
+					{
+						return TTYPE_SYNTAX;
+					}
+					else
+					{
+						return TTYPE_ERROR;
+					}
+				}
                 else if(cur_char == 'p' && strCompare(glob_Token.data , "<?")){
 					add_Token_Data(cur_char); 
 					break;}
 				else if(cur_char == 'p' && strCompare(glob_Token.data , "<?ph")){		
 					add_Token_Data(cur_char);
-					return TTYPE_PHP_START;}
-                else if(cur_char == 'h' && strCompare(glob_Token.data , "<?p"))
+					break;}
+                else if(cur_char == 'h' && strCompare(glob_Token.data , "<?p")){
 					add_Token_Data(cur_char); 
-// 				else if((cur_char == '\n' || cur_char == ' ' || cur_char == '\t') && strCompare(glob_Token.data , "<?php"))
-// 					return TTYPE_PHP_START; 
+					break;}
+				else if((cur_char == '\n' || cur_char == ' ' || cur_char == '\t') && strCompare(glob_Token.data , "<?php"))
+				{
+					glob_Token.start = 1;
+					return TTYPE_PHP_START; 
+				}
                 else{
-                    ungetc(cur_char, glob_FileHandler);
-                    return TTYPE_ERROR;}
+					if(strCompare(glob_Token.data , "<?php"))
+					{
+						return TTYPE_SYNTAX;
+					}
+					else
+					{
+						ungetc(cur_char, glob_FileHandler);
+						return TTYPE_ERROR;
+					}
+				}
                 break;
 			case STATE_VARIABLE:
 				if(cur_char == EOF)

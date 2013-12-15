@@ -59,7 +59,8 @@ typedef enum enum_RetVal
 	
 	TTYPE_EOF,
 	TTYPE_EXPRESSION,
-	TTYPE_ERROR = 66
+	TTYPE_ERROR = 66,
+	TTYPE_SYNTAX = 77
 	
 } enum_RetVal;
 
@@ -90,6 +91,7 @@ typedef enum enum_State
 
 typedef struct struct_Token
 {
+	int start;
 	STRING data;
 } struct_Token;
 
