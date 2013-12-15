@@ -45,7 +45,7 @@ struct_BTree_Node recursive_Node_Search(struct_BTree_Node node, STRING_PTR key)
         return NULL;
 	else if(strCompareStrings(*node->key,*key))
 		return node;
-	else if (strSize(node->key) < strSize(key))
+	else if (strSize(node->key) > strSize(key))
 		return recursive_Node_Search(node->left, key);
 	else
 		return recursive_Node_Search(node->right, key);
@@ -69,7 +69,7 @@ ERROR BT_Insert(struct_BTree* tree, STRING_PTR key, void* data)
 
 	while(temp_node != NULL)
 	{
-        if ( key < temp_node->key)
+        if ( strSize(key) < strSize(temp_node->key))
 		{
             if(temp_node->left == NULL)
 			{
@@ -83,7 +83,7 @@ ERROR BT_Insert(struct_BTree* tree, STRING_PTR key, void* data)
             }
             else temp_node=temp_node->left;
         }
-        else if ( key > temp_node->key)
+        else if (strSize(key) >= strSize(temp_node->key))
 		{
             if (temp_node->right == NULL)
 			{
