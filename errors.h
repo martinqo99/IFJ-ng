@@ -2,17 +2,17 @@
  * Predmet:  IFJ / IAL
  * Projekt:  Implementace interpretu jazyka PHP13
  * Varianta: a/1/I
- * Soubor:   errors.c
+ * Soubor:   errors.h
  *
  * Popis:
  *
  *
- * Datum:    12.9.2013
+ * Datum:    20.11.2013
  *
- * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
- *           Stodulka Daniel
- *           Hermann Lukas
- *           Tran Manh Hoang
+ * Autori:   Frantisek Kolacek	<xkolac12@stud.fit.vutbr.cz>
+ *           Stodulka Daniel 	<xstodu06@stud.fit.vutbr.cz>
+ *           Hermann Lukas 		<xherma25@stud.fit.vutbr.cz>
+ *           Tran Manh Hoang 	<xtranh00@stud.fit.vutbr.cz>
  */
 
 #ifndef ERRORS_H_INCLUDED

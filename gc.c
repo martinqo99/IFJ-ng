@@ -1,19 +1,19 @@
 /**
-* Predmet: IFJ / IAL
-* Projekt: Implementace interpretu jazyka PHP13
-* Varianta: a/1/I
-* Soubor: gc.c
-*
-* Popis:
-*
-*
-* Datum: 28.11.2013
-*
-* Autori: Frantisek Kolacek <xkolac12@stud.fit.vutbr.cz>
-* Stodulka Daniel
-* Hermann Lukas
-* Tran Manh Hoang
-*/
+ * Predmet:  IFJ / IAL
+ * Projekt:  Implementace interpretu jazyka PHP13
+ * Varianta: a/1/I
+ * Soubor:   gc.c
+ *
+ * Popis:
+ *
+ *
+ * Datum:    20.11.2013
+ *
+ * Autori:   Frantisek Kolacek	<xkolac12@stud.fit.vutbr.cz>
+ *           Stodulka Daniel 	<xstodu06@stud.fit.vutbr.cz>
+ *           Hermann Lukas 		<xherma25@stud.fit.vutbr.cz>
+ *           Tran Manh Hoang 	<xtranh00@stud.fit.vutbr.cz>
+ */
 
 #include "gc.h"
 
@@ -22,8 +22,8 @@ GC_ITEM_PTR curr;
 
 void gcInit(){
 
-   //signal(SIGINT, gcAbort);
-   // signal(SIGABRT, gcAbort);
+   signal(SIGINT, gcAbort);
+    signal(SIGABRT, gcAbort);
 
     root = NULL;
 }

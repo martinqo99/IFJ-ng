@@ -7,36 +7,16 @@
  * Popis:
  *
  *
- * Datum:    29.11.2013
+ * Datum:    20.11.2013
  *
- * Autori:   Frantisek Kolacek   <xkolac12@stud.fit.vutbr.cz>
- *           Stodulka Daniel
- *           Hermann Lukas
- *           Tran Manh Hoang
+ * Autori:   Frantisek Kolacek	<xkolac12@stud.fit.vutbr.cz>
+ *           Stodulka Daniel 	<xstodu06@stud.fit.vutbr.cz>
+ *           Hermann Lukas 		<xherma25@stud.fit.vutbr.cz>
+ *           Tran Manh Hoang 	<xtranh00@stud.fit.vutbr.cz>
  */
 
 #include "exp.h"
 
-/*
-const char expressionPrecedentTable[EXPRESSION_TABLE_SIZE][EXPRESSION_TABLE_SIZE] = {
-  //Tokeny									id  (   )   +   -   *   /   **  ==  !=  <   <=  >   >=
-  [TTYPE_VARIABLE]			={[TTYPE_VARIABLE]= 0 , 0 ,'>','>','>','>','>','>','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_L_BRACKET]			={[TTYPE_VARIABLE]='<','<','=','<','<','<','<','<','<','<','<','<','<','<',[TTYPE_SEMICOLON]= 0 },
-  [TTYPE_R_BRACKET]			={[TTYPE_VARIABLE]= 0 , 0 ,'>','>','>','>','>','>','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_ADDITION]			={[TTYPE_VARIABLE]='<','<','>','>','>','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_SUBTRACTION]		={[TTYPE_VARIABLE]='<','<','>','>','>','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_MULTIPLICATION]	={[TTYPE_VARIABLE]='<','<','>','>','>','>','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_DIVISION]			={[TTYPE_VARIABLE]='<','<','>','>','>','>','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_POWER]				={[TTYPE_VARIABLE]='<','<','>','>','>','>','>','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_EQUAL]				={[TTYPE_VARIABLE]='<','<','>','<','<','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_NOT_EQUAL]			={[TTYPE_VARIABLE]='<','<','>','<','<','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_LESSER]			={[TTYPE_VARIABLE]='<','<','>','<','<','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_LESSER_EQUAL]		={[TTYPE_VARIABLE]='<','<','>','<','<','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_GREATER]			={[TTYPE_VARIABLE]='<','<','>','<','<','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_GREATER_EQUAL]		={[TTYPE_VARIABLE]='<','<','>','<','<','<','<','<','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
-  [TTYPE_SEMICOLON]			={[TTYPE_VARIABLE]='<','<', 0 ,'<','<','<','<','<','<','<','<','<','<','<',[TTYPE_SEMICOLON]='$'},
-};
-*/
 const char expressionPrecedentTable[EXPRESSION_TABLE_SIZE][EXPRESSION_TABLE_SIZE] = {
   //Tokeny									id  (   )   +   -   *   /   .  ==  !=  <   <=  >   >=
   [TTYPE_VARIABLE]			={[TTYPE_VARIABLE]= 0 , 0 ,'>','>','>','>','>','>','>','>','>','>','>','>',[TTYPE_SEMICOLON]='>'},
