@@ -641,7 +641,7 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 			fprintf(stderr," - assign function\n");
 			
 			if(!(f = stSearchFunction(st, glob_Token.data)))
-				return E_SEMANTIC_UNDECLARED;
+				return E_SEMANTIC;
 			
 			if(getToken() != TTYPE_L_BRACKET)
 				return E_SYNTAX;
