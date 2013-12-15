@@ -55,8 +55,15 @@ ERROR parserFindFunctions(SYMBOL_TABLE_PTR st){
 				
 				if(stSearchFunction(st, glob_Token.data))
 					return E_SEMANTIC;
-				
+								
 				stInsertFunction(st, glob_Token.data);
+				
+				st->curr = stSearchFunction(st, glob_Token.data);
+				
+				if(getToken() != TTYPE_L_BRACKET)
+					return E_SYNTAX;
+				
+				parserParseFunctionParam(st, true);
 			}
 			else if(retval == TTYPE_RESERVED)
 				return E_SEMANTIC;
@@ -119,7 +126,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 	if(getToken() != TTYPE_L_BRACKET)
 		return E_SYNTAX;
 	
-	err = parserParseFunctionParam(st);
+	err = parserParseFunctionParam(st, false);
 	
 	if(err != E_OK)
 		return err;
@@ -138,7 +145,7 @@ ERROR parserParseFunction(SYMBOL_TABLE_PTR st){
 //Parsovani parametru definice funkce (0-1)
 // <params> - id <params_n>
 // <params> - eps
-ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
+ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st, bool test){
 	fprintf(stderr,"Parsing function %s definition param\n", st->curr->id.data);
 	
 	enum_RetVal retval = getToken();
@@ -150,12 +157,15 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 		//if(stSearchFunction(st, glob_Token.data))
 		//	return E_SEMANTIC;
 		
-		stInsertSymbol(st->curr, glob_Token.data);
+		if(test)
+			st->curr->argumentsCount++;
+		else{
+			stInsertSymbol(st->curr, glob_Token.data);
 			
-		listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, stGetLastSymbol(st->curr), NULL, NULL));
-		st->curr->argumentsCount++;
+			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, stGetLastSymbol(st->curr), NULL, NULL));
+		}
 		
-		return parserParseFunctionParams(st);
+		return parserParseFunctionParams(st, test);
 	}
 	else
 		return E_SYNTAX;
@@ -164,7 +174,7 @@ ERROR parserParseFunctionParam(SYMBOL_TABLE_PTR st){
 //Parsovani parametru definice funkce (2+)
 // <params_n> - , id <params_n>
 // <params_n> - eps
-ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
+ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st, bool test){
 	fprintf(stderr,"Parsing function definition params\n");
 	
 	enum_RetVal retval = getToken();
@@ -178,18 +188,23 @@ ERROR parserParseFunctionParams(SYMBOL_TABLE_PTR st){
 		if(retval == TTYPE_VARIABLE){
 			//Stejny nazev parametru a funkce - ale nemozne v PHP
 			//if(stSearchFunction(st, glob_Token.data))
-			//	return E_SEMANTIC;
+			//	return E_SEMANTIC;			
 			
-			//Stejny nazev dvou parametru
-			if(stSearchSymbol(st->curr, glob_Token.data))
- 				return E_SEMANTIC;
+			if(test)
+				st->curr->argumentsCount++;
+			else{
+				//Stejny nazev dvou parametru
+				if(stSearchSymbol(st->curr, glob_Token.data))
+					//return E_SEMANTIC;
+					return E_SEMANTIC_OTHER;
+
+				stInsertSymbol(st->curr, glob_Token.data);
 			
-			stInsertSymbol(st->curr, glob_Token.data);
+				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, stGetLastSymbol(st->curr), NULL, NULL));
+				st->curr->argumentsCount++;
+			}
 			
-			listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_POP, stGetLastSymbol(st->curr), NULL, NULL));
-			st->curr->argumentsCount++;
-			
-			return parserParseFunctionParams(st);
+			return parserParseFunctionParams(st, test);
 		}
 		else
 			return E_SYNTAX;
