@@ -602,6 +602,16 @@ ERROR recursive_interpret(FUNCTION_PTR function, STACK_PTR stack)
 					return err;
 				
 				tmp_symbol = stackPop(stack);
+				
+				if(tmp_symbol == NULL){
+					tmp_symbol = gcMalloc(sizeof(SYMBOL));
+					tmp_symbol->items = gcMalloc(sizeof(ITEM));
+					
+					tmp_symbol->items->type = TYPE_NULL;
+					tmp_symbol->filgy = true;
+					
+				}
+				
 				data_copy(tmp_symbol,op1);
 				op1->filgy = true;
 			break;
