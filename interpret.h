@@ -8,7 +8,6 @@
 #include "symbol_table.h"
 #include "strings.h"
 #include "lib.h"
-#include "ial.h"
 
 
 // --- API ---

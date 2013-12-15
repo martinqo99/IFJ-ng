@@ -207,7 +207,7 @@ ERROR parserExpression(SYMBOL_TABLE_PTR st, enum_RetVal retval, SYMBOL_PTR* symb
 				if(iType != INSTRUCTION_NOP){
 						fprintf(stderr,"[exp] Creating blank constant\n");
 						destination = stInsertStaticValueEmpty(st->curr);
-						fprintf(stderr, "I: %s, dest: %d, src1: %d, src2: %d\n", debugInstruction(iType), destination, source1, source2);
+						//fprintf(stderr, "I: %s, dest: %u, src1: %u, src2: %u\n", debugInstruction(iType), destination, source1, source2);
 
 						i = makeInstruction(iType, destination, source1, source2); // itype
 						listInsertEnd(&st->curr->instructions, i);					
@@ -268,8 +268,8 @@ ERROR pushExpression(SYMBOL_TABLE_PTR st, STACK_PTR stack, SYMBOL_PTR symbol, en
 		retval == TTYPE_FALSE || 
 		retval == TTYPE_STRING ||
 		retval == TTYPE_NUMBER ||
-		retval == TTYPE_DEC_NUMBER ||
-		retval == TYPE_OTHER
+		retval == TTYPE_DEC_NUMBER //||
+		//retval == TYPE_OTHER
 	){
 		
 		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);

@@ -15,6 +15,44 @@
  *           Tran Manh Hoang
  */
 
+/* 
+ * <program> - <body_program>
+ * <body_program> - <def_function><body_program>
+ * <body_program> - <command>;<body_program>
+ * <body_program> - eps
+ * <def_function> - function idFunction (<params>) { <stat_list> }
+ * <stat_list> - eps
+ * <stat_list> - <command> ; <stat_list>
+ * <param> - id <params>
+ * <param> - eps
+ * <params> - , id <params>
+ * <params> - eps
+ * <command> - id = <assign> ;
+ * <command> - if (expression) { <stat_list> } else { <stat_list> }
+ * <command> - while (expression) { <stat_list> }
+ * <command> - return expression ;
+ * <assign> - expression ;
+ * <assign> - idFunction( <params> ) ;
+ * <assign> - boolval(term) ;
+ * <assign> - doubleval(term) ;
+ * <assign> - intval(term) ;
+ * <assign> - strval(term) ;
+ * <assign> - get_string() ;
+ * <assign> - put_string(term) ;
+ * <assign> - strlen(term) ;
+ * <assign> - get_substring(term, num, num) ;
+ * <assign> - find_string(string, string) ;
+ * <assign> - sort_string(string) ;
+ * <num> - eps
+ * <num> - num
+ * <term> - id
+ * <term> - <value>
+ * <value> - num
+ * <value> - string
+ * <value> - bool
+ * <value> - null
+ */
+
 #include "parser.h"
 
 //Hlavni funkce parseru
@@ -264,7 +302,7 @@ ERROR parserParseCode(SYMBOL_TABLE_PTR st, enum_RetVal retval){
 				return E_SYNTAX;
 			else{
 				//DEBUG FILGY
-				fprintf(stderr,"Found assign and last symbol was: %s\n", tmpSymbol->id);
+				fprintf(stderr,"Found assign and last symbol was: %s\n", tmpSymbol->id.data);
 				//err = parserControlAssign(st, stGetLastSymbol(st->curr));
 				err = parserControlAssign(st, tmpSymbol);
 				
@@ -481,7 +519,6 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 					return E_SYNTAX;
 				
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_INTVAL, symbol, NULL, NULL));				
-				fprintf(stderr, "DELL intval push symbol: %d\n", symbol);
 			}
 			else if(strCompare(glob_Token.data, "strval")){
 				fprintf(stderr," - assign lib strval\n");
@@ -518,7 +555,6 @@ ERROR parserControlAssign(SYMBOL_TABLE_PTR st, SYMBOL_PTR symbol){
 					return E_SYNTAX;
 				
 				listInsertEnd(&st->curr->instructions, makeInstruction(INSTRUCTION_GET_STRING, symbol, NULL, NULL));				
-				fprintf(stderr, "DELL get_string push symbol: %d\n", symbol);
 			}
 			else if(strCompare(glob_Token.data, "put_string")){
 				fprintf(stderr," - assign lib put_string\n");
@@ -716,7 +752,7 @@ ERROR parserParseCallParam(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 		symbol = stSearchSymbol(st->curr, glob_Token.data);
 		
 		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);
-		fprintf(stderr, "DELL call function with symbol: %d - %s\n", symbol, symbol->id);
+		//fprintf(stderr, "DELL call function with symbol: %d - %s\n", symbol, symbol->id);
 		
 	}
 	else if(
@@ -761,7 +797,7 @@ ERROR parserParseCallParams(SYMBOL_TABLE_PTR st, FUNCTION_PTR f){
 		symbol = stSearchSymbol(st->curr, glob_Token.data);
 		
 		stInsertStaticValue(st->curr, glob_Token.data, retval, &symbol);
-		fprintf(stderr, "DELL call function with symbol: %d - %s\n", symbol, symbol->id);
+		//fprintf(stderr, "DELL call function with symbol: %d - %s\n", symbol, symbol->id);
 	}
 	else if(
 		retval == TTYPE_NUMBER ||
